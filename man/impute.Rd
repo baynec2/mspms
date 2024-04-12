@@ -7,10 +7,6 @@
 impute(outlier_handled_data, noise = 0.05, nsd = 1)
 }
 \arguments{
-\item{outlier_handled_data}{}
-
-\item{noise}{}
-
 \item{nsd}{}
 }
 \description{

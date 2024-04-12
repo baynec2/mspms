@@ -4,12 +4,10 @@
 \alias{join_with_library}
 \title{join_with_library}
 \usage{
-join_with_library(imputed, peptide_library = readRDS("peptide_library"))
+join_with_library(imputed, peptide_library = mspms::peptide_library)
 }
 \arguments{
 \item{imputed}{}
-
-\item{peptide_library}{}
 }
 \description{
 join_with_library

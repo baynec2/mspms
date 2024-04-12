@@ -4,10 +4,12 @@
 \alias{handle_outliers}
 \title{handle_outliers}
 \usage{
-handle_outliers(normalyzed_data)
+handle_outliers(normalyzed_data, design_matrix)
 }
 \arguments{
 \item{normalyzed_data}{= this is the normalzed data.}
+
+\item{design_matrix}{= this is the design_matrix containing info on what sample is in what group}
 }
 \value{
 a data frame in the long format where outliers according to a dixon test have been handled.
