@@ -14,8 +14,9 @@ ui <- dashboardPage(#skin = "midnight",
         menuItem("Output", tabName = "output", icon = icon("chart-simple"))
       ),
       #Putting the place to load the files
-       fileInput("upload1", "Upload PEAKS LFQ file",accept = ".csv"),
-       fileInput("upload2", "Upload PEAKS ID file",accept = ".csv")
+      fileInput("upload1", "Upload PEAKS LFQ file",accept = ".csv"),
+      fileInput("upload2", "Upload PEAKS ID file",accept = ".csv"),
+      fileInput("upload3", "Upload design matrix",accept = ".csv")
       ),
 
     dashboardBody(
@@ -42,9 +43,9 @@ server <- function(input, output){
   processed_data = reactive({
         prepared_data =  mspms::prepare_for_normalyzer(input$upload1$datapath,input$upload2$datapath)
         # mspms workflow
-        design_matrix = mspms::extract_design_matrix(prepared_data)
+        design_matrix=readr::read_csv(input$upload3$datapath)
         normalyzed_data = mspms::normalyze(prepared_data,design_matrix)
-        outliers = mspms::handle_outliers(normalyzed_data)
+        outliers = mspms::handle_outliers(normalyzed_data,design_matrix)
         imputed = mspms::impute(outliers)
         joined_with_library = mspms::join_with_library(imputed)
         final_data = mspms::add_cleavages(joined_with_library)

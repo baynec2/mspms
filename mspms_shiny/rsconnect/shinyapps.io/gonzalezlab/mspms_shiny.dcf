@@ -10,4 +10,4 @@ url: https://gonzalezlab.shinyapps.io/mspms_shiny/
 version: 1
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: about.Rmd
+ignoredFiles: about.Rmd|2024-04-12_msp-ms_normalyze_output

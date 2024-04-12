@@ -67,37 +67,33 @@ prepared_data = prepare_for_normalyzer(lfq_filename,id_filename)
 ```
 
 
+### Loading design matrix
 
+Before we normalyze data, we need to know what samples are in what groups. We can do that by defining a design matrix. 
+```{r}
+design_matrix = readr::read_csv("annotation.csv")
 
-### Normalizing values.
+head(design_matrix)
+
+```
+### Normalyzing data
 
 msp-ms uses the .... package to do normalization under the hood. 
 
 
-First we need to extract a design matrix. 
-
-Then we can normalyze the data. 
+Now we can normalyze the data.
 ```{r}
-# Extracting design matrix
-design_matrix = extract_design_matrix(prepared_data)
-
-# normalyze the data 
-
-source("R/normalyze.R")
-
 normalyzed_data = normalyze(prepared_data,design_matrix)
 ```
 
-
 ### Handling Outliers
 
-Here we use a dixon test from the outliers package to detect outliers from each of our replicates. 
+Here we use a dixon test from the outliers package to detect outliers from each of our replicates. We need to know what samples are part of which groups, so we need to specify the design matrix here too. Make sure that the column header names are "sample" and "group" just like before.
 
 ```{r}
-outliers = handle_outliers(normalyzed_data)
+design_matrix = readr::read_csv("annotation.csv")
+outliers = handle_outliers(normalyzed_data,design_matrix)
 ```
-
-
 
 ### Imputation of data 
 
@@ -127,6 +123,8 @@ Sequences are presented as the 4 amino acids on both sides of a cleavage. X indi
 
 ```{r}
 final_data = add_cleavages(joined_with_library)
+
+head(final_data)
 ```
 
 
