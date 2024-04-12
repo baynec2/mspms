@@ -75,7 +75,7 @@ normalyzed_data = normalyze(prepared_data,design_matrix)
 
 ## Handling Outliers
 
-Here we use a dixion test from the outliers package to detect outliers from each of our replicates. 
+Here we use a dixon test from the outliers package to detect outliers from each of our replicates. 
 
 ```{r}
 outliers = handle_outliers(normalyzed_data)

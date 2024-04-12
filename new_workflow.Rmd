@@ -42,6 +42,9 @@ peptide_library2 = peptide_library %>%
   mutate(library_reference_id = gsub(">","",library_reference_id))
 
 saveRDS(peptide_library2,"peptide_library")
+peptide_library = readRDS("peptide_library")
+
+usethis::use_data(peptide_library,overwrite = TRUE)
 
 
 source("R/join_with_library.R")

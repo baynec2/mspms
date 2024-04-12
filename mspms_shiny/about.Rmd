@@ -1,0 +1,42 @@
+---
+title: "MSPMS-Shiny"
+author: "Charlie Bayne"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+        theme: cosmo
+        code_folding: hide
+        highlight: tango
+        df_print: paged
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+ggplot2::theme_set(ggprism::theme_prism(palette = "viridis"))
+knitr::opts_chunk$set(echo = TRUE,warning = FALSE, message = FALSE)
+```
+
+# About 
+
+This is a Shiny app designed to use the [mspms R package](https://github.com/baynec2/mspms) to analyze data from the [Multiplex Substrate Profiling by Mass Spectrometry (MSP-MS) method](https://pubmed.ncbi.nlm.nih.gov/36948708/)
+
+# How to use
+
+On the side bar, you will see two places to upload files. 
+
+1. The first file should be the LFQ file from PEAKS. This file should be a csv file.
+2. The second file should be the ID file from PEAKS. This file should also be a csv file.
+
+
+You will also see two tabs at the top of the page, About and Output.. 
+About links to these instructions. 
+
+Output contains a rendering of the normalized data, and a button that says download. This button will allow you to download the data that has been processed as a .csv file.
+
+Be patient with the output tab, it takes a while for the code to execute. When it is finished, the table will appear and the data will be ready for download. 
+
+
+
+
+
+
