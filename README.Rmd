@@ -16,10 +16,23 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of msp-ms is provide a concise code-base for the normalization and data processing required for the msp-ms method. 
+The goal of mspms is provide a concise code-base for the normalization and data processing required to analyze data from the [Multiplex Substrate Profiling by Mass Spectrometry (MSP-MS) method](https://pubmed.ncbi.nlm.nih.gov/36948708/). 
 
 
-Additionally, we provide a graphical user interface powered by shiny apps that allows for a user to utilize the method without requiring any R coding knowledge. 
+Additionally, we provide a [graphical user interface powered by shiny apps](https://gonzalezlab.shinyapps.io/mspms_shiny/) that allows for a user to utilize the method without requiring any R coding knowledge. 
+
+
+
+## Installation
+
+
+You can install the released version of mspms from github
+
+```{r,eval = FALSE}
+devtools::install_github("baynec2/mspms")
+```
+
+## Workflow
 
 So how does the msps data normalization process work?
 
@@ -31,7 +44,7 @@ So how does the msps data normalization process work?
 7. Calculates the fold change and the p/q value across experimental conditions using T-tests. 
 
 
-## Combining Peaks file outputs
+### Combining Peaks file outputs
 
 The files coming from peaks should have..... **Describe how to do this here**.
 
@@ -41,6 +54,9 @@ Importantly, this. data contains... what????
 
 
 ```{r}
+library(dplyr)
+library(mspms)
+
 ### Loading the files ###
 lfq_filename = "legacy/protein-peptides-lfq.csv"
 #file "protein-peptides.csv" exported from PEAKS identification
@@ -53,7 +69,7 @@ prepared_data = prepare_for_normalyzer(lfq_filename,id_filename)
 
 
 
-## Normalizing values.
+### Normalizing values.
 
 msp-ms uses the .... package to do normalization under the hood. 
 
@@ -73,7 +89,7 @@ normalyzed_data = normalyze(prepared_data,design_matrix)
 ```
 
 
-## Handling Outliers
+### Handling Outliers
 
 Here we use a dixon test from the outliers package to detect outliers from each of our replicates. 
 
@@ -83,7 +99,7 @@ outliers = handle_outliers(normalyzed_data)
 
 
 
-## Imputation of data 
+### Imputation of data 
 
 We have a lot of missing, or 0 values. For these, we need to impute them so we can do downstream statistics
 Data is imputated by ....
@@ -93,7 +109,7 @@ imputed = impute(outliers)
 ```
 
 
-## Joining with Library
+### Joining with Library
 
 Next we need to join everything with the sequences of the peptide library
 ```{r}
@@ -102,7 +118,7 @@ joined_with_library = join_with_library(imputed)
 
 
 
-## Calcuating clevages
+### Calcuating clevages
 Next, we need to determine where the peptide sequences are cleaved. 
 
 We check both the N and C terminus. 
@@ -114,7 +130,7 @@ final_data = add_cleavages(joined_with_library)
 ```
 
 
-## Conducting stats
+### Conducting stats
 
 Right now this is left to the user to do on their own. Will update after talkng to Bri.
 
