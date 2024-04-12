@@ -1,0 +1,72 @@
+---
+title: "updated_workflow"
+output: html_document
+date: "2024-03-29"
+---
+
+
+
+```{r}
+#library(mspms)
+source("R/prepare_for_normalyzer.R")
+source("R/extract_design_matrix.R")
+
+### Loading the files ###
+lfq_filename = "legacy/protein-peptides-lfq.csv"
+#file "protein-peptides.csv" exported from PEAKS identification
+id_filename = "legacy/protein-peptides-id.csv"
+
+# Prepare the data for normalyzer analysis
+prepared_data = prepare_for_normalyzer(lfq_filename,id_filename)
+
+# Extracting design matrix
+design_matrix = extract_design_matrix(prepared_data)
+
+# normalyze the data 
+
+source("R/normalyze.R")
+
+normalyzed_data = normalyze(prepared_data,design_matrix)
+
+
+source("R/handle_outliers.R")
+outliers = handle_outliers(normalyzed_data)
+
+
+#outliers get converted to NAs. We dont want to impute these. We want to impute the values that are not NAs
+source("R/impute.R")
+imputed = impute(outliers)
+
+# Writing sequences to file
+peptide_library2 = peptide_library %>% 
+  mutate(library_reference_id = gsub(">","",library_reference_id))
+
+saveRDS(peptide_library2,"peptide_library")
+
+
+source("R/join_with_library.R")
+
+joined_with_library = join_with_library(imputed)
+
+
+# Doing all the clevages 
+
+## Calculating where all of the cleavages are at. 
+
+source("R/nterm_cleavage.R")
+source("R/cterm_cleavage.R")
+
+source("R/add_cleavages.R")
+
+
+final_data = add_cleavages(joined_with_library)
+
+
+## Now that we have the final data, we need to 
+
+
+
+
+
+
+```

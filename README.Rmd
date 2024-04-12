@@ -1,0 +1,124 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# msp-ms
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of msp-ms is provide a concise code-base for the normalization and data processing required for the msp-ms method. 
+
+
+Additionally, we provide a graphical user interface powered by shiny apps that allows for a user to utilize the method without requiring any R coding knowledge. 
+
+So how does the msps data normalization process work?
+
+1. Takes two input files from PEAKS and combines them
+3. Normalizes values and then does a reverse log2 transformation
+4. Looks for outliers across replicates. Removes them. 
+5. Imputes data for missing values (likely to be very low intesity).
+6. Figures out the locations of the detected clevages within the library of peptide sequences used. Is it cleaved at the N or C terminus, or both?
+7. Calculates the fold change and the p/q value across experimental conditions using T-tests. 
+
+
+## Combining Peaks file outputs
+
+The files coming from peaks should have..... **Describe how to do this here**.
+
+
+
+Importantly, this. data contains... what????
+
+
+```{r}
+### Loading the files ###
+lfq_filename = "legacy/protein-peptides-lfq.csv"
+#file "protein-peptides.csv" exported from PEAKS identification
+id_filename = "legacy/protein-peptides-id.csv"
+
+# Prepare the data for normalyzer analysis
+prepared_data = prepare_for_normalyzer(lfq_filename,id_filename)
+```
+
+
+
+
+## Normalizing values.
+
+msp-ms uses the .... package to do normalization under the hood. 
+
+
+First we need to extract a design matrix. 
+
+Then we can normalyze the data. 
+```{r}
+# Extracting design matrix
+design_matrix = extract_design_matrix(prepared_data)
+
+# normalyze the data 
+
+source("R/normalyze.R")
+
+normalyzed_data = normalyze(prepared_data,design_matrix)
+```
+
+
+## Handling Outliers
+
+Here we use a dixion test from the outliers package to detect outliers from each of our replicates. 
+
+```{r}
+outliers = handle_outliers(normalyzed_data)
+```
+
+
+
+## Imputation of data 
+
+We have a lot of missing, or 0 values. For these, we need to impute them so we can do downstream statistics
+Data is imputated by ....
+
+```{r}
+imputed = impute(outliers)
+```
+
+
+## Joining with Library
+
+Next we need to join everything with the sequences of the peptide library
+```{r}
+joined_with_library = join_with_library(imputed)
+```
+
+
+
+## Calcuating clevages
+Next, we need to determine where the peptide sequences are cleaved. 
+
+We check both the N and C terminus. 
+
+Sequences are presented as the 4 amino acids on both sides of a cleavage. X indicates that there was nothing on that side in the library because it was cleaved close to the edge. 
+
+```{r}
+final_data = add_cleavages(joined_with_library)
+```
+
+
+## Conducting stats
+
+Right now this is left to the user to do on their own. Will update after talkng to Bri.
+
+
+
+
+
