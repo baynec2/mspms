@@ -132,7 +132,75 @@ head(final_data)
 
 Right now this is left to the user to do on their own. Will update after talkng to Bri.
 
+```{r}
+
+#Figuring out where the samples start
+start_of_samples = names(final_data)[which(names(final_data) == "z")+1]
+
+# Combining with design matrix
+long = final_data %>% 
+ tidyr::pivot_longer(start_of_samples:length(.),names_to = "sample") %>% 
+ inner_join(design_matrix,by = "sample")
+
+# What is the control group called?
+control_group = "DMSO_T0"
+
+# calculating log2 FC
+control_data = long %>% 
+  filter(group == control_group) %>% 
+  group_by(Peptide) %>% 
+  summarise(control_mean = mean(value,na.rm = TRUE))
+
+reference_group = "DMSO_T240"
+
+reference_data = long %>% 
+  filter(group == reference_group) %>% 
+  group_by(Peptide) %>% 
+  summarise(reference_mean = mean(value,na.rm = TRUE))
+
+log2fc = inner_join(control_data,reference_data,by = "Peptide") %>% 
+ dplyr::mutate(comparison = paste0(control_group,"_",reference_group),
+         log2fc = log2(reference_mean/control_mean)) %>% 
+  dplyr::select(Peptide,comparison,log2fc)
 
 
+
+# Doing T tests
+
+stat = long %>% 
+  filter(group %in% c(control_group,reference_group)) %>%
+  group_by(Peptide) %>%
+  rstatix::t_test(value ~ group) %>%
+  rstatix::adjust_pvalue(method = "fdr") %>% 
+  mutate(comparison = paste0(group1,"_",group2)) 
+
+combined = inner_join(log2fc,stat,by = c("Peptide","comparison"))
+
+
+
+```
+
+
+
+
+```{r}
+
+# Lets do anova to see if there are any differences among groups
+stat = long %>% 
+  group_by(Peptide) %>% 
+  rstatix::anova_test(formula = value ~ group) %>% 
+  rstatix::adjust_pvalue(method = "fdr")
+
+sig = stat %>% 
+  as.data.frame() %>% 
+  dplyr::filter(p.adj < 0.05) %>% 
+  dplyr::pull(Peptide)
+
+
+p1 = long %>%
+  mutate(peptide %in% stat)
+  ggplot(aes())
+
+```
 
 
