@@ -7,8 +7,13 @@
 join_with_library(imputed, peptide_library = mspms::peptide_library)
 }
 \arguments{
-\item{imputed}{}
+\item{imputed}{= this is the imputed data. Intended to be prepared using mspms::impute()}
+
+\item{peptide_library}{= this is the peptide library that was used with the MSP-MS method}
+}
+\value{
+a data frame with the peptide library information joined to the imputed data.
 }
 \description{
-join_with_library
+Joins MSP-MS peptide library with imputed data.
 }

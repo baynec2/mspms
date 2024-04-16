@@ -22,10 +22,35 @@ This is a Shiny app designed to use the [mspms R package](https://github.com/bay
 
 # How to use
 
-On the side bar, you will see two places to upload files. 
+On the side bar, you will see three places to upload files. 
 
-1. The first file should be the LFQ file from PEAKS. This file should be a csv file.
-2. The second file should be the ID file from PEAKS. This file should also be a csv file.
+1. The first file should be the LFQ file as exported from PEAKS. This file should be a csv file.
+
+This file should look like the following:
+
+```{r}
+DT::datatable(head(mspms::peaks_lfq,2))
+```
+
+
+2. The second file should be the ID file as exported from PEAKS. This file should also be a csv file.
+
+This file should look like the following:
+
+```{r}
+DT::datatable(head(mspms::peaks_id,2))
+```
+
+3. The third file should be the design matrix file. This should be a csv file. 
+
+The design matrix file should be a csv file with the following columns: "sample" and "group". The sample column should contain the names of the samples as found in the PEAKS files. The group column should contain the group that the sample belongs to. This can be any thing, as long as it is the same per group.
+
+Here is an example of what the design matrix file should look like for the test files.
+
+```{r}
+DT::datatable(mspms::design_matrix)
+```
+
 
 
 You will also see two tabs at the top of the page, About and Output.. 

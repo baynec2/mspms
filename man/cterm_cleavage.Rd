@@ -2,20 +2,27 @@
 % Please edit documentation in R/cterm_cleavage.R
 \name{cterm_cleavage}
 \alias{cterm_cleavage}
-\title{cterm_cleavage = finding the cleavage sequences in reference to a p}
+\title{cterm_cleavage}
 \usage{
 cterm_cleavage(peptide_sequence, library_match_sequence, library_real_sequence)
 }
 \arguments{
-\item{peptide_sequence}{= this is the peptide sequence measured. _ denotes clevage site.}
+\item{peptide_sequence}{= this is the peptide sequence in single leter AA code. _ denotes cleavage site.}
 
 \item{library_match_sequence}{= this is the sequence of the corresponding peptide in the library to the peptide_sequence.}
 
-\item{library_real_sequence}{= this is the library match sequence with the Ls transformed to Ms (For some reason we don't understand.)}
+\item{library_real_sequence}{= this is the library match sequence with the Ls transformed to Ms (This is what the legacy code did so it is kept this way in case there was a good reason for it)}
 }
 \value{
 a data frame with the peptide sequence, cleavage sequences 4 AA on the left and right of the c term cleavage, and the position of the c term cleavage in the library sequence.
 }
 \description{
-cterm_cleavage = finding the cleavage sequences in reference to a p
+Finding the cleavage sequences on the C terminus of a given peptide in reference to the peptide library it was derived from
+}
+\examples{
+peptide_sequence = "YWLSTHLAGKR_R"
+library_match_sequence = "YWLSTHLAGKRRDW"
+library_real_sequence = "YWMSTHLAGKRRDW"
+cterm_cleavage(peptide_sequence,library_match_sequence,library_real_sequence)
+
 }

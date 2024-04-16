@@ -2,7 +2,10 @@
 % Please edit documentation in R/prepare_for_normalyzer.R
 \name{prepare_for_normalyzer}
 \alias{prepare_for_normalyzer}
-\title{prepare_for_normalyzer: This function prepares the data out from peaks for downstream normalization via normalyzer.}
+\title{prepare_for_normalyzer
+This function prepares the data out from peaks for downstream normalization via normalyzer.
+Briefly, it combines the two files by peptide IDs and filters out peptides that have quality scores <= 0.3. 0s are also replaced with NAs
+Note that there can be multiple matches between these, currently only keeps the values for the best quality scores. This could be a bug.}
 \usage{
 prepare_for_normalyzer(lfq_filepath, id_filepath)
 }
@@ -12,9 +15,11 @@ prepare_for_normalyzer(lfq_filepath, id_filepath)
 \item{id_filepath}{= this is the filepath to the second PEAKS output table}
 }
 \value{
-a data frame containing the combined columns from the
+a data frame containing the combined columns from the lfq and id files, with quality scores > 0.3 and 0s replaced with NAs.
 }
 \description{
-Briefly, it combines the two files by peptide IDs and filters out peptides that have quality scores <= 0.3. 0s are also replaced with NAs 
-Note that there can be multiple matches between these, currently  only keeps the values for the best match. This could be a bug.
+prepare_for_normalyzer
+This function prepares the data out from peaks for downstream normalization via normalyzer.
+Briefly, it combines the two files by peptide IDs and filters out peptides that have quality scores <= 0.3. 0s are also replaced with NAs
+Note that there can be multiple matches between these, currently only keeps the values for the best quality scores. This could be a bug.
 }

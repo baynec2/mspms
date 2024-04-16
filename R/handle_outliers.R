@@ -1,19 +1,22 @@
 #' handle_outliers
 #'
-#' @param normalyzed_data = this is the normalzed data.
-#' @param design_matrix = this is the design_matrix containing info on what sample is in what group
+#' This function replaces outliers for MSP-MS data with NA based on the results of dixon tests as implemented in the outliers package
+#'
+#' @param normalyzed_data = this is the normalized data. Intended to be prepared using mspms::normalyze()
+#' @param design_matrix = this is the design_matrix containing "sample","group","condition","time" columns. Intended to be read in using readr::read_csv()
 #'
 #' @return a data frame in the long format where outliers according to a dixon test have been handled.
 #' @export
 #'
 #' @examples
+#'
 handle_outliers = function(normalyzed_data,design_matrix){
 
   # Putting into the long format, adding group information, based on sample_time_replicate naming convention
-
+  index = which(names(normalyzed_data) == "z")+1
 
   long_data = normalyzed_data %>%
-    tidyr::pivot_longer(30:length(.),names_to = "sample") %>%
+    tidyr::pivot_longer(index:length(.),names_to = "sample") %>%
     dplyr::inner_join(design_matrix,by = "sample") %>%
     dplyr::filter(!is.na(value))
 
@@ -56,9 +59,10 @@ handle_outliers = function(normalyzed_data,design_matrix){
 
   NAs_added_back = out %>%
     #dplyr::filter(!is_outlier) %>%
-    dplyr::select(-group) %>%
+    dplyr::select(-group,-condition,-time) %>%
     tidyr::pivot_wider(names_from = sample, values_from = value) %>%
-    tidyr::pivot_longer(30:length(.),names_to = "sample_id")
+    tidyr::pivot_longer(index:length(.),names_to = "sample_id") %>%
+    tibble::as.tibble()
 
 
   return(NAs_added_back)

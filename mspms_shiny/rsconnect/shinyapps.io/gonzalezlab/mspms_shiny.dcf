@@ -5,7 +5,7 @@ account: gonzalezlab
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 11745649
-bundleId:
+bundleId: 8487924
 url: https://gonzalezlab.shinyapps.io/mspms_shiny/
 version: 1
 asMultiple: FALSE

@@ -1,12 +1,13 @@
-#' nterm_cleavage:
+#' nterm_cleavage
 #'
-#' @param peptide_sequence = this is the peptide sequence measured. _ denotes clevage site.
+#' Finding the cleavage sequences on the N terminus of a given peptide in reference to the peptide library it was derived from.
+#'
+#' @param peptide_sequence = this is the peptide sequence in single leter AA code. _ denotes cleavage site..
 #' @param library_match_sequence  = this is the sequence of the corresponding peptide in the library to the peptide_sequence.
-#' @param library_real_sequence = this is the library match sequence with the Ls transformed to Ms (For some reason we don't understand.)
+#' @param library_real_sequence = this is the library match sequence with the Ls transformed to Ms (This is what the legacy code did so it is kept this way in case there was a good reason for it)
 #'
 #' @return
 #' a data frame with the peptide sequence, cleavage sequences 4 AA on the left and right of the n term cleavage, and the position of the n term cleavage in the library sequence.
-
 #' @export
 #'
 #' @examples
@@ -84,16 +85,3 @@ nterm_cleavage = function(peptide_sequence,library_match_sequence,library_real_s
   }
 
 
-# ###Testing
-# cleave_tab = readr::read_csv("legacy/protein-peptides_prepared.csv")
-#
-#
-# library(dplyr)
-#    test =  purrr::pmap_df(list( gsub("\\.","_",cleave_tab$Annotated_Sequence),cleave_tab$MatchSequence,cleave_tab$RealSequence),nterm_cleavage)
-#
-#
-#    test_vis = cbind(cleave_tab$RealSequence,cleave_tab$Annotated_Sequence,cleave_tab$`N-term`,test$nterm,cleave_tab$Cleave_Loc,test$nterm_cleavage_pos)
-#
-#    identical(cleave_tab$`N-term`,test$nterm)
-#    test_vis
-#

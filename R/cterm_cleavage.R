@@ -1,18 +1,19 @@
-#' cterm_cleavage = finding the cleavage sequences in reference to a p
+#' cterm_cleavage
 #'
-#' @param peptide_sequence = this is the peptide sequence measured. _ denotes clevage site.
+#' Finding the cleavage sequences on the C terminus of a given peptide in reference to the peptide library it was derived from
+#'
+#' @param peptide_sequence = this is the peptide sequence in single leter AA code. _ denotes cleavage site.
 #' @param library_match_sequence  = this is the sequence of the corresponding peptide in the library to the peptide_sequence.
-#' @param library_real_sequence = this is the library match sequence with the Ls transformed to Ms (For some reason we don't understand.)
+#' @param library_real_sequence = this is the library match sequence with the Ls transformed to Ms (This is what the legacy code did so it is kept this way in case there was a good reason for it)
 #'
 #' @return
 #' a data frame with the peptide sequence, cleavage sequences 4 AA on the left and right of the c term cleavage, and the position of the c term cleavage in the library sequence.
 #' @export
 #'
 #' @examples
-#' peptide_sequence = ""YWLSTHLAGKR_R"
+#' peptide_sequence = "YWLSTHLAGKR_R"
 #' library_match_sequence = "YWLSTHLAGKRRDW"
 #' library_real_sequence = "YWMSTHLAGKRRDW"
-#
 #' cterm_cleavage(peptide_sequence,library_match_sequence,library_real_sequence)
 #'
 cterm_cleavage = function(peptide_sequence,library_match_sequence,library_real_sequence){
@@ -32,7 +33,6 @@ cterm_cleavage = function(peptide_sequence,library_match_sequence,library_real_s
     temp = substr(peptide_sequence,pos-4, pos-1)
 
     # Checking to see what part of the reference sequence this matches.
-    # Ask Bri- what if there are more than two matches?? Is that possible?
     left_reference_beginning = regexpr(temp,library_match_sequence)[[1]][1]
     # it is four AA long, so the end is the beginning + 3
     left_reference_end = left_reference_beginning + 3
@@ -82,21 +82,3 @@ cterm_cleavage = function(peptide_sequence,library_match_sequence,library_real_s
                       cterm_cleavage_pos = cterm_cleavage_pos)
   return(output)
 }
-
-
-# ###Testing
-# cleave_tab = readr::read_csv("legacy/protein-peptides_prepared.csv")
-# peptide_sequence = "G_IYRLHVQLGGAA"
-# library_match_sequence = "DGIYRMHVQLGGAA"
-# library_real_sequence = "DGIYRMHVQLGGAA"
-#
-# cterm_cleavage(peptide_sequence,library_match_sequence,library_real_sequence)
-#
-# library(dplyr)
-#    test =  purrr::pmap_df(list( gsub("\\.","_",cleave_tab$Annotated_Sequence),cleave_tab$MatchSequence,cleave_tab$RealSequence),cterm_cleavage)
-#
-#
-#    test_vis = cbind(cleave_tab$RealSequence,cleave_tab$Annotated_Sequence,cleave_tab$`C-term`,test$cterm,cleave_tab$Cleave_Loc,test$cterm_cleavage_pos)
-#
-#    identical(cleave_tab$`C-term`,test$cterm)
-#    test_vis

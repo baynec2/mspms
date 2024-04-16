@@ -1,0 +1,28 @@
+#' log2fc_t_test
+#'
+#' Gives log2fc and statistics from t tests across conditions. Gives differences relative to time 0 within each condition.
+#'
+#' @param prepared_for_stats = this is data that has been prepared using prepare_for_stats().
+#'
+#' @return a data frame containing log2fc and t test statistics across conditions
+#' @export
+#'
+#' @examples
+log2fc_t_test = function(prepared_for_stats){
+
+  # Calculating the log2fc
+  log2fc = mspms::mspms_log2fc(prepared_for_stats)
+
+  # Calculating the stats
+  stat = mspms::mspms_t_tests(prepared_for_stats)
+
+  #Combining them together
+  log2fc_stats = dplyr::inner_join(log2fc,stat,by = c("Peptide","comparison")) %>%
+    dplyr::mutate(time = group2,
+           condition = condition.x) %>%
+    dplyr::select(-condition.x,-condition.y) %>%
+    tibble::as.tibble()
+
+  return(log2fc_stats)
+
+}

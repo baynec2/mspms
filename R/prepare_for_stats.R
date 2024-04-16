@@ -1,0 +1,25 @@
+#' prepare_for_stats
+#'
+#' This function prepares data for downstream statistics by transforming the data to the long format and combining with the design matrix.
+#'
+#' @param cleavage_added_data = this is the processed data with cleavage information added. Intended to be downstream of the add_cleavages() function.
+#' @param design_matrix = this is the design matrix with "sample",group","time","condition" columns.
+#'
+#' @return a data frame in long format with the design matrix combined.
+#' @export
+#'
+#' @examples
+prepare_for_stats = function(cleavage_added_data,design_matrix){
+
+  #Figuring out where the samples start
+  start_of_samples = names(cleavage_added_data)[which(names(cleavage_added_data) == "z")+1]
+
+  # make into long format, combine with design matrix.
+  long = cleavage_added_data %>%
+    tidyr::pivot_longer(start_of_samples:length(.),names_to = "sample") %>%
+    dplyr::inner_join(design_matrix,by = "sample") %>%
+    tibble::as.tibble()
+
+  return(long)
+
+}

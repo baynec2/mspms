@@ -11,7 +11,9 @@ ui <- dashboardPage(#skin = "midnight",
       sidebarMenu(
         # Making the tabs
         menuItem("About", tabName = "about", icon = icon("magnifying-glass-chart")),
-        menuItem("Output", tabName = "output", icon = icon("chart-simple"))
+        menuItem("Output", tabName = "output", icon = icon("database")),
+        menuItem("Stats", tabName = "stats", icon = icon("star-of-life")),
+        menuItem("DataViz", tabName = "viz", icon = icon("chart-simple"))
       ),
       #Putting the place to load the files
       fileInput("upload1", "Upload PEAKS LFQ file",accept = ".csv"),
@@ -31,19 +33,50 @@ ui <- dashboardPage(#skin = "midnight",
                 downloadButton(
                   "downloadData",
                   label = "Download"
-                )))
-                  )
-                  )
+                ))),
+        tabItem(tabName = "stats",
+                fluidRow(
+                  box(DT::DTOutput('ttest_results'),width = 6),
+                  box(DT::DTOutput('anova_results'),width = 6)),
+                downloadButton(
+                  "downloadttest",
+                  label = "Download t-test"
+                  ),
+                downloadButton(
+                  "downloadanova",
+                  label = "Download anova"
+                )
+                ),
+        tabItem(tabName = "viz",
+                fluidRow(
+                  box(plotOutput("plot1"),width = 6),
+                  box(plotOutput("plot2"),width = 6)
+                )
+                )
+        )
     )
+)
+
 
 
 # Define server logic
 server <- function(input, output){
 
+  # Rendering the about page
+  output$about <- renderUI({
+    includeHTML("./about.html")})
+
+
+  # Reading in the design matrix
+  design_matrix = reactive({
+    readr::read_csv(input$upload3$datapath)
+  })
+
+  # Processing the data normalization data
   processed_data = reactive({
         prepared_data =  mspms::prepare_for_normalyzer(input$upload1$datapath,input$upload2$datapath)
         # mspms workflow
-        design_matrix=readr::read_csv(input$upload3$datapath)
+        design_matrix = design_matrix()
         normalyzed_data = mspms::normalyze(prepared_data,design_matrix)
         outliers = mspms::handle_outliers(normalyzed_data,design_matrix)
         imputed = mspms::impute(outliers)
@@ -64,14 +97,101 @@ server <- function(input, output){
   )
 
   output$processed_data = DT::renderDT(
-      processed_data(),
-      options = list(scrollX = TRUE))
+    processed_data(),
+    options = list(scrollX = TRUE))
 
-
-  output$about <- renderUI({
-    includeHTML("./about.html")
+  # Doing the anova
+  anova = reactive({
+    processed_data() %>%
+    mspms::prepare_for_stats(design_matrix()) %>%
+    mspms::mspms_anova()
   })
+
+
+  #Downloading anova data
+  output$downloadanova <- downloadHandler(
+    filename = function() {
+      paste("anova_results", ".csv", sep = "")
+    },
+    content = function(file){
+      readr::write_csv(anova(), file)
+    }
+  )
+
+  output$anova_results = DT::renderDT(
+    anova(),
+    options = list(scrollX = TRUE))
+
+  # Doing the t-tests
+
+  ttests = reactive({
+    processed_data() %>%
+    mspms::prepare_for_stats(design_matrix()) %>%
+    mspms::mspms_t_tests()
+  })
+
+
+  #Downloading processed data
+  output$downloadData <- downloadHandler(
+    filename = function() {
+      paste("ttest_results", ".csv", sep = "")
+    },
+    content = function(file){
+      readr::write_csv(ttests(), file)
+    }
+  )
+
+  output$ttest_results = DT::renderDT(
+    ttests(),
+    options = list(scrollX = TRUE))
+
+
+  #doing some data visualizations.
+
+  # Volcano plots
+
+
+  log2fct = reactive({
+   processed_data() %>%
+     mspms::prepare_for_stats(design_matrix()) %>%
+     mspms::log2fc_t_test()
+   })
+
+  output$plot1 = renderPlot({
+
+    log2fct() %>%
+      ggplot(aes(x = log2fc,y = -log10(p.adj)))+
+      geom_point()+
+      geom_hline(yintercept = -log10(0.05),linetype = "dashed",color = "red")+
+      geom_vline(xintercept = 3, linetype = "dashed",color = "red")+
+      geom_vline(xintercept = -3, linetype = "dashed",color = "red")+
+      theme_minimal()+
+      labs(x = "Log2 Fold Change",y = "-log10(p value)")+
+      facet_wrap(~comparison,scales = "free")
+
+    })
+
+
+  output$plot2 = plotly::renderPlotly({
+
+    log2fct() %>%
+      ggplot(aes(x = log2fc,y = -log10(p.adj)))+
+      geom_point()+
+      geom_hline(yintercept = -log10(0.05),linetype = "dashed",color = "red")+
+      geom_vline(xintercept = 3, linetype = "dashed",color = "red")+
+      geom_vline(xintercept = -3, linetype = "dashed",color = "red")+
+      theme_minimal()+
+      labs(x = "Log2 Fold Change",y = "-log10(p value)")+
+      facet_wrap(~comparison,scales = "free")
+
+    })
+
+
+
+
   }
+
+
 
 
 
