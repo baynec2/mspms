@@ -51,6 +51,10 @@ ui <- dashboardPage(#skin = "midnight",
                 fluidRow(
                   box(plotOutput("plot1"),width = 6),
                   box(plotOutput("plot2"),width = 6)
+                ),
+                fluidRow(
+                  box(plotOutput("plot3"),width = 12)
+
                 )
                 )
         )
@@ -100,10 +104,15 @@ server <- function(input, output){
     processed_data(),
     options = list(scrollX = TRUE))
 
-  # Doing the anova
+  # Preparing for stats
+
+  prepared_for_stats = reactive({
+      processed_data() %>%
+      mspms::prepare_for_stats(design_matrix())
+  })
+
   anova = reactive({
-    processed_data() %>%
-    mspms::prepare_for_stats(design_matrix()) %>%
+    prepared_for_stats() %>%
     mspms::mspms_anova()
   })
 
@@ -125,8 +134,7 @@ server <- function(input, output){
   # Doing the t-tests
 
   ttests = reactive({
-    processed_data() %>%
-    mspms::prepare_for_stats(design_matrix()) %>%
+    prepared_for_stats() %>%
     mspms::mspms_t_tests()
   })
 
@@ -149,31 +157,30 @@ server <- function(input, output){
   #doing some data visualizations.
 
   # Volcano plots
-
-
   log2fct = reactive({
-   processed_data() %>%
-     mspms::prepare_for_stats(design_matrix()) %>%
+     prepared_for_stats() %>%
      mspms::log2fc_t_test()
    })
 
   output$plot1 = renderPlot({
 
-    log2fct() %>%
-      ggplot(aes(x = log2fc,y = -log10(p.adj)))+
-      geom_point()+
-      geom_hline(yintercept = -log10(0.05),linetype = "dashed",color = "red")+
-      geom_vline(xintercept = 3, linetype = "dashed",color = "red")+
-      geom_vline(xintercept = -3, linetype = "dashed",color = "red")+
-      theme_minimal()+
-      labs(x = "Log2 Fold Change",y = "-log10(p value)")+
-      facet_wrap(~comparison,scales = "free")
+    prepared_for_stats() %>%
+      mspms::plot_pca()
 
     })
 
 
   output$plot2 = plotly::renderPlotly({
 
+    prepared_for_stats() %>%
+      mspms::plot_heatmap()
+
+
+
+    })
+
+  output$plot3 = renderPlot({
+
     log2fct() %>%
       ggplot(aes(x = log2fc,y = -log10(p.adj)))+
       geom_point()+
@@ -184,8 +191,7 @@ server <- function(input, output){
       labs(x = "Log2 Fold Change",y = "-log10(p value)")+
       facet_wrap(~comparison,scales = "free")
 
-    })
-
+  })
 
 
 

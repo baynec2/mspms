@@ -20,7 +20,7 @@ plot_heatmap = function(prepared_for_stats,scale = "column"){
     dplyr::mutate(time = as.factor(time))
 
 
- plot =  heatmaply::heatmaply(heatmap_data,scale = scale,showticklabels = c(FALSE,TRUE))
+ heatmaply::heatmaply(heatmap_data,scale = scale,showticklabels = c(FALSE,TRUE))
 
- return(plot)
+
 }
