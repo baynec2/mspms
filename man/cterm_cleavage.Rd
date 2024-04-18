@@ -4,7 +4,12 @@
 \alias{cterm_cleavage}
 \title{cterm_cleavage}
 \usage{
-cterm_cleavage(peptide_sequence, library_match_sequence, library_real_sequence)
+cterm_cleavage(
+  peptide_sequence,
+  library_match_sequence,
+  library_real_sequence,
+  n_residues = 4
+)
 }
 \arguments{
 \item{peptide_sequence}{= this is the peptide sequence in single leter AA code. _ denotes cleavage site.}
@@ -12,6 +17,8 @@ cterm_cleavage(peptide_sequence, library_match_sequence, library_real_sequence)
 \item{library_match_sequence}{= this is the sequence of the corresponding peptide in the library to the peptide_sequence.}
 
 \item{library_real_sequence}{= this is the library match sequence with the Ls transformed to Ms (This is what the legacy code did so it is kept this way in case there was a good reason for it)}
+
+\item{n_residues}{= this is the number of residues to the left and right of the cleavage site that you want to extract.}
 }
 \value{
 a data frame with the peptide sequence, cleavage sequences 4 AA on the left and right of the c term cleavage, and the position of the c term cleavage in the library sequence.

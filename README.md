@@ -237,12 +237,14 @@ Next, we need to determine where the peptide sequences are cleaved.
 
 We check both the N and C terminus.
 
-Sequences are presented as the 4 amino acids on both sides of a
-cleavage. X indicates that there was nothing on that side in the library
-because it was cleaved close to the edge.
+Sequences are presented as the user specified number of amino acids on
+both sides of a cleavage. The default is 4, but there is interest in
+looking at motifs that are farther away from the cut site. Note that X
+indicates that there was nothing on that side in the library because it
+was cleaved close to the edge.
 
 ``` r
-cleavage_added_data = add_cleavages(joined_with_library)
+cleavage_added_data = add_cleavages(joined_with_library,n_residues = 4)
 
 head(cleavage_added_data)
 #> # A tibble: 6 × 60
@@ -264,6 +266,7 @@ head(cleavage_added_data)
 
 # saving to data folder in package for tests. Ignore when using on your own data
 usethis::use_data(cleavage_added_data,overwrite = TRUE)
+#> ✔ Setting active project to '/Users/charliebayne/mspms'
 #> ✔ Saving 'cleavage_added_data' to 'data/cleavage_added_data.rda'
 #> • Document your data (see 'https://r-pkgs.org/data.html')
 ```

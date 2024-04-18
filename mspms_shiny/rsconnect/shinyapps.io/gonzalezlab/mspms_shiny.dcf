@@ -5,9 +5,9 @@ account: gonzalezlab
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 11745649
-bundleId: 8487924
+bundleId: 8502991
 url: https://gonzalezlab.shinyapps.io/mspms_shiny/
 version: 1
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: about.Rmd|2024-04-12_msp-ms_normalyze_output
+ignoredFiles: about.Rmd

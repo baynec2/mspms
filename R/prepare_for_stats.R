@@ -18,7 +18,7 @@ prepare_for_stats = function(cleavage_added_data,design_matrix){
   long = cleavage_added_data %>%
     tidyr::pivot_longer(start_of_samples:length(.),names_to = "sample") %>%
     dplyr::inner_join(design_matrix,by = "sample") %>%
-    tibble::as.tibble()
+    tibble::as_tibble()
 
   return(long)
 

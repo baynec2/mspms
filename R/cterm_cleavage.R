@@ -5,7 +5,8 @@
 #' @param peptide_sequence = this is the peptide sequence in single leter AA code. _ denotes cleavage site.
 #' @param library_match_sequence  = this is the sequence of the corresponding peptide in the library to the peptide_sequence.
 #' @param library_real_sequence = this is the library match sequence with the Ls transformed to Ms (This is what the legacy code did so it is kept this way in case there was a good reason for it)
-#'
+#' @param n_residues = this is the number of residues to the left and right of the cleavage site that you want to extract.
+
 #' @return
 #' a data frame with the peptide sequence, cleavage sequences 4 AA on the left and right of the c term cleavage, and the position of the c term cleavage in the library sequence.
 #' @export
@@ -16,7 +17,8 @@
 #' library_real_sequence = "YWMSTHLAGKRRDW"
 #' cterm_cleavage(peptide_sequence,library_match_sequence,library_real_sequence)
 #'
-cterm_cleavage = function(peptide_sequence,library_match_sequence,library_real_sequence){
+
+cterm_cleavage = function(peptide_sequence,library_match_sequence,library_real_sequence,n_residues = 4){
 
   # First, we determine if there is a cterm cleavage
   # We do this by looking to see if there is a _ (denotes a cleavage)
@@ -30,12 +32,12 @@ cterm_cleavage = function(peptide_sequence,library_match_sequence,library_real_s
     pos = nchar(peptide_sequence) - 1
 
     # now we define the sequence on the left side of the cleavage
-    temp = substr(peptide_sequence,pos-4, pos-1)
+    temp = substr(peptide_sequence,pos-n_residues, pos-1)
 
     # Checking to see what part of the reference sequence this matches.
     left_reference_beginning = regexpr(temp,library_match_sequence)[[1]][1]
     # it is four AA long, so the end is the beginning + 3
-    left_reference_end = left_reference_beginning + 3
+    left_reference_end = left_reference_beginning + (n_residues - 1)
 
     # now we can determine the right side of the cleavage sequence by taking the left reference end and adding 1
     right_reference_beginning = left_reference_end + 1
@@ -43,36 +45,22 @@ cterm_cleavage = function(peptide_sequence,library_match_sequence,library_real_s
     # the cterm cleavage position is the right reference beginning minus 1
     cterm_cleavage_pos = right_reference_beginning -1
 
-
     # it is four AA long, so the end is the beginning + 3
-    right_reference_end = right_reference_beginning + 3
+    right_reference_end = right_reference_beginning + (n_residues - 1)
 
-    # Deciding what to do based on what position of the reference the match is to.
-    # Note that all of the peptides in the library are 14 AA long
-    # This is all about getting the 4 flanking amino acids correct. It should be 4 on each side of the cleavage
-    # X denotes that there was nothing there, as happens if it is on the edge of the sequence in the peptide library.
-    if(left_reference_end == 13){
-      cterm = paste(
-        c(substr(library_real_sequence,left_reference_beginning,left_reference_end),
-          substr(library_real_sequence,right_reference_beginning,right_reference_beginning)
-          ,"XXX"),collapse = "")
-    }else if(left_reference_end == 12){
-      cterm = paste(
-        c(
-          substr(library_real_sequence,left_reference_beginning,left_reference_end),
-          substr(library_real_sequence,right_reference_beginning,right_reference_beginning+1),
-                 "XX"),collapse = "")
-    }else if(left_reference_end == 11){
-      cterm = paste(
-        c(
-          substr(library_real_sequence,left_reference_beginning,left_reference_end),
-          substr(library_real_sequence,right_reference_beginning,right_reference_beginning +2),
-          "X"),collapse = "")
-    }else if(dplyr::between(left_reference_end,1,11)){
-      cterm = paste0(c(
-        substr(library_real_sequence,left_reference_beginning,left_reference_end),
-        substr(library_real_sequence,right_reference_beginning,right_reference_end)),collapse = "")
-    }
+    # Extracting the sequences from the reference sequence
+    right_sequence = substr(library_real_sequence,right_reference_beginning,right_reference_end)
+    # now we need to make sure that we add X to represent cases where there was no more sequences in the library peptide
+    right_sequence = paste0(right_sequence,paste0(rep("X",n_residues - nchar(right_sequence)),collapse = ""))
+
+    # Doing the same on the left side of the clevage event
+
+    left_sequence = substr(library_real_sequence,left_reference_beginning,left_reference_end)
+    # now we need to make sure that we add X to represent cases where there was no more sequences in the library peptide
+    left_sequence = paste0(paste0(rep("X",n_residues - nchar(left_sequence)),collapse = ""),left_sequence)
+
+
+    cterm = paste(c(left_sequence,right_sequence),collapse = "")
   }else{
     cterm = NA
     cterm_cleavage_pos = NA
