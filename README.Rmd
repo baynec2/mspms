@@ -274,5 +274,26 @@ mspms::plot_heatmap(prepared_for_stats)
 ```
 
 ![](www/plot_heatmap_output.png)
+  
+#### Ploting time course.  
+
+We also provide a function for plotting the mean intensity and standard deviation over time for each peptide in the data set by conditions. Facets show peptide, color shows the condition. 
+
+This is best used in combination with the ANOVA function. Below, we will use anova to calculate the peptides where we see an effect of time (in the DMSO group), and then plot these.
+
+```{r}
+
+top10sig = anova_stats %>% 
+  arrange(p.adj) %>%
+  pull(Peptide) %>% 
+  head(10)
+
+
+p1 = prepared_for_stats %>%
+  dplyr::filter(Peptide %in% top10sig) %>%
+  mspms::plot_time_course()
+
+p1
+```
 
 

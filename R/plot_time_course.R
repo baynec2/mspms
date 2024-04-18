@@ -11,27 +11,28 @@
 #'
 #' @examples
 #'
-#' prepared_for_stats = mspms::prepared_for_stats
-#'
-#' p1 = prepared_for_stats %>%
+#' p1 = mspms::prepared_for_stats %>%
 #' dplyr::filter(Peptide == "A_GLFNYNQLRGF") %>%
-#' plot_time_course()
-#'
+#' mspms::plot_time_course()
 #' p1
 
 plot_time_course = function(prepared_for_stats){
 
- p1 = ggplot2::ggplot(data = prepared_for_stats,
-                      ggplot2::aes(x = time, y = value, color = condition)) +
+ p1 = prepared_for_stats %>%
+  dplyr::group_by(Peptide,condition,time) %>%
+  dplyr::summarize(mean = mean(value,na.rm=T),sd = sd(value,na.rm = T)) %>%
+  ggplot2::ggplot(ggplot2::aes(x = time, y = mean, color = condition)) +
   ggplot2::geom_point() +
-  ggplot2::geom_line() +
+  ggplot2::geom_line()+
+  ggplot2::geom_errorbar(aes(ymax = mean + sd, ymin = mean - sd),width = 15) +
   ggplot2::facet_wrap(~Peptide, scales = "free_y") +
   ggplot2::theme_minimal() +
-  ggplot2::theme(legend.position = "none")
+  ggplot2::theme(legend.position = "bottom")
 
 
   return(p1)
 
 }
+
 
 
