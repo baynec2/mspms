@@ -12,12 +12,13 @@
 #' @export
 #'
 #' @examples
-add_cleavages = function(joined_with_library){
+add_cleavages = function(joined_with_library,n_residues = 4){
 
   # Iterating through and applying nterm_clevage
   nterm = purrr::pmap_df(list(joined_with_library$Peptide,
                               joined_with_library$library_match_sequence,
-                              joined_with_library$library_real_sequence),
+                              joined_with_library$library_real_sequence,
+                              n_residues),
                          mspms::nterm_cleavage)
 
 
@@ -25,7 +26,8 @@ add_cleavages = function(joined_with_library){
   # Iterating though and applying cterm_cleavage
   cterm = purrr::pmap_df(list(joined_with_library$Peptide,
                               joined_with_library$library_match_sequence,
-                              joined_with_library$library_real_sequence),
+                              joined_with_library$library_real_sequence,
+                              n_residues),
                          mspms::cterm_cleavage)
 
 
@@ -37,7 +39,7 @@ add_cleavages = function(joined_with_library){
   # Building final data frame.
   output = dplyr::bind_cols(joined_with_library,cleavages) %>%
     dplyr::select(library_reference_id,library_real_sequence,Peptide,nterm,nterm_cleavage_pos,cterm,cterm_cleavage_pos,dplyr::everything(),-peptide) %>%
-    tibble::as.tibble()
+    tibble::as_tibble()
 
 
 
