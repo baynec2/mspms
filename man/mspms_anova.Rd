@@ -15,3 +15,6 @@ a data frame with anova results for each peptide.
 \description{
 Performs anova on data prepared with prepare_for_stats(). Tests the effect of time for each condition. FDR corrected.
 }
+\examples{
+anova_results = mspms_anova(mspms::prepare_for_stats)
+}

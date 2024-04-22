@@ -12,8 +12,13 @@ plot_heatmap(prepared_for_stats, scale = "column")
 \item{cleavage_added_data}{= this is the data that has been processed by the add_cleavage() function.}
 }
 \value{
-a heatmaply interactive heatmao
+a heatmaply interactive heatmap
 }
 \description{
-This produces a heatmaply interactive heatmap of the data.
+This produces a heatmaply interactive heatmap of the data with color bars representing the condition and time for each sample.
+}
+\examples{
+
+plot_heatmap(mspms::prepared_for_stats,scale = "column")
+
 }

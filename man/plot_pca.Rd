@@ -15,3 +15,9 @@ a ggplot2 object
 \description{
 this creates a pca plot of the data where the points are colored by time and shaped by condition. elipses are drawn around the points at a 95% confidence interval.
 }
+\examples{
+
+plot_pca(mspms::prepared_for_stats)
+
+
+}

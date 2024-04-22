@@ -4,10 +4,14 @@
 #'
 #' @param prepared_for_stats = this is data that has been prepared using prepare_for_stats().
 #'
-#' @return a data frame containing log2fc and t test statistics across conditions
+#' @return a tibblecontaining log2fc and t test statistics across conditions
 #' @export
 #'
 #' @examples
+#'
+#' log2fc_and_t_test = log2fc_t_test(mspms::prepared_for_stats)
+#'
+#'
 log2fc_t_test = function(prepared_for_stats){
 
   # Calculating the log2fc
@@ -21,7 +25,7 @@ log2fc_t_test = function(prepared_for_stats){
     dplyr::mutate(time = group2,
            condition = condition.x) %>%
     dplyr::select(-condition.x,-condition.y) %>%
-    tibble::as.tibble()
+    tibble::as_tibble()
 
   return(log2fc_stats)
 

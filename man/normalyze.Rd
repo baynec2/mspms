@@ -18,10 +18,15 @@ and on named "condition" that contains condition cooresponding to each sample (c
 \value{
 Files from NormalyzerDE are written to the outdir specified.
 
-The normalized data is read in as a data frame, and returned as a R object.
+The normalized data is returned as a tibble.
 }
 \description{
 This function uses the NormalyzerDE package to perform normalization. It returns the median normalized data as a data frame.
 For this normalization the Intensity of each variable in a given sample is divided by the median of intensities of all variables
 in the sample and then multiplied by the mean of median of sum of intensities of all variables in all samples.
+}
+\examples{
+
+normalyzed_data = normalyze(mspms::prepared_data,mspms::design_matrix,outdir = getwd())
+
 }

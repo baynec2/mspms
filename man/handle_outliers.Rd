@@ -17,3 +17,8 @@ a data frame in the long format where outliers according to a dixon test have be
 \description{
 This function replaces outliers for MSP-MS data with NA based on the results of dixon tests as implemented in the outliers package
 }
+\examples{
+
+# Here we handle the outliers from the test data
+handled_outliers = handle_outliers(mspms::normalyzed_data,mspms::design_matrix)
+}

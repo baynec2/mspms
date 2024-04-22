@@ -4,7 +4,7 @@
 \alias{add_cleavages}
 \title{add_cleavages}
 \usage{
-add_cleavages(joined_with_library)
+add_cleavages(joined_with_library, n_residues = 4)
 }
 \arguments{
 \item{joined_with_library}{}
@@ -17,4 +17,9 @@ This functions adds cleavage information to the data frame that has been normali
 The cleavage information is represented as the 4 amino acids to the left and right of the cleavage site.
 If there is no amino acid in a position of original peptide in the library that was cleaved, it is represented as an X.
 This wraps the mspms::n_term_cleavage and mspms::c_term_cleavage functions into a consolidated function.
+}
+\examples{
+# adding the clevages 5 AA to the left and right of the cleavage site.
+add_cleavages(mspms::joined_with_library,n_residues = 5)
+
 }

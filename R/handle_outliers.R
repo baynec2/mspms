@@ -10,6 +10,9 @@
 #'
 #' @examples
 #'
+#' # Here we handle the outliers from the test data
+#'handled_outliers = handle_outliers(mspms::normalyzed_data,mspms::design_matrix)
+
 handle_outliers = function(normalyzed_data,design_matrix){
 
   # Putting into the long format, adding group information, based on sample_time_replicate naming convention

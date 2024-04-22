@@ -15,3 +15,7 @@ a data frame with the log2fc for each timepoint within each condition relative t
 \description{
 Calculates the log2fc for each timepoint within each condition relative to time 0.
 }
+\examples{
+
+log2fc = mspms_log2fc(mspms::prepared_for_stats)
+}

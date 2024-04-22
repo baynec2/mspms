@@ -1,14 +1,17 @@
 #' plot_heatmap
 #'
-#' This produces a heatmaply interactive heatmap of the data.
+#' This produces a heatmaply interactive heatmap of the data with color bars representing the condition and time for each sample.
 #'
 #' @param cleavage_added_data = this is the data that has been processed by the add_cleavage() function.
 #' @param scale = how would you like the data scaled? default is none, but can be done by "row", "column", or "none"
 #'
-#' @return a heatmaply interactive heatmao
+#' @return a heatmaply interactive heatmap
 #' @export
 #'
 #' @examples
+#'
+#' plot_heatmap(mspms::prepared_for_stats,scale = "column")
+#'
 plot_heatmap = function(prepared_for_stats,scale = "column"){
 
   heatmap_data = prepared_for_stats %>%
@@ -24,3 +27,5 @@ plot_heatmap = function(prepared_for_stats,scale = "column"){
 
 
 }
+
+

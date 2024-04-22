@@ -8,6 +8,8 @@
 #' @export
 #'
 #' @examples
+#'
+#' log2fc = mspms_log2fc(mspms::prepared_for_stats)
 mspms_log2fc = function(prepared_for_stats){
 
   # Extracting just the control data

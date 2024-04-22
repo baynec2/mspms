@@ -33,22 +33,72 @@ You can install the released version of mspms from github
 devtools::install_github("baynec2/mspms")
 ```
 
-## Workflow
+## Overview
 
-So how does the msps data normalization process work?
+There are 4 different types of functions in this package.  Those that are involved in: 
 
-1. Takes two input files from PEAKS and combines them
-3. Normalizes values and then does a reverse log2 transformation
-4. Looks for outliers across replicates. Removes them. 
-5. Imputes data for missing values (likely to be very low intesity).
-6. Figures out the locations of the detected clevages within the library of peptide sequences used. Is it cleaved at the N or C terminus, or both?
+1. Making mspms generically useful. These functions are focused on making mspms more generally useful to a wider audience outside of the very specific workflow traditionally used in the O’Donoghue lab. Allows for the use of other types of upstream proteomic data processing, different peptide libraries, etc.    
 
-This package also contains tools for doing some basic statistics and data visualizations.   
+2. Data processing/ normalization. These functions allow the user to normalize and process the MSP-MS data.    
 
-7. Calculates the fold change and the p/q value across experimental conditions using T-tests.   
-8. Conducts ANOVA tests to determine if there are any peptides that are significantly different across all time points.  
-9. Conducts a hierarchical clustering analysis to visualize overall patterns in the data.  
+3. Statistics. These methods allow the user to perform basic statistics on the normalyzed/processed data.   
 
+4. Data visualization. These functions allow the user to visualize the data in a number of useful way. 
+
+
+**Making mspms generically useful**.   
+  
+1. *calculate_all_cleavages()*: Calculates all possible cleavages for peptide library sequences.  
+
+**Data Proessing/ Normalization**. 
+
+1. *prepare_for_normalyzer()*:Takes two input files from PEAKS and combines them.    
+2. *normalyze()*: Normalizes values and then does a reverse log2 transformation.    
+3. *handle_outliers()*: Looks for outliers across replicates. Removes them.     
+4. *impute()*: Imputes data for missing values (not including NAs introduced by handle_outliers()).    
+5. *join_with_library()*: Joins the normalyzed data with the peptide library sequences.  
+6. *add_cleavages()*: Figures out the locations of the detected clevages within the library of peptide sequences used. Is it cleaved at the N or C terminus, or both?  Uses *cterm_cleavage()* and *nterm_cleavage()* to do this.  
+7. *polish()*: combines the cleavage info into one column. Discards peptides that were cleaved on both sides or not at all.  
+8. *prepare_for_stats()*: Reshapes the data into a long format and appends the data in the design matrix to make statistical testing easy to perform.  
+
+**Statistics**.   
+1. *log2fc_t_test()*: Calculates the fold change and the p/q value across experimental conditions using T-tests.      
+2. *mspms_anova()*: Conducts ANOVA tests to determine if there are any peptides that are significantly different across all time points.      
+
+**Data Visualization**.   
+1. *plot_heatmap()*: Conducts hierarchical clustering analysis and plots an interactive heatmap to visualize overall patterns in the data.    
+2. *plot_pca()*: PCA analysis to visualize the data in a 2D space.  
+3. *plot_time_course()*: Plot peptides over time by condition.  
+4. *plot_cleavage_motif()*: Visualize the sequence specificity of the cleavage sites. Designed to be similar to what is implemented in IceLogo.   
+
+
+## Making Generically Usefull
+
+### Calculating all cleavages
+
+We might want to calculate all possible cleavages for the peptide library sequences. This is useful for downstream analysis, especially when we are looking at the specificity of the cleavage sites via  as this requires a background of all possible cleavages
+
+We can do this by specifying the number of amino acids after the cleavage site that we are interested in. First lets try 4, which is the default. 
+
+```{r}
+all_peptide_sequences = mspms::calculate_all_cleavages(mspms::peptide_library$library_real_sequence,
+                        n_AA_after_cleavage=4)
+head(all_peptide_sequences)
+
+```
+
+We could also try 5 AA after each cleavage site 
+
+```{r}
+all_peptide_sequences = mspms::calculate_all_cleavages(mspms::peptide_library$library_real_sequence,
+                        n_AA_after_cleavage=5)
+head(all_peptide_sequences)
+```
+
+
+
+
+## Data Normalization/ Processing 
 
 ### Combining Peaks file outputs
 
@@ -62,9 +112,9 @@ library(dplyr)
 library(mspms)
 
 ### Loading the files ###
-lfq_filename = "test/protein-peptides-lfq.csv"
+lfq_filename = "tests/protein-peptides-lfq.csv"
 #file "protein-peptides.csv" exported from PEAKS identification
-id_filename = "test/protein-peptides-id.csv"
+id_filename = "tests/protein-peptides-id.csv"
 
 # Prepare the data for normalyzer analysis
 prepared_data = prepare_for_normalyzer(lfq_filename,id_filename)
@@ -79,7 +129,7 @@ usethis::use_data(prepared_data,overwrite = TRUE)
 
 Before we normalyze data, we need to know what samples are in what groups. We can do that by defining a design matrix. 
 ```{r}
-design_matrix = readr::read_csv("test/design_matrix.csv")
+design_matrix = readr::read_csv("tests/design_matrix.csv")
 
 head(design_matrix)
 
@@ -102,7 +152,7 @@ usethis::use_data(normalyzed_data,overwrite = TRUE)
 Here we use a dixon test from the outliers package to detect outliers from each of our replicates. We need to know what samples are part of which groups, so we need to specify the design matrix here too. Make sure that the column header names are "sample" and "group" just like before.
 
 ```{r}
-design_matrix = readr::read_csv("test/design_matrix.csv")
+design_matrix = readr::read_csv("tests/design_matrix.csv")
 outliers = handle_outliers(normalyzed_data,design_matrix)
 
 # saving to data folder in package for tests. Ignore when using on your own data
@@ -151,7 +201,7 @@ head(cleavage_added_data)
 usethis::use_data(cleavage_added_data,overwrite = TRUE)
 ```
 
-### polishing
+### Polishing
 
 Someimes there is a need to polish the data a bit for downstream analysis. This function does that by removing combining the cterm and nterm cleavage information into one column while removing any rows that don't have any cleavage information or have cleavage information on the cterm and nterm.
 
@@ -160,7 +210,8 @@ polished_data = polish(cleavage_added_data)
 ```
 
 
-### Conducting stats
+
+## Statistics
 
 mspms provides a number of convenience functions to conduct statistics on the data. 
 
@@ -175,7 +226,7 @@ usethis::use_data(prepared_for_stats,overwrite = TRUE)
 
 Noe we can conduct the statistics.
 
-#### T tests
+### T tests
 
 Ttests are performed within each condition and compared to time 0.
 
@@ -194,7 +245,7 @@ For example, for an experiment where there are two conditions, DMSO and MZB as w
 t_test_stats = mspms::mspms_t_tests(prepared_for_stats)
 ```
 
-#### log2FC
+### log2FC
 
 We can also calculate the log 2 fc. The comparisons here are the same as for the T tests
 ```{r}
@@ -205,7 +256,8 @@ head(log2fc)
 ```
 
 
-#### log2fc_t_tests. 
+### log2fc_t_tests.  
+
 Sometimes (such as when you want to make volcano plots) it is useful to look at the log2fc and the t test statistics at the same time. This function does that.  
 
 ```{r}
@@ -233,7 +285,7 @@ p1 = log2fc_t_test %>%
 p1
 ```
 
-#### ANOVA
+### ANOVA
 
 We also might want to perfom an anova. Here, we have it set up to show the effect of time within each condition. 
 
@@ -246,22 +298,43 @@ anova_stats = mspms::mspms_anova(prepared_for_stats)
 head(anova_stats)
 ```
 
-### Common Data Visualizations
+## Common Data Visualizations
 
 We also provide some functions that make common data visualizations easier.
 
 
+### Plotting sequence specificity motif
 
-#### PCA 
+Here use an approach similar to what is implemented in ICELogo to visualize the sequence specificity of the cleavage sites. This was used as reference to build the code: https://iomics.ugent.be/icelogoserver/resources/manual.pdf. 
+
+```{r}
+cleavage_seqs = mspms::prepared_for_stats %>%
+  mspms::polish() %>% 
+  filter(condition == "DMSO",time == 240) %>%
+  pull(cleavage_seq)
+
+background_universe = mspms::all_possible_8mers_from_228_library
+
+
+mspms::plot_cleavage_motif(cleavage_seqs,background_universe)
+```
+
+
+```{r}
+test_seq = readLines("tests/cleavage_seq_test.txt")
+
+mspms::plot_cleavage_motif(test_seq,background_universe)
+```
+
+### PCA 
 
 We can generate a PCA plot to visualize the data. Here, the colors show the different time points while the shape shows the different conditions.  
 
 ```{r}
-
 mspms::plot_pca(prepared_for_stats)
 ```
 
-#### Hierchical clustering
+### Hierchical clustering
 
 We can also generate an interactive heatmap with the hierchical clustering results. 
 
@@ -275,7 +348,7 @@ mspms::plot_heatmap(prepared_for_stats)
 
 ![](www/plot_heatmap_output.png)
   
-#### Ploting time course.  
+### Ploting time course.  
 
 We also provide a function for plotting the mean intensity and standard deviation over time for each peptide in the data set by conditions. Facets show peptide, color shows the condition. 
 
@@ -295,5 +368,4 @@ p1 = prepared_for_stats %>%
 
 p1
 ```
-
 

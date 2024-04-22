@@ -10,8 +10,14 @@ log2fc_t_test(prepared_for_stats)
 \item{prepared_for_stats}{= this is data that has been prepared using prepare_for_stats().}
 }
 \value{
-a data frame containing log2fc and t test statistics across conditions
+a tibblecontaining log2fc and t test statistics across conditions
 }
 \description{
 Gives log2fc and statistics from t tests across conditions. Gives differences relative to time 0 within each condition.
+}
+\examples{
+
+log2fc_and_t_test = log2fc_t_test(mspms::prepared_for_stats)
+
+
 }

@@ -12,8 +12,11 @@ prepare_for_stats(cleavage_added_data, design_matrix)
 \item{design_matrix}{= this is the design matrix with "sample",group","time","condition" columns.}
 }
 \value{
-a data frame in long format with the design matrix combined.
+a tibble in long format with the design matrix combined.
 }
 \description{
 This function prepares data for downstream statistics by transforming the data to the long format and combining with the design matrix.
+}
+\examples{
+prepare_for_stats(mspms::cleavage_added_data,mspms::design_matrix)
 }

@@ -8,6 +8,8 @@
 #' @export
 #'
 #' @examples
+#'
+#' t_tests = mspms_t_tests(mspms::prepared_for_stats)
 mspms_t_tests = function(prepared_for_stats){
 
   # Doing T tests

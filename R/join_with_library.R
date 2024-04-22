@@ -10,8 +10,7 @@
 #'
 #' @examples
 #'
-#'
-#'
+#' joined_with_library = join_with_library(mspms::imputed,mspms::peptide_library)
 #'
 join_with_library = function(imputed,peptide_library = mspms::peptide_library){
 

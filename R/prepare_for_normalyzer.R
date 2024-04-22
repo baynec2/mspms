@@ -10,6 +10,8 @@
 #' @export
 #'
 #' @examples
+#'
+#' prepare_for_normalyzer(test/protein-peptides-id.csv","test/protein-peptides-id.csv")
 prepare_for_normalyzer = function(lfq_filepath,
                                   id_filepath){
 

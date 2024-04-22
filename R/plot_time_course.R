@@ -14,6 +14,7 @@
 #' p1 = mspms::prepared_for_stats %>%
 #' dplyr::filter(Peptide == "A_GLFNYNQLRGF") %>%
 #' mspms::plot_time_course()
+#'
 #' p1
 
 plot_time_course = function(prepared_for_stats){

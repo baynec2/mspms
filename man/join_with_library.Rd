@@ -17,3 +17,8 @@ a data frame with the peptide library information joined to the imputed data.
 \description{
 Joins MSP-MS peptide library with imputed data.
 }
+\examples{
+
+joined_with_library = join_with_library(mspms::imputed,mspms::peptide_library)
+
+}

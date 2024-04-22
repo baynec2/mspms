@@ -5,10 +5,11 @@
 #' @param cleavage_added_data = this is the processed data with cleavage information added. Intended to be downstream of the add_cleavages() function.
 #' @param design_matrix = this is the design matrix with "sample",group","time","condition" columns.
 #'
-#' @return a data frame in long format with the design matrix combined.
+#' @return a tibble in long format with the design matrix combined.
 #' @export
 #'
 #' @examples
+#' prepare_for_stats(mspms::cleavage_added_data,mspms::design_matrix)
 prepare_for_stats = function(cleavage_added_data,design_matrix){
 
   #Figuring out where the samples start

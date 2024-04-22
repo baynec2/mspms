@@ -14,10 +14,13 @@
 #' @return
 #' Files from NormalyzerDE are written to the outdir specified.
 #'
-#' The normalized data is read in as a data frame, and returned as a R object.
+#' The normalized data is returned as a tibble.
 #' @export
 #'
 #' @examples
+#'
+#' normalyzed_data = normalyze(mspms::prepared_data,mspms::design_matrix,outdir = getwd())
+#'
 normalyze = function(prepared_data,design_matrix,outdir = getwd()){
 
   # Extracting only the data

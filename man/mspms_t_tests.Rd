@@ -15,3 +15,7 @@ a data frame with the t test statistics for each peptide within each group with 
 \description{
 Performs ttests for each peptide within each group with t0 as reference. P value adjustment performed using FDR correction
 }
+\examples{
+
+t_tests = mspms_t_tests(mspms::prepared_for_stats)
+}

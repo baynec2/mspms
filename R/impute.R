@@ -10,12 +10,7 @@
 #' @export
 #'
 #' @examples
-#'
-#'
-#'
-#'
-#'
-#'
+#' impute(mspms::outlier_handled_data,noise = 0.05,nsd = 1)
 impute = function(outlier_handled_data,noise=0.05,nsd=1){
   # taking the lowest end of the values observed to use as a list of values to compose the distribution we will be imputing with.
   values_for_impute = outlier_handled_data %>%

@@ -19,11 +19,9 @@ this function plots the time course of each peptide in the data set.
 }
 \examples{
 
-prepared_for_stats = mspms::prepared_for_stats
-
-p1 = prepared_for_stats \%>\%
+p1 = mspms::prepared_for_stats \%>\%
 dplyr::filter(Peptide == "A_GLFNYNQLRGF") \%>\%
-plot_time_course()
+mspms::plot_time_course()
 
 p1
 }

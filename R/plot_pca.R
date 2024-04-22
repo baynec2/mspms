@@ -9,7 +9,7 @@
 #'
 #' @examples
 #'
-#'
+#'plot_pca(mspms::prepared_for_stats)
 #'
 #'
 plot_pca = function(prepared_for_stats){
