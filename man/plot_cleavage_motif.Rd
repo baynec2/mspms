@@ -22,13 +22,8 @@ This function plots the cleavage motifs that were enriched relative to backgroun
 https://iomics.ugent.be/icelogoserver/resources/manual.pdf
 }
 \examples{
-
-cleavage_seqs = mspms::cleavage_added_data \%>\%
-filter(condtion == "DMSO",time == 240) \%>\%
+cleavage_seqs = mspms::prepared_for_stats \%>\%
+mspms::polish() \%>\%
+filter(condition == "DMSO",time == 240) \%>\%
 pull(cleavage_seq)
-
-background_universe = mspms::mspms::all_possible_8mers_from_228_library
-
-
-plot_clavage_motif(cleavage_seqs,background_universe)
 }

@@ -13,7 +13,7 @@
 prepare_for_stats = function(cleavage_added_data,design_matrix){
 
   #Figuring out where the samples start
-  start_of_samples = names(cleavage_added_data)[which(names(cleavage_added_data) == "z")+1]
+  start_of_samples = which(names(cleavage_added_data) == "cterm_cleavage_pos")+1
 
   # make into long format, combine with design matrix.
   long = cleavage_added_data %>%

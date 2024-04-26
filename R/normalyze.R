@@ -48,11 +48,11 @@ normalyze = function(prepared_data,design_matrix,outdir = getwd()){
   norm_data = readr::read_delim(paste0(outdir,"/",jobName,"/","median-normalized.txt"))
 
   #need to find the columns corresponding to our samples. These are after the column named z.
-  index = which(names(norm_data) == "z")+1
+  index = which(names(norm_data) == "Protein Accession")+1
 
     #Performing a reverse log2 transformation
   norm_data = norm_data %>%
-    dplyr::mutate(across(index:length(.),~2**.x))
+    dplyr::mutate(across(dplyr::all_of(index:length(.)),~2**.x))
 
   return(norm_data)
 }

@@ -16,10 +16,10 @@
 handle_outliers = function(normalyzed_data,design_matrix){
 
   # Putting into the long format, adding group information, based on sample_time_replicate naming convention
-  index = which(names(normalyzed_data) == "z")+1
+  index = which(names(normalyzed_data) == "Protein Accession")+1
 
   long_data = normalyzed_data %>%
-    tidyr::pivot_longer(index:length(.),names_to = "sample") %>%
+    tidyr::pivot_longer(dplyr::all_of(index:length(.)),names_to = "sample") %>%
     dplyr::inner_join(design_matrix,by = "sample") %>%
     dplyr::filter(!is.na(value))
 
@@ -65,12 +65,11 @@ handle_outliers = function(normalyzed_data,design_matrix){
     dplyr::select(-group,-condition,-time) %>%
     tidyr::pivot_wider(names_from = sample, values_from = value) %>%
     tidyr::pivot_longer(index:length(.),names_to = "sample_id") %>%
-    tibble::as.tibble()
+    tibble::as_tibble()
 
 
   return(NAs_added_back)
 }
-
 
 
 
