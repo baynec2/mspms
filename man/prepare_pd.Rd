@@ -9,6 +9,13 @@ prepare_pd(filepath)
 \arguments{
 \item{filepath}{= this is the filepath to the proteome discoverer excel formatted file.}
 }
+\value{
+a tibble with the data formated for use with normalyze
+}
 \description{
 prepare proteome discoverer output for mspms analysis.
+}
+\examples{
+
+prepared_proteome_discoverer = prepare_pd("tests/proteome_discoverer_output.xlsx")
 }

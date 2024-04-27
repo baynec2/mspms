@@ -72,7 +72,7 @@ plot_cleavage_motif = function(cleavage_seqs,background_universe = mspms::all_po
  # counting the number of time each AA appears at each position
 
  clev_count = clev_seq %>%
-   purrr:::map_df(table) %>%
+   purrr::map_df(table) %>%
    t()
 
   #replacing NA with 0

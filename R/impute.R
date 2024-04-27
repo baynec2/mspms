@@ -67,8 +67,8 @@ impute = function(outlier_handled_data,noise=0.05,nsd=1){
     tidyr::pivot_wider(names_from = "sample_id",
                        values_from = imputed_values) %>%
     dplyr::mutate(Peptide = gsub("\\.","_",Peptide),
-                  Peptide_no_cleavage = gsub("_","",Peptide),.before = 5) %>%
-    tibble::as.tibble()
+                  Peptide_no_cleavage = gsub("_","",Peptide),.after = Peptide) %>%
+    tibble::as_tibble()
 
   return(output)
 

@@ -29,7 +29,7 @@ mspms_log2fc = function(prepared_for_stats){
   log2fc = dplyr::inner_join(control_data,reference_data,by = c("Peptide","condition")) %>%
     dplyr::mutate(comparison = paste0(condition,".T0","_",condition,".T",time),
                   log2fc = log2(reference_mean/control_mean)) %>%
-    tibble::as.tibble()
+    tibble::as_tibble()
 
 
   return(log2fc)

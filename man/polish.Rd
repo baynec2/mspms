@@ -7,10 +7,10 @@
 polish(cleavage_added_data)
 }
 \arguments{
-\item{cleavage_added_data}{}
+\item{cleavage_added_data}{= this is a tibble where cleavage information has been added by add_cleavages()}
 }
 \value{
-a data frame with the cleavage information combined into a single column and rows with no cleavage information or double information removed.
+a tibble with the cleavage information combined into a single column and rows with no cleavage information or double information removed.
 }
 \description{
 This function is used to polish the cleavage data. It combines the nterm and cterm cleavage information into a single column and removes rows that

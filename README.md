@@ -99,15 +99,23 @@ instructions found [here](www/PeaksDataAnalysis_howto.pdf).
 
 ``` r
 library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
 library(mspms)
 
 ### Loading the files ###
-lfq_filename = "tests/protein-peptides-lfq.csv"
+lfq_filename = "tests/testdata/protein-peptides-lfq.csv"
 #file "protein-peptides.csv" exported from PEAKS identification
-id_filename = "tests/protein-peptides-id.csv"
+id_filename = "tests/testdata/protein-peptides-id.csv"
 
 # Prepare the data for normalyzer analysis
-prepared_data = prepare_peaks(lfq_filename,id_filename)
+peaks_prepared_data = prepare_peaks(lfq_filename,id_filename)
 #> Warning: One or more parsing issues, call `problems()` on your data frame for details,
 #> e.g.:
 #>   dat <- vroom(...)
@@ -139,9 +147,9 @@ prepared_data = prepare_peaks(lfq_filename,id_filename)
 
 
 # saving to data folder in package for tests. Ignore when using on your own data
-usethis::use_data(prepared_data,overwrite = TRUE)
+usethis::use_data(peaks_prepared_data,overwrite = TRUE)
 #> ✔ Setting active project to '/Users/charliebayne/mspms'
-#> ✔ Saving 'prepared_data' to 'data/prepared_data.rda'
+#> ✔ Saving 'peaks_prepared_data' to 'data/peaks_prepared_data.rda'
 #> • Document your data (see 'https://r-pkgs.org/data.html')
 ```
 
@@ -181,7 +189,7 @@ Before we normalyze data, we need to know what samples are in what
 groups. We can do that by defining a design matrix.
 
 ``` r
-design_matrix = readr::read_csv("tests/design_matrix.csv")
+design_matrix = readr::read_csv("tests/testdata/design_matrix.csv")
 #> Rows: 24 Columns: 4
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: ","
@@ -210,14 +218,14 @@ msp-ms uses the …. package to do normalization under the hood.
 Now we can normalyze the data.
 
 ``` r
-normalyzed_data = normalyze(prepared_data,design_matrix)
+normalyzed_data = normalyze(peaks_prepared_data,design_matrix)
 #> You are running version 1.19.7 of NormalyzerDE
 #> [Step 1/5] Load data and verify input
 #> Input data checked. All fields are valid.
 #> Sample check: More than one sample group found
 #> Sample replication check: All samples have replicates
-#> RT annotation column found (23)
-#> [Step 1/5] Input verified, job directory prepared at:./2024-04-22_mspms_normalyze_output
+#> RT annotation column found (2)
+#> [Step 1/5] Input verified, job directory prepared at:./2024-04-26_mspms_normalyze_output
 #> [Step 2/5] Performing normalizations
 #> [Step 2/5] Done!
 #> [Step 3/5] Generating evaluation measures...
@@ -226,12 +234,12 @@ normalyzed_data = normalyze(prepared_data,design_matrix)
 #> [Step 4/5] Matrices successfully written
 #> [Step 5/5] Generating plots...
 #> [Step 5/5] Plots successfully generated
-#> All done! Results are stored in: ./2024-04-22_mspms_normalyze_output, processing time was 0.4 minutes
-#> Rows: 835 Columns: 53
+#> All done! Results are stored in: ./2024-04-26_mspms_normalyze_output, processing time was 0.3 minutes
+#> Rows: 820 Columns: 27
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: "\t"
-#> chr  (6): Protein Accession, Peptide, Used, Candidate, Sample Profile (Ratio...
-#> dbl (47): Protein Group, Protein ID, Quality, Significance, Avg. ppm, Avg. A...
+#> chr  (2): Peptide, Protein Accession
+#> dbl (25): RT, DMSO_T000_1, DMSO_T000_2, DMSO_T000_3, DMSO_T000_4, DMSO_T060_...
 #> 
 #> ℹ Use `spec()` to retrieve the full column specification for this data.
 #> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
@@ -251,7 +259,7 @@ sure that the column header names are “sample” and “group” just like
 before.
 
 ``` r
-design_matrix = readr::read_csv("tests/design_matrix.csv")
+design_matrix = readr::read_csv("tests/testdata/design_matrix.csv")
 #> Rows: 24 Columns: 4
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: ","
@@ -312,22 +320,22 @@ was cleaved close to the edge.
 cleavage_added_data = add_cleavages(joined_with_library,n_residues = 4)
 
 head(cleavage_added_data)
-#> # A tibble: 6 × 60
-#>   library_reference_id  library_real_sequence Peptide   nterm nterm_cleavage_pos
-#>   <chr>                 <chr>                 <chr>     <chr>              <dbl>
-#> 1 TDP1|TDP1|generation1 LVATVYEFGHIDHM        LVATVYEF… <NA>                  NA
-#> 2 TDP1|TDP1|generation1 LVATVYEFGHIDHM        L_VATVYE… XXXL…                  1
-#> 3 TDP1|TDP1|generation1 LVATVYEFGHIDHM        L_VATVYE… XXXL…                  1
-#> 4 TDP1|TDP1|generation1 LVATVYEFGHIDHM        T_VYEFGH… LVAT…                  4
-#> 5 TDP1|TDP1|generation1 LVATVYEFGHIDHM        A_TVYEFG… XLVA…                  3
-#> 6 TDP1|TDP1|generation1 LVATVYEFGHIDHM        LVATVYEF… <NA>                  NA
-#> # ℹ 55 more variables: cterm <chr>, cterm_cleavage_pos <dbl>,
-#> #   library_match_sequence <chr>, `Protein Group` <dbl>, `Protein ID` <dbl>,
-#> #   Peptide_no_cleavage <chr>, Used <chr>, Candidate <chr>, Quality <dbl>,
-#> #   Significance <dbl>, `Avg. ppm` <dbl>, `Avg. Area` <dbl>,
-#> #   `Sample Profile (Ratio)` <chr>, `Group 1` <dbl>, `Group 2` <dbl>,
-#> #   `Group 3` <dbl>, `Group 4` <dbl>, `Group 5` <dbl>, `Group 6` <dbl>,
-#> #   `Group Profile (Ratio)` <chr>, `Max Ratio` <dbl>, `#Vector` <dbl>, …
+#> # A tibble: 6 × 32
+#>   Peptide      library_reference_id library_match_sequence library_real_sequence
+#>   <chr>        <chr>                <chr>                  <chr>                
+#> 1 LVATVYEFGHI… TDP1|TDP1|generatio… LVATVYEFGHIDHL         LVATVYEFGHIDHM       
+#> 2 L_VATVYEFGH… TDP1|TDP1|generatio… LVATVYEFGHIDHL         LVATVYEFGHIDHM       
+#> 3 T_VYEFGHIDHL TDP1|TDP1|generatio… LVATVYEFGHIDHL         LVATVYEFGHIDHM       
+#> 4 A_TVYEFGHID… TDP1|TDP1|generatio… LVATVYEFGHIDHL         LVATVYEFGHIDHM       
+#> 5 LVATVYEFGHI… TDP1|TDP1|generatio… LVATVYEFGHIDHL         LVATVYEFGHIDHM       
+#> 6 LLDKLLNWPQR… TDP2|TDP2|generatio… LLDKLLNWPQRRGL         MLDKLMNWPQRRGM       
+#> # ℹ 28 more variables: nterm <chr>, nterm_cleavage_pos <dbl>, cterm <chr>,
+#> #   cterm_cleavage_pos <dbl>, DMSO_T060_1 <dbl>, DMSO_T060_2 <dbl>,
+#> #   DMSO_T060_3 <dbl>, DMSO_T060_4 <dbl>, DMSO_T240_1 <dbl>, DMSO_T240_2 <dbl>,
+#> #   DMSO_T240_3 <dbl>, DMSO_T240_4 <dbl>, MZB_T240_2 <dbl>, MZB_T240_3 <dbl>,
+#> #   MZB_T240_1 <dbl>, MZB_T240_4 <dbl>, DMSO_T000_1 <dbl>, DMSO_T000_2 <dbl>,
+#> #   DMSO_T000_3 <dbl>, DMSO_T000_4 <dbl>, MZB_T000_1 <dbl>, MZB_T000_2 <dbl>,
+#> #   MZB_T000_3 <dbl>, MZB_T000_4 <dbl>, MZB_T060_1 <dbl>, MZB_T060_2 <dbl>, …
 
 # saving to data folder in package for tests. Ignore when using on your own data
 usethis::use_data(cleavage_added_data,overwrite = TRUE)
@@ -406,12 +414,12 @@ head(log2fc)
 #> # A tibble: 6 × 7
 #>   condition Peptide        control_mean  time reference_mean comparison   log2fc
 #>   <chr>     <chr>                 <dbl> <dbl>          <dbl> <chr>         <dbl>
-#> 1 DMSO      AAPYHKLETNITSG   233175824.     0     233175824. DMSO.T0_DMS…  0    
-#> 2 DMSO      AAPYHKLETNITSG   233175824.    60     374118572. DMSO.T0_DMS…  0.682
-#> 3 DMSO      AAPYHKLETNITSG   233175824.   240     273516985. DMSO.T0_DMS…  0.230
-#> 4 DMSO      ADARKYWNVHGTHQ   103938796.     0     103938796. DMSO.T0_DMS…  0    
-#> 5 DMSO      ADARKYWNVHGTHQ   103938796.    60     161320592. DMSO.T0_DMS…  0.634
-#> 6 DMSO      ADARKYWNVHGTHQ   103938796.   240     116969921. DMSO.T0_DMS…  0.170
+#> 1 DMSO      AAPYHKLETNITSG   231287600.     0     231287600. DMSO.T0_DMS…  0    
+#> 2 DMSO      AAPYHKLETNITSG   231287600.    60     385450615. DMSO.T0_DMS…  0.737
+#> 3 DMSO      AAPYHKLETNITSG   231287600.   240     278208500. DMSO.T0_DMS…  0.266
+#> 4 DMSO      ADARKYWNVHGTHQ   101113749.     0     101113749. DMSO.T0_DMS…  0    
+#> 5 DMSO      ADARKYWNVHGTHQ   101113749.    60     166235600. DMSO.T0_DMS…  0.717
+#> 6 DMSO      ADARKYWNVHGTHQ   101113749.   240     119066521. DMSO.T0_DMS…  0.236
 ```
 
 ### log2fc_t_tests.
@@ -427,12 +435,12 @@ head(log2fc_t_test)
 #> # A tibble: 6 × 17
 #>   Peptide       control_mean time  reference_mean comparison log2fc .y.   group1
 #>   <chr>                <dbl> <chr>          <dbl> <chr>       <dbl> <chr> <chr> 
-#> 1 AAPYHKLETNIT…   233175824. 60        374118572. DMSO.T0_D…  0.682 value 0     
-#> 2 AAPYHKLETNIT…   233175824. 240       273516985. DMSO.T0_D…  0.230 value 0     
-#> 3 ADARKYWNVHGT…   103938796. 60        161320592. DMSO.T0_D…  0.634 value 0     
-#> 4 ADARKYWNVHGT…   103938796. 240       116969921. DMSO.T0_D…  0.170 value 0     
-#> 5 ADIVANFTGHGY…   266705245. 60        446090107. DMSO.T0_D…  0.742 value 0     
-#> 6 ADIVANFTGHGY…   266705245. 240       308954985. DMSO.T0_D…  0.212 value 0     
+#> 1 AAPYHKLETNIT…   231287600. 60        385450615. DMSO.T0_D…  0.737 value 0     
+#> 2 AAPYHKLETNIT…   231287600. 240       278208500. DMSO.T0_D…  0.266 value 0     
+#> 3 ADARKYWNVHGT…   101113749. 60        166235600. DMSO.T0_D…  0.717 value 0     
+#> 4 ADARKYWNVHGT…   101113749. 240       119066521. DMSO.T0_D…  0.236 value 0     
+#> 5 ADIVANFTGHGY…   264432528. 60        459550722. DMSO.T0_D…  0.797 value 0     
+#> 6 ADIVANFTGHGY…   264432528. 240       314130902. DMSO.T0_D…  0.248 value 0     
 #> # ℹ 9 more variables: group2 <chr>, n1 <int>, n2 <int>, statistic <dbl>,
 #> #   df <dbl>, p <dbl>, p.adj <dbl>, p.adj.signif <chr>, condition <chr>
 ```
@@ -470,24 +478,24 @@ for the effect of time for each peptide within DMSO or MZB.
 ``` r
 # Doing ANOVA
 anova_stats = mspms::mspms_anova(prepared_for_stats)
-#> Warning: There were 166 warnings in `mutate()`.
+#> Warning: There were 170 warnings in `mutate()`.
 #> The first warning was:
 #> ℹ In argument: `data = map(.data$data, .f, ...)`.
 #> Caused by warning:
-#> ! NA detected in rows: 12.
+#> ! NA detected in rows: 6,12.
 #> Removing this rows before the analysis.
-#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 165 remaining warnings.
+#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 169 remaining warnings.
 
 head(anova_stats)
 #> # A tibble: 6 × 10
-#>   Peptide       condition Effect   DFn   DFd       F     p `p<.05`     ges p.adj
-#>   <chr>         <chr>     <chr>  <dbl> <dbl>   <dbl> <dbl> <chr>     <dbl> <dbl>
-#> 1 AAPYHKLETNIT… DMSO      time       1    10 2.27e-6 0.999 ""      2.27e-7 0.999
-#> 2 ADARKYWNVHGT… DMSO      time       1     9 1.92e-1 0.672 ""      2.1 e-2 0.909
-#> 3 ADIVANFTGHGY… DMSO      time       1    10 2.1 e-2 0.887 ""      2   e-3 0.990
-#> 4 AETSIKVFLPYY… DMSO      time       1    10 1.54e+0 0.242 ""      1.34e-1 0.614
-#> 5 AETSIKVFLPYY… DMSO      time       1    10 3.55e-1 0.564 ""      3.4 e-2 0.869
-#> 6 AETSIKVFL_P   DMSO      time       1    10 3.57e+0 0.088 ""      2.63e-1 0.324
+#>   Peptide         condition Effect   DFn   DFd     F     p `p<.05`     ges p.adj
+#>   <chr>           <chr>     <chr>  <dbl> <dbl> <dbl> <dbl> <chr>     <dbl> <dbl>
+#> 1 AAPYHKLETNITSG  DMSO      time       1    10 0.003 0.956 ""      3.24e-4 0.998
+#> 2 ADARKYWNVHGTHQ  DMSO      time       1    10 0.001 0.975 ""      1   e-4 0.998
+#> 3 ADIVANFTGHGYHQ  DMSO      time       1    10 0.009 0.928 ""      8.7 e-4 0.997
+#> 4 AETSIKVFLPYYGH  DMSO      time       1    10 1.06  0.328 ""      9.5 e-2 0.727
+#> 5 AETSIKVFLPYYG_H DMSO      time       1    10 0.316 0.587 ""      3.1 e-2 0.892
+#> 6 AETSIKVFL_P     DMSO      time       1    10 3.32  0.098 ""      2.49e-1 0.356
 ```
 
 ## Common Data Visualizations

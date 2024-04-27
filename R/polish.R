@@ -3,9 +3,9 @@
 #' This function is used to polish the cleavage data. It combines the nterm and cterm cleavage information into a single column and removes rows that
 #' don't have any cleavage information or have both nterm and cterm cleavage information.
 #'
-#' @param cleavage_added_data
+#' @param cleavage_added_data = this is a tibble where cleavage information has been added by add_cleavages()
 #'
-#' @return a data frame with the cleavage information combined into a single column and rows with no cleavage information or double information removed.
+#' @return a tibble with the cleavage information combined into a single column and rows with no cleavage information or double information removed.
 #' @export
 #'
 #' @examples

@@ -5,7 +5,7 @@
 #' @param peptide_library = this is the peptide library that was used with the MSP-MS method
 #' @param imputed = this is the imputed data. Intended to be prepared using mspms::impute()
 #'
-#' @return a data frame with the peptide library information joined to the imputed data.
+#' @return a tibble with the peptide library information joined to the imputed data.
 #' @export
 #'
 #' @examples
@@ -16,7 +16,7 @@ join_with_library = function(imputed,peptide_library = mspms::peptide_library){
 
   # Joining the peptide library to the imputed data.
   joined = dplyr::inner_join(peptide_library,imputed,by = c("library_reference_id" = "Protein Accession")) %>%
-    tibble::as.tibble()
+    tibble::as_tibble()
 
   return(joined)
 }

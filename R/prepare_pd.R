@@ -4,12 +4,13 @@
 #'
 #' @param filepath = this is the filepath to the proteome discoverer excel formatted file.
 #'
-#' @return
+#' @return a tibble with the data formated for use with normalyze
 #' @export
 #'
 #' @examples
 #'
-#'
+#' prepared_proteome_discoverer = prepare_pd("tests/proteome_discoverer_output.xlsx")
+
 prepare_pd = function(filepath){
 
   # Read in the file
@@ -29,7 +30,11 @@ prepare_pd = function(filepath){
     dplyr::mutate(Peptide = gsub("\\].","_",Peptide)) %>%
     dplyr::mutate(Peptide = gsub("\\.\\[","_",Peptide)) %>%
     dplyr::mutate(Peptide = gsub("\\]","",Peptide)) %>%
-    dplyr::mutate(Peptide = gsub("\\[","",Peptide))
+    dplyr::mutate(Peptide = gsub("\\[","",Peptide)) %>%
+    #Only keep max quality peptide, for cases where there is more than one match.
+    dplyr::group_by(Peptide) %>%
+    dplyr::filter(`Qvality PEP` == max(`Qvality PEP`)) %>%
+    dplyr::ungroup()
 
   #Converting the column names to reasonable sample ID names
   sample_name_fixed = peptide_fixed %>%

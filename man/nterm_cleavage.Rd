@@ -21,7 +21,7 @@ nterm_cleavage(
 \item{n_residues}{= this is the number of residues to the left and right of the cleavage site that you want to extract.}
 }
 \value{
-a data frame with the peptide sequence, cleavage sequences 4 AA on the left and right of the n term cleavage, and the position of the n term cleavage in the library sequence.
+a tibble with the peptide sequence, cleavage sequences n specified number of AA on the left and right of the n term cleavage, and the position of the n term cleavage in the library sequence.
 }
 \description{
 Finding the cleavage sequences on the N terminus of a given peptide in reference to the peptide library it was derived from.

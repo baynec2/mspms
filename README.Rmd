@@ -8,7 +8,7 @@ output: github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  cache = TRUE
+  cache = FALSE
 )
 ```
 
@@ -88,16 +88,16 @@ library(dplyr)
 library(mspms)
 
 ### Loading the files ###
-lfq_filename = "tests/protein-peptides-lfq.csv"
+lfq_filename = "tests/testdata/protein-peptides-lfq.csv"
 #file "protein-peptides.csv" exported from PEAKS identification
-id_filename = "tests/protein-peptides-id.csv"
+id_filename = "tests/testdata/protein-peptides-id.csv"
 
 # Prepare the data for normalyzer analysis
-prepared_data = prepare_peaks(lfq_filename,id_filename)
+peaks_prepared_data = prepare_peaks(lfq_filename,id_filename)
 
 
 # saving to data folder in package for tests. Ignore when using on your own data
-usethis::use_data(prepared_data,overwrite = TRUE)
+usethis::use_data(peaks_prepared_data,overwrite = TRUE)
 ```
 
 ### Calculating all cleavages
@@ -133,19 +133,19 @@ head(all_peptide_sequences)
 
 Before we normalyze data, we need to know what samples are in what groups. We can do that by defining a design matrix. 
 ```{r}
-design_matrix = readr::read_csv("tests/design_matrix.csv")
+design_matrix = readr::read_csv("tests/testdata/design_matrix.csv")
 
 head(design_matrix)
 
 ```
 ### Normalyzing data
 
-msp-ms uses the .... package to do normalization under the hood. 
+msp-ms uses the normalyzede package to do normalization under the hood. 
 
 
 Now we can normalyze the data.
 ```{r}
-normalyzed_data = normalyze(prepared_data,design_matrix)
+normalyzed_data = normalyze(peaks_prepared_data,design_matrix)
 
 # saving to data folder in package for tests. Ignore when using on your own data
 usethis::use_data(normalyzed_data,overwrite = TRUE)
@@ -156,7 +156,7 @@ usethis::use_data(normalyzed_data,overwrite = TRUE)
 Here we use a dixon test from the outliers package to detect outliers from each of our replicates. We need to know what samples are part of which groups, so we need to specify the design matrix here too. Make sure that the column header names are "sample" and "group" just like before.
 
 ```{r}
-design_matrix = readr::read_csv("tests/design_matrix.csv")
+design_matrix = readr::read_csv("tests/testdata/design_matrix.csv")
 outliers = handle_outliers(normalyzed_data,design_matrix)
 
 # saving to data folder in package for tests. Ignore when using on your own data

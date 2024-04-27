@@ -7,8 +7,7 @@
 #' @param cleavage_seq = this is the cleavage sequecne that is being checked. Represented as 4 AA to the left and right of cleavage site
 #' @param AA_vector = this is a vector of AA that you want to check to see if the cleavage site is after. For example c("W","L","Y","F").
 #'
-#' @return
-#' a logical vector of the same length as the input cleavage_seq
+#' @return a logical vector of the same length as the input cleavage_seq
 #' @export
 #'
 #' @examples
@@ -22,7 +21,7 @@
 check_for_cleavage_after_AA = function(cleavage_seq,AA_vector){
 
   # check if the cleavage site is in the AA_list
-  out = stringr::str_sub(cleavage_seq,4,4) %in% AA_list
+  out = stringr::str_sub(cleavage_seq,4,4) %in% AA_vector
 
   return(out)
 }

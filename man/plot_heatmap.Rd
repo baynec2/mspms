@@ -7,9 +7,9 @@
 plot_heatmap(prepared_for_stats, scale = "column")
 }
 \arguments{
-\item{scale}{= how would you like the data scaled? default is none, but can be done by "row", "column", or "none"}
+\item{prepared_for_stats}{= this is the data that has been processed by the prepare for stats function.}
 
-\item{cleavage_added_data}{= this is the data that has been processed by the add_cleavage() function.}
+\item{scale}{= how would you like the data scaled? default is none, but can be done by "row", "column", or "none"}
 }
 \value{
 a heatmaply interactive heatmap

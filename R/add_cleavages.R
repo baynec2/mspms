@@ -1,14 +1,13 @@
 #' add_cleavages
 #'
-#' This functions adds cleavage information to the data frame that has been normalized, outlier removed, imputed, and joined with (peptide) library.
+#' This functions adds cleavage information to the tibble that has been normalized, outlier removed, imputed, and joined with (peptide) library.
 #' The cleavage information is represented as the 4 amino acids to the left and right of the cleavage site.
 #' If there is no amino acid in a position of original peptide in the library that was cleaved, it is represented as an X.
 #' This wraps the mspms::n_term_cleavage and mspms::c_term_cleavage functions into a consolidated function.
 #'
-#' @param joined_with_library
-#'
-#' @return
-#' a data frame with cleavage information added.
+#' @param joined_with_library = this is the tibble that has been normalized, outlier removed, imputed, and joined with the library.
+#' @param n_residues = the number of residues to the left and right of the cleavage site to include in the output.
+#' @return a tibble with cleavage information added.
 #' @export
 #'
 #' @examples

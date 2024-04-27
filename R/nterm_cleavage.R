@@ -7,8 +7,7 @@
 #' @param library_real_sequence = this is the library match sequence with the Ls transformed to Ms (This is what the legacy code did so it is kept this way in case there was a good reason for it)
 #' @param n_residues = this is the number of residues to the left and right of the cleavage site that you want to extract.
 
-#' @return
-#' a data frame with the peptide sequence, cleavage sequences 4 AA on the left and right of the n term cleavage, and the position of the n term cleavage in the library sequence.
+#' @return a tibble with the peptide sequence, cleavage sequences n specified number of AA on the left and right of the n term cleavage, and the position of the n term cleavage in the library sequence.
 #' @export
 #'
 #' @examples
@@ -59,7 +58,7 @@ nterm_cleavage =function(peptide_sequence,library_match_sequence,library_real_se
     nterm = NA
     nterm_cleavage_pos = NA
   }
-  output = data.frame(peptide = peptide_sequence,
+  output = tibble::tibble(peptide = peptide_sequence,
                       nterm = nterm,
                       nterm_cleavage_pos = nterm_cleavage_pos)
   return(output)
