@@ -1,3 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
+^README.Rmd
+^\.github$
+^PeaksDataAnalysis_howto\.pdf$
+^plot_heatmap_output\.png$

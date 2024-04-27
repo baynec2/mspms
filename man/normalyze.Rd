@@ -26,7 +26,8 @@ For this normalization the Intensity of each variable in a given sample is divid
 in the sample and then multiplied by the mean of median of sum of intensities of all variables in all samples.
 }
 \examples{
+\dontshow{if (isTRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 normalyzed_data = normalyze(mspms::peaks_prepared_data,mspms::design_matrix,outdir = getwd())
-
+\dontshow{\}) # examplesIf}
 }

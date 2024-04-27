@@ -343,7 +343,7 @@ mspms::plot_heatmap(prepared_for_stats)
 
 ```
 
-![](www/plot_heatmap_output.png)
+![](plot_heatmap_output.png)
   
 ### Ploting time course.  
 

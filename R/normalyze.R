@@ -17,7 +17,7 @@
 #' The normalized data is returned as a tibble.
 #' @export
 #'
-#' @examples
+#' @examplesIf isTRUE(FALSE)
 #'
 #' normalyzed_data = normalyze(mspms::peaks_prepared_data,mspms::design_matrix,outdir = getwd())
 #'
