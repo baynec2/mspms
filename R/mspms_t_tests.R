@@ -18,7 +18,7 @@ mspms_t_tests = function(prepared_for_stats){
     rstatix::t_test(value ~ time,ref.group = "0") %>%
     rstatix::adjust_pvalue(method = "fdr") %>%
     dplyr::mutate(comparison = paste0(condition,".T0","_",condition,".T",group2)) %>%
-    tibble::as.tibble()
+    tibble::as_tibble()
 
   return(stat)
 

@@ -38,7 +38,7 @@ prepare_peaks = function(lfq_filepath,
     dplyr::ungroup() %>%
     dplyr::inner_join(id,by = c("Peptide"),multiple = "first") %>%
     dplyr::filter(Quality > 0.3) %>%
-    tibble::as.tibble()
+    tibble::as_tibble()
 
 
   # finding the columns with our samples
