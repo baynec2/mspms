@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-#' anova_results = mspms_anova(mspms::prepare_for_stats)
+#' anova_results = mspms_anova(mspms::prepared_for_stats)
 mspms_anova = function(prepared_for_stats){
 
   anova = prepared_for_stats %>%

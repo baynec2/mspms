@@ -14,7 +14,7 @@
 #' @return a tibble containing the extracted design matrix compatable with the normalyze function
 #' @export
 #'
-#' @examples
+#' @examplesIf isTRUE(FALSE)
 #'
 #' design_matrix = extract_design_matrix_pd("tests/testdata/proteome_discoverer_output.xlsx")
 

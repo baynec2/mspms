@@ -15,7 +15,7 @@ prepare_peaks(lfq_filepath, id_filepath)
 \item{id_filepath}{= this is the filepath to the second PEAKS output table}
 }
 \value{
-a data frame containing the combined columns from the lfq and id files, with quality scores > 0.3 and 0s replaced with NAs.
+a tibble containing the combined columns from the lfq and id files, with quality scores > 0.3 and 0s replaced with NAs.
 }
 \description{
 prepare_peaks
@@ -24,7 +24,9 @@ Briefly, it combines the two files by peptide IDs and filters out peptides that 
 Note that there can be multiple matches between these, currently only keeps the values for the best quality scores. This could be a bug.
 }
 \examples{
+\dontshow{if (isTRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
-prepare_peaks("tests/protein-peptides-lfq.csv","tests/protein-peptides-id.csv")
-
+prepare_peaks("tests/testdata/protein-peptides-lfq.csv",
+             "tests/testdata/protein-peptides-id.csv")
+\dontshow{\}) # examplesIf}
 }

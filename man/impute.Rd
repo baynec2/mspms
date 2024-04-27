@@ -20,5 +20,5 @@ a data frame in the wide format where NAs have been imputed.
 This function imputes data using according to the truncated normal distribution as implemented in truncnorm.
 }
 \examples{
-impute(mspms::outlier_handled_data,noise = 0.05,nsd = 1)
+impute(mspms::outliers,noise = 0.05,nsd = 1)
 }

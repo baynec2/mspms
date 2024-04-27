@@ -6,12 +6,13 @@
 #' @param lfq_filepath = this is the filepath to the first PEAKS output table
 #' @param id_filepath = this is the filepath to the second PEAKS output table
 #'
-#' @return a data frame containing the combined columns from the lfq and id files, with quality scores > 0.3 and 0s replaced with NAs.
+#' @return a tibble containing the combined columns from the lfq and id files, with quality scores > 0.3 and 0s replaced with NAs.
 #' @export
 #'
-#' @examples
+#' @examplesIf isTRUE(FALSE)
 #'
-#' prepare_peaks("tests/protein-peptides-lfq.csv","tests/protein-peptides-id.csv")
+#' prepare_peaks("tests/testdata/protein-peptides-lfq.csv",
+#'              "tests/testdata/protein-peptides-id.csv")
 #'
 prepare_peaks = function(lfq_filepath,
                          id_filepath){

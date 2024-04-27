@@ -24,6 +24,8 @@ Abundance: F5: Sample, 1, 15 min is an example of a sample name input by the sof
 in this example, samples gets assigned to the pd_group, 1 gets assigned to the group, and 15 min gets assigned to the time.
 }
 \examples{
+\dontshow{if (isTRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 design_matrix = extract_design_matrix_pd("tests/testdata/proteome_discoverer_output.xlsx")
+\dontshow{\}) # examplesIf}
 }

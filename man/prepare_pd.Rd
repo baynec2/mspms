@@ -16,6 +16,7 @@ a tibble with the data formated for use with normalyze
 prepare proteome discoverer output for mspms analysis.
 }
 \examples{
-
-prepared_proteome_discoverer = prepare_pd("tests/proteome_discoverer_output.xlsx")
+\dontshow{if (isTRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+prepared_proteome_discoverer = prepare_pd("tests/testdata/proteome_discoverer_output.xlsx")
+\dontshow{\}) # examplesIf}
 }

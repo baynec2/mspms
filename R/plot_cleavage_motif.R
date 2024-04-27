@@ -12,8 +12,8 @@
 #' @examples
 #'cleavage_seqs = mspms::prepared_for_stats %>%
 #' mspms::polish() %>%
-#' filter(condition == "DMSO",time == 240) %>%
-#' pull(cleavage_seq)
+#' dplyr::filter(condition == "DMSO",time == 240) %>%
+#' dplyr::pull(cleavage_seq)
 
 plot_cleavage_motif = function(cleavage_seqs,background_universe = mspms::all_possible_8mers_from_228_library){
 

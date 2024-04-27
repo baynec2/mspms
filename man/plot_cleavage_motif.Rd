@@ -24,6 +24,6 @@ https://iomics.ugent.be/icelogoserver/resources/manual.pdf
 \examples{
 cleavage_seqs = mspms::prepared_for_stats \%>\%
 mspms::polish() \%>\%
-filter(condition == "DMSO",time == 240) \%>\%
-pull(cleavage_seq)
+dplyr::filter(condition == "DMSO",time == 240) \%>\%
+dplyr::pull(cleavage_seq)
 }

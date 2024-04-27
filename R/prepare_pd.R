@@ -7,9 +7,8 @@
 #' @return a tibble with the data formated for use with normalyze
 #' @export
 #'
-#' @examples
-#'
-#' prepared_proteome_discoverer = prepare_pd("tests/proteome_discoverer_output.xlsx")
+#' @examplesIf isTRUE(FALSE)
+#' prepared_proteome_discoverer = prepare_pd("tests/testdata/proteome_discoverer_output.xlsx")
 
 prepare_pd = function(filepath){
 

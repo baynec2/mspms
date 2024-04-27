@@ -19,7 +19,7 @@
 #'
 #' @examples
 #'
-#' normalyzed_data = normalyze(mspms::prepared_data,mspms::design_matrix,outdir = getwd())
+#' normalyzed_data = normalyze(mspms::peaks_prepared_data,mspms::design_matrix,outdir = getwd())
 #'
 normalyze = function(prepared_data,design_matrix,outdir = getwd()){
 

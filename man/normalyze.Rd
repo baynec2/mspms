@@ -27,6 +27,6 @@ in the sample and then multiplied by the mean of median of sum of intensities of
 }
 \examples{
 
-normalyzed_data = normalyze(mspms::prepared_data,mspms::design_matrix,outdir = getwd())
+normalyzed_data = normalyze(mspms::peaks_prepared_data,mspms::design_matrix,outdir = getwd())
 
 }
