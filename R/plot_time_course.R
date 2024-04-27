@@ -25,7 +25,7 @@ plot_time_course = function(prepared_for_stats){
   ggplot2::ggplot(ggplot2::aes(x = time, y = mean, color = condition)) +
   ggplot2::geom_point() +
   ggplot2::geom_line()+
-  ggplot2::geom_errorbar(aes(ymax = mean + sd, ymin = mean - sd),width = 15) +
+  ggplot2::geom_errorbar(ggplot2::aes(ymax = mean + sd, ymin = mean - sd),width = 15) +
   ggplot2::facet_wrap(~Peptide, scales = "free_y") +
   ggplot2::theme_minimal() +
   ggplot2::theme(legend.position = "bottom")

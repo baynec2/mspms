@@ -52,7 +52,7 @@ normalyze = function(prepared_data,design_matrix,outdir = getwd()){
 
     #Performing a reverse log2 transformation
   norm_data = norm_data %>%
-    dplyr::mutate(across(dplyr::all_of(index:length(.)),~2**.x))
+    dplyr::mutate(dplyr::across(dplyr::all_of(index:length(.)),~2**.x))
 
   return(norm_data)
 }

@@ -21,7 +21,7 @@ plot_cleavage_motif = function(cleavage_seqs,background_universe = mspms::all_po
   nchar_bg = nchar(background_universe[1])
 
   # do this for the background first.
-  background_universe = tibble(sequences = background_universe)
+  background_universe = tibble::tibble(sequences = background_universe)
 
   # separate the sequences into individual amino acids
   bg_seq = tidyr::separate(background_universe,col = 1,
@@ -40,7 +40,7 @@ plot_cleavage_motif = function(cleavage_seqs,background_universe = mspms::all_po
   bg_prop = bg_count %>%
     as.data.frame() %>%
     tibble::rownames_to_column("AA") %>%
-    mutate(across(where(is.numeric), prop.table)) %>%
+    dplyr::mutate(dplyr::across(dplyr::where(is.numeric), prop.table)) %>%
     tibble::column_to_rownames("AA") %>%
     as.matrix()
 
@@ -82,7 +82,7 @@ plot_cleavage_motif = function(cleavage_seqs,background_universe = mspms::all_po
   clev_prop = clev_count %>%
    as.data.frame() %>%
    tibble::rownames_to_column("AA") %>%
-   mutate(across(where(is.numeric), prop.table)) %>%
+   dplyr::mutate(dplyr::across(dplyr::where(is.numeric), prop.table)) %>%
    tibble::column_to_rownames("AA") %>%
    as.matrix()
 
@@ -105,7 +105,7 @@ plot_cleavage_motif = function(cleavage_seqs,background_universe = mspms::all_po
     tibble::rownames_to_column("AA") %>%
     tidyr::pivot_longer(2:length(.),names_to = "position",values_to = "zscore") %>%
     dplyr::filter(abs(zscore) > 1.96) %>%
-    mutate(aa_position = paste0(AA,".",position))
+    dplyr::mutate(aa_position = paste0(AA,".",position))
 
 
 # calculating percentage difference between experimenally observed and theoritcal cleavage propensities
