@@ -4,6 +4,8 @@
 # mspms
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/baynec2/mspms/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/baynec2/mspms/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of mspms is provide a concise code-base for the normalization
@@ -46,15 +48,15 @@ involved in:
 **Making mspms generically useful**.  
 1. *prepare_peaks()*:Takes two input files from PEAKS and combines them.
 2. *prepare_pd()*: prepares exported files from proteome discoverer.  
-- *extract_design_matrix_pd()*: Extracts the design matrix from the
+3. *extract_design_matrix_pd()*: Extracts the design matrix from the
 proteome discoverer file.  
-3. *prepare_spectronaut()*: prepares exported files from spectronaut -
+4. *prepare_spectronaut()*: prepares exported files from spectronaut -
 note in development, not yet implemented.  
-4. *calculate_all_cleavages()*: Calculates all possible cleavages for
+5. *calculate_all_cleavages()*: Calculates all possible cleavages for
 peptide library sequences.
 
-**Data Proessing/ Normalization**. 1. *normalyze()*: Normalizes values
-and then does a reverse log2 transformation.  
+**Data Proessing/ Normalization**.  
+1. *normalyze()*: Normalizes values.  
 2. *handle_outliers()*: Looks for outliers across replicates. Removes
 them.  
 3. *impute()*: Imputes data for missing values (not including NAs
@@ -83,7 +85,7 @@ an interactive heatmap to visualize overall patterns in the data.
 2. *plot_pca()*: PCA analysis to visualize the data in a 2D space.  
 3. *plot_time_course()*: Plot peptides over time by condition.  
 4. *plot_cleavage_motif()*: Visualize the sequence specificity of the
-cleavage sites. Designed to be similar to what is implemented in
+cleavage sites. Designed to be equivalent to what is implemented in
 IceLogo.
 
 ## Making Generically Usefull.
@@ -141,12 +143,39 @@ usethis::use_data(peaks_prepared_data,overwrite = TRUE)
 #> • Document your data (see 'https://r-pkgs.org/data.html')
 ```
 
+### Formating Proteome Discoverer File Outputs.
+
+We can prepare proteome discover files for analysis with mspms as
+follows.
+
+``` r
+prepared_proteome_discoverer = prepare_pd("tests/testdata/proteome_discoverer_output.xlsx")
+#> New names:
+#> • `Abundance: F12: Sample, 4, 60 min` -> `Abundance: F12: Sample, 4, 60
+#>   min...15`
+#> • `Abundance: F12: Sample, 4, 60 min` -> `Abundance: F12: Sample, 4, 60
+#>   min...19`
+```
+
+We can also extract a design matrix from the naming scheme used by
+proteome discoverer as follows.
+
+``` r
+ design_matrix = extract_design_matrix_pd("tests/testdata/proteome_discoverer_output.xlsx")
+#> New names:
+#> • `Abundance: F12: Sample, 4, 60 min` -> `Abundance: F12: Sample, 4, 60
+#>   min...15`
+#> • `Abundance: F12: Sample, 4, 60 min` -> `Abundance: F12: Sample, 4, 60
+#>   min...19`
+```
+
 ### Calculating all cleavages
 
 We might want to calculate all possible cleavages for the peptide
 library sequences. This is useful for downstream analysis, especially
-when we are looking at the specificity of the cleavage sites via as this
-requires a background of all possible cleavages
+when we are looking at the specificity of the cleavage sites via
+plot_cleavage_motif() as this requires a background of all possible
+cleavages
 
 We can do this by specifying the number of amino acids after the
 cleavage site that we are interested in. First lets try 4, which is the
@@ -201,9 +230,9 @@ head(design_matrix)
 
 ### Normalyzing data
 
-msp-ms uses the normalyzede package to do normalization under the hood.
+mspms uses the NormalyzerDE package to do normalization under the hood.
 
-Now we can normalyze the data.
+We can normalyze the data as follows:
 
 ``` r
 normalyzed_data = normalyze(peaks_prepared_data,design_matrix)
@@ -267,7 +296,7 @@ usethis::use_data(outliers,overwrite = TRUE)
 ### Imputation of data
 
 We have a lot of missing, or 0 values. For these, we need to impute them
-so we can do downstream statistics Data is imputated by ….
+so we can do downstream statistics.
 
 ``` r
 imputed = impute(outliers)
@@ -281,7 +310,7 @@ usethis::use_data(imputed,overwrite = TRUE)
 ### Joining with Library
 
 Next we need to join everything with the sequences of the peptide
-library
+library.
 
 ``` r
 joined_with_library = join_with_library(imputed)
@@ -292,7 +321,7 @@ usethis::use_data(joined_with_library,overwrite = TRUE)
 #> • Document your data (see 'https://r-pkgs.org/data.html')
 ```
 
-### Calcuating clevages.
+### Calcuating cleavages.
 
 Next, we need to determine where the peptide sequences are cleaved.
 
@@ -391,8 +420,8 @@ t_test_stats = mspms::mspms_t_tests(prepared_for_stats)
 
 ### log2FC
 
-We can also calculate the log 2 fc. The comparisons here are the same as
-for the T tests
+We can also calculate the log 2 fold change. The comparisons here are
+the same as for the T tests.
 
 ``` r
 # calclulate log2fc
@@ -434,7 +463,7 @@ head(log2fc_t_test)
 ```
 
 Now that we have this data we can visualize these results easily using
-the ggplot2 package.
+the ggplot2 package as follows.
 
 ``` r
 library(ggplot2)
@@ -452,7 +481,7 @@ p1 = log2fc_t_test %>%
 p1
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
 
 ### ANOVA
 
@@ -512,7 +541,7 @@ mspms::plot_cleavage_motif(cleavage_seqs,background_universe)
 #> Adding another scale for x, which will replace the existing scale.
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
 ### PCA
 
@@ -524,7 +553,7 @@ conditions.
 mspms::plot_pca(prepared_for_stats)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
 
 ### Hierchical clustering
 
@@ -566,4 +595,4 @@ p1 = prepared_for_stats %>%
 p1
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
