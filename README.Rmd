@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/baynec2/mspms/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/baynec2/mspms/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/baynec2/mspms/branch/main/graph/badge.svg)](https://app.codecov.io/gh/baynec2/mspms?branch=main)
 <!-- badges: end -->
 
 The goal of mspms is provide a concise code-base for the normalization and data processing required to analyze data from the [Multiplex Substrate Profiling by Mass Spectrometry (MSP-MS) method](https://pubmed.ncbi.nlm.nih.gov/36948708/). 
