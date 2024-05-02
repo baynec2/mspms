@@ -18,7 +18,8 @@ a heatmaply interactive heatmap
 This produces a heatmaply interactive heatmap of the data with color bars representing the condition and time for each sample.
 }
 \examples{
+\dontshow{if (isTRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 plot_heatmap(mspms::prepared_for_stats,scale = "column")
-
+\dontshow{\}) # examplesIf}
 }
