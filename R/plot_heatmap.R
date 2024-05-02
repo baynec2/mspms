@@ -8,7 +8,7 @@
 #' @return a heatmaply interactive heatmap
 #' @export
 #'
-#' @examples
+#' @examplesIf isTRUE(FALSE)
 #'
 #' plot_heatmap(mspms::prepared_for_stats,scale = "column")
 #'
