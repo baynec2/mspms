@@ -22,9 +22,9 @@ log2fc_t_test = function(prepared_for_stats){
 
   #Combining them together
   log2fc_stats = dplyr::inner_join(log2fc,stat,by = c("Peptide","comparison")) %>%
-    dplyr::mutate(time = group2,
-           condition = condition.x) %>%
-    dplyr::select(-condition.x,-condition.y) %>%
+    dplyr::mutate(time = .data$group2,
+           condition = .data$condition.x) %>%
+    dplyr::select(-.data$condition.x,-.data$condition.y) %>%
     tibble::as_tibble()
 
   return(log2fc_stats)

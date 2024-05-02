@@ -15,10 +15,10 @@
 plot_heatmap = function(prepared_for_stats,scale = "column"){
 
   heatmap_data = prepared_for_stats %>%
-    dplyr::select(sample,Peptide,condition,time,value) %>%
-    tidyr::pivot_wider(names_from = Peptide,values_from = value,values_fn = mean) %>%
+    dplyr::select(.data$sample,.data$Peptide,.data$condition,.data$time,.data$value) %>%
+    tidyr::pivot_wider(names_from = .data$Peptide,values_from = .data$value,values_fn = mean) %>%
     tibble::column_to_rownames("sample") %>%
-    dplyr::mutate(time = as.factor(time))
+    dplyr::mutate(time = as.factor(.data$time))
 
 
  heatmaply::heatmaply(heatmap_data,scale = scale,showticklabels = c(FALSE,TRUE))

@@ -40,17 +40,17 @@ add_cleavages = function(joined_with_library,n_residues = 4){
 
   # Building final data frame.
   output = dplyr::bind_cols(joined_with_library,cleavages) %>%
-    dplyr::select(Peptide,
-                  library_reference_id,
-                  library_match_sequence,
-                  library_real_sequence,
-                  nterm,
-                  nterm_cleavage_pos,
-                  cterm,
-                  cterm_cleavage_pos,
+    dplyr::select(.data$Peptide,
+                  .data$library_reference_id,
+                  .data$library_match_sequence,
+                  .data$library_real_sequence,
+                  .data$nterm,
+                  .data$nterm_cleavage_pos,
+                  .data$cterm,
+                  .data$cterm_cleavage_pos,
                   dplyr::everything(),
-                  -peptide,
-                  -Peptide_no_cleavage,
+                  -.data$peptide,
+                  -.data$Peptide_no_cleavage,
                   -dplyr::any_of("RT")) %>%
     tibble::as_tibble()
 

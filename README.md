@@ -116,10 +116,6 @@ id_filename = "tests/testdata/protein-peptides-id.csv"
 
 # Prepare the data for normalyzer analysis
 peaks_prepared_data = prepare_peaks(lfq_filename,id_filename)
-#> Warning: One or more parsing issues, call `problems()` on your data frame for details,
-#> e.g.:
-#>   dat <- vroom(...)
-#>   problems(dat)
 #> Rows: 1099 Columns: 46
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: ","
@@ -136,14 +132,6 @@ peaks_prepared_data = prepare_peaks(lfq_filename,id_filename)
 #> 
 #> ℹ Use `spec()` to retrieve the full column specification for this data.
 #> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Warning: `as.tibble()` was deprecated in tibble 2.0.0.
-#> ℹ Please use `as_tibble()` instead.
-#> ℹ The signature and semantics have changed, see `?as_tibble`.
-#> ℹ The deprecated feature was likely used in the mspms package.
-#>   Please report the issue to the authors.
-#> This warning is displayed once every 8 hours.
-#> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-#> generated.
 
 
 # saving to data folder in package for tests. Ignore when using on your own data
@@ -213,7 +201,7 @@ head(design_matrix)
 
 ### Normalyzing data
 
-msp-ms uses the …. package to do normalization under the hood.
+msp-ms uses the normalyzede package to do normalization under the hood.
 
 Now we can normalyze the data.
 
@@ -225,7 +213,7 @@ normalyzed_data = normalyze(peaks_prepared_data,design_matrix)
 #> Sample check: More than one sample group found
 #> Sample replication check: All samples have replicates
 #> RT annotation column found (2)
-#> [Step 1/5] Input verified, job directory prepared at:./2024-04-26_mspms_normalyze_output
+#> [Step 1/5] Input verified, job directory prepared at:./2024-05-02_mspms_normalyze_output
 #> [Step 2/5] Performing normalizations
 #> [Step 2/5] Done!
 #> [Step 3/5] Generating evaluation measures...
@@ -234,7 +222,7 @@ normalyzed_data = normalyze(peaks_prepared_data,design_matrix)
 #> [Step 4/5] Matrices successfully written
 #> [Step 5/5] Generating plots...
 #> [Step 5/5] Plots successfully generated
-#> All done! Results are stored in: ./2024-04-26_mspms_normalyze_output, processing time was 0.3 minutes
+#> All done! Results are stored in: ./2024-05-02_mspms_normalyze_output, processing time was 0.3 minutes
 #> Rows: 820 Columns: 27
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: "\t"
@@ -551,7 +539,7 @@ picture of the output is shown instead.
 mspms::plot_heatmap(prepared_for_stats)
 ```
 
-![](www/plot_heatmap_output.png)
+![](plot_heatmap_output.png)
 
 ### Ploting time course.
 

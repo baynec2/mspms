@@ -18,27 +18,67 @@ prepare_peaks = function(lfq_filepath,
                          id_filepath){
 
   # Reading in the label free quantification data
-  lfq = readr::read_csv(lfq_filepath,guess_max = 10)
+  lfq = readr::read_csv(lfq_filepath,guess_max = 10,na = c("-",""))
+
+  `%!in%` = Negate(`%in%`)
+
+  # Making sure the lfq file has the correct headers
+  if(sum(c("Protein Group",
+           "Protein ID",
+           "Protein Accession",
+           "Peptide",
+           "Used",
+           "Candidate",
+           "Quality",
+           "Significance",
+           "Avg. ppm",
+           "Avg. Area") %!in% names(lfq))>0){
+    stop(paste("The lfq file does not have the correct headers.
+                The headers should contain:", "Protein Group","Protein ID","Protein Accession","Peptide",
+                "Used","Candidate","Quality","Significance","Avg.ppm","Avg.Area"))
+
+  }
 
   # Reading in the ids
-  id = readr::read_csv(id_filepath) %>%
+  id = readr::read_csv(id_filepath,na = c("-",""))
+
+  #Making sure id file has the correct headers
+  if(sum(c("Protein Group",
+           "Protein ID",
+           "Protein Accession",
+           "Peptide",
+           "Unique",
+           "-10lgP",
+           "Mass",
+           "Length",
+           "ppm",
+           "m/z",
+           "z",
+           "RT") %!in%
+    names(id))>0){
+    stop(paste("The id file does not have the correct headers.
+                The headers should contain:","Protein Group","Protein ID","Protein Accession","Peptide",
+                "Unique","-10lgP","Mass","Length","ppm","m/z","z","RT", "and columns corresponding to your sample names"))
+
+  }
+
+  id = id %>%
     #only keep the Peptide ID with the highest score in case there are more than one.
     # This is essentially what the current script does, is it intended? Seems like a bug to me
-    dplyr::group_by(Peptide) %>%
-    dplyr::filter(`-10lgP` == max(`-10lgP`)) %>%
+    dplyr::group_by(.data$Peptide) %>%
+    dplyr::filter(.data$`-10lgP` == max(.data$`-10lgP`)) %>%
     dplyr::ungroup() %>%
-    dplyr::select(Peptide,RT,6:12)
-
+    dplyr::select(.data$Peptide,.data$RT,6:12)
 
   # Combining data frame and filtering to only contain quality scores > 0.3
   output = lfq %>%
     # Sometimes a peptide is detected more than once at different retention times.
     # We will only keep the one with the highest quality score.
-    dplyr::group_by(Peptide) %>%
-    dplyr::filter(Quality == max(Quality)) %>%
+    dplyr::group_by(.data$Peptide) %>%
+    dplyr::filter(.data$Quality == max(.data$Quality)) %>%
     dplyr::ungroup() %>%
     dplyr::inner_join(id,by = c("Peptide"),multiple = "first") %>%
-    dplyr::filter(Quality > 0.3) %>%
+    dplyr::filter(.data$Quality > 0.3) %>%
     tibble::as_tibble()
 
 
@@ -49,8 +89,8 @@ prepare_peaks = function(lfq_filepath,
 
   # Selecting only the columns that we care about
   output = output %>%
-    dplyr::mutate(Peptide = gsub("\\.","_",Peptide)) %>%
-    dplyr::select(Peptide,RT,`Protein Accession`,dplyr::any_of(start:end))
+    dplyr::mutate(Peptide = gsub("\\.","_",.data$Peptide)) %>%
+    dplyr::select(.data$Peptide,.data$RT,.data$`Protein Accession`,dplyr::any_of(start:end))
 
   # Replacing 0 with NA
   output[output == 0] = NA_real_

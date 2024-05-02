@@ -27,7 +27,7 @@ plot_cleavage_motif = function(cleavage_seqs,background_universe = mspms::all_po
   bg_seq = tidyr::separate(background_universe,col = 1,
                            into = paste0("position",1:(nchar_bg+1)),
                            sep = "",remove = TRUE) %>%
-    dplyr::select(-position1)
+    dplyr::select(-.data$position1)
 
   # Counting the number in each position
   bg_count = bg_seq %>%
@@ -62,12 +62,12 @@ plot_cleavage_motif = function(cleavage_seqs,background_universe = mspms::all_po
  nchar_cleav = nchar(cleavage_seqs[[1]])
 
  # done for the background first
- cleavage_seqs = tibble(sequences = cleavage_seqs)
+ cleavage_seqs = tibble::tibble(sequences = cleavage_seqs)
 
  clev_seq = tidyr::separate(cleavage_seqs,col = 1,
                             into = paste0("position",1:(nchar_cleav+1)),
                             sep = "",remove = TRUE) %>%
-   dplyr::select(-position1)
+   dplyr::select(-.data$position1)
 
  # counting the number of time each AA appears at each position
 
@@ -103,9 +103,9 @@ plot_cleavage_motif = function(cleavage_seqs,background_universe = mspms::all_po
   #finding the significant zscores
   sig_zscores = zscores %>%
     tibble::rownames_to_column("AA") %>%
-    tidyr::pivot_longer(2:length(.),names_to = "position",values_to = "zscore") %>%
+    tidyr::pivot_longer(2:length(.data),names_to = "position",values_to = "zscore") %>%
     dplyr::filter(abs(zscore) > 1.96) %>%
-    dplyr::mutate(aa_position = paste0(AA,".",position))
+    dplyr::mutate(aa_position = paste0(.data$AA,".",.data$position))
 
 
 # calculating percentage difference between experimenally observed and theoritcal cleavage propensities
@@ -128,12 +128,12 @@ plot_cleavage_motif = function(cleavage_seqs,background_universe = mspms::all_po
 
   bg_per_dif_bits_final = bg_per_dif_bits %>%
     tibble::rownames_to_column("AA") %>%
-    tidyr::pivot_longer(2:length(.),names_to = "position",values_to = "bits") %>%
-    dplyr::mutate(aa_position = paste0(AA,".",position)) %>%
-    dplyr::filter(aa_position %in% sig_zscores$aa_position) %>%
-    dplyr::select(-aa_position) %>%
-    tidyr::pivot_wider(names_from = position,
-                       values_from = bits,names_sort = FALSE) %>%
+    tidyr::pivot_longer(2:length(.data),names_to = "position",values_to = "bits") %>%
+    dplyr::mutate(aa_position = paste0(.data$AA,".",.data$position)) %>%
+    dplyr::filter(.data$aa_position %in% sig_zscores$aa_position) %>%
+    dplyr::select(-.data$aa_position) %>%
+    tidyr::pivot_wider(names_from = .data$position,
+                       values_from = .data$bits,names_sort = FALSE) %>%
     dplyr::relocate(paste0("P",c((nchar_cleav/2):1,
                                  paste0(1:(nchar_cleav/2),"'")))) %>%
     tibble::column_to_rownames("AA") %>%

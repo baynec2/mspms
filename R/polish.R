@@ -16,7 +16,7 @@ polish = function(cleavage_added_data){
     dplyr::mutate(cleavage_seq = dplyr::case_when(!is.na(nterm) & is.na(cterm) ~ nterm,
                                                   !is.na(cterm) & is.na(nterm) ~ cterm,
                                                   TRUE ~NA),.after = "cterm_cleavage_pos") %>%
-    dplyr::filter(!is.na(cleavage_seq)) %>%
+    dplyr::filter(!is.na(.data$cleavage_seq)) %>%
     tibble::as_tibble()
 
 

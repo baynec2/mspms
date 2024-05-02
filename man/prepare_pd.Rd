@@ -10,7 +10,7 @@ prepare_pd(filepath)
 \item{filepath}{= this is the filepath to the proteome discoverer excel formatted file.}
 }
 \value{
-a tibble with the data formated for use with normalyze
+a tibble with the data formatted for use with normalyze
 }
 \description{
 prepare proteome discoverer output for mspms analysis.

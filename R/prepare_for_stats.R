@@ -11,7 +11,8 @@
 #' @examples
 #' prepare_for_stats(mspms::cleavage_added_data,mspms::design_matrix)
 prepare_for_stats = function(cleavage_added_data,design_matrix){
-
+  # dealing with no visible binding for global variable ‘.’ NOTE
+  . = NULL
   #Figuring out where the samples start
   start_of_samples = which(names(cleavage_added_data) == "cterm_cleavage_pos")+1
 

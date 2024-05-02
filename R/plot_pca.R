@@ -13,10 +13,11 @@
 #'
 #'
 plot_pca = function(prepared_for_stats){
-
+  # dealing with no visible binding for global variable ‘.’ NOTE
+  . = NULL
   PCA_data = prepared_for_stats %>%
-    dplyr::select(sample,Peptide,group,condition,time,value) %>%
-    tidyr::pivot_wider(names_from = Peptide,values_from = value,values_fn = mean) %>%
+    dplyr::select(.data$sample,.data$Peptide,.data$group,.data$condition,.data$time,.data$value) %>%
+    tidyr::pivot_wider(names_from = .data$Peptide,values_from = .data$value,values_fn = mean) %>%
     # if a peptide has an na remove it
     dplyr::select_if(~ !any(is.na(.)))
 
@@ -45,7 +46,7 @@ plot_pca = function(prepared_for_stats){
 
   #plotting the PCA
   plot = PCA_df %>%
-    ggplot2::ggplot(ggplot2::aes(PC1,PC2,color = time, shape = condition))+
+    ggplot2::ggplot(ggplot2::aes_string("PC1","PC2",color = "time", shape = "condition"))+
     ggplot2::geom_point()+
     ggplot2::stat_ellipse(level=0.95)+
     ggplot2::xlab(paste0("PCA-1 ",round(Prop_of_var[1]*100,2),"%"))+

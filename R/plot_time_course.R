@@ -20,12 +20,13 @@
 plot_time_course = function(prepared_for_stats){
 
  p1 = prepared_for_stats %>%
-  dplyr::group_by(Peptide,condition,time) %>%
-  dplyr::summarize(mean = mean(value,na.rm=T),sd = sd(value,na.rm = T)) %>%
-  ggplot2::ggplot(ggplot2::aes(x = time, y = mean, color = condition)) +
+  dplyr::group_by(.data$Peptide,.data$condition,.data$time) %>%
+  dplyr::summarize(mean = mean(.data$value,na.rm=T),sd = sd(.data$value,na.rm = T)) %>%
+  ggplot2::ggplot(ggplot2::aes_string(x = "time", y = "mean", color = "condition")) +
   ggplot2::geom_point() +
   ggplot2::geom_line()+
-  ggplot2::geom_errorbar(ggplot2::aes(ymax = mean + sd, ymin = mean - sd),width = 15) +
+  ggplot2::geom_errorbar(ggplot2::aes(ymax = mean + sd,
+                                      ymin = mean - sd),width = 15) +
   ggplot2::facet_wrap(~Peptide, scales = "free_y") +
   ggplot2::theme_minimal() +
   ggplot2::theme(legend.position = "bottom")

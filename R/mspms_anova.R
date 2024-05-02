@@ -12,7 +12,7 @@
 mspms_anova = function(prepared_for_stats){
 
   anova = prepared_for_stats %>%
-    dplyr::group_by(condition,Peptide) %>%
+    dplyr::group_by(.data$condition,.data$Peptide) %>%
     rstatix::anova_test(value ~ time) %>%
     rstatix::adjust_pvalue(method = "fdr") %>%
     tibble::as_tibble()

@@ -15,13 +15,16 @@
 
 handle_outliers = function(normalyzed_data,design_matrix){
 
+  # dealing with no visible binding for global variable ‘.’ NOTE
+  . = NULL
+
   # Putting into the long format, adding group information, based on sample_time_replicate naming convention
   index = which(names(normalyzed_data) == "Protein Accession")+1
 
   long_data = normalyzed_data %>%
     tidyr::pivot_longer(dplyr::all_of(index:length(.)),names_to = "sample") %>%
     dplyr::inner_join(design_matrix,by = "sample") %>%
-    dplyr::filter(!is.na(value))
+    dplyr::filter(!is.na(.data$value))
 
 
   # initalizing the data frame
@@ -31,11 +34,11 @@ handle_outliers = function(normalyzed_data,design_matrix){
   for(i in unique(long_data$group)){
 
     #filtering data to only include the samples with the same condition and time
-    f = dplyr::filter(long_data, group == i)
+    f = dplyr::filter(long_data, .data$group == i)
 
     # Looping though each peptide within each group
     for(j in unique(long_data$Peptide)){
-      f2 = dplyr::filter(f,Peptide == j )
+      f2 = dplyr::filter(f,.data$Peptide == j )
       # # only doing tests if there are between 3 and 30 values
        if(length(f2$value) > 3 & length(f2$value) < 30){
       #
@@ -62,8 +65,8 @@ handle_outliers = function(normalyzed_data,design_matrix){
 
   NAs_added_back = out %>%
     #dplyr::filter(!is_outlier) %>%
-    dplyr::select(-group,-condition,-time) %>%
-    tidyr::pivot_wider(names_from = sample, values_from = value) %>%
+    dplyr::select(-.data$group,-.data$condition,-.data$time) %>%
+    tidyr::pivot_wider(names_from = .data$sample, values_from = .data$value) %>%
     tidyr::pivot_longer(index:length(.),names_to = "sample_id") %>%
     tibble::as_tibble()
 

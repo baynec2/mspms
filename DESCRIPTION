@@ -11,26 +11,28 @@ LazyData: true
 RoxygenNote: 7.3.1
 Depends: 
     R (>= 3.5.0)
+biocViews:
 Imports: 
-    dplyr,
-    magrittr,
-    MASS,
-    NormalyzerDE,
-    outliers,
-    purrr,
-    stats,
-    tidyr,
-    truncnorm,
-    utils,
-    ggplot2,
-    ggseqlogo,
-    heatmaply,
-    readr,
-    readxl,
-    rstatix,
-    stringr,
-    tibble,
-    SummarizedExperiment
+    dplyr (>= 1.1.4),
+    magrittr (>= 2.0.3),
+    MASS (>= 7.3.60.0.1),
+    NormalyzerDE (>= 1.19.7),
+    outliers (>= 0.15),
+    purrr (>= 1.0.2),
+    stats (>= 4.1.1),
+    tidyr (>= 1.3.1),
+    truncnorm (>= 1.0.9),
+    utils (>= 4.1.1),
+    ggplot2 (>= 3.5.0),
+    ggseqlogo (>= 0.2),
+    heatmaply (>= 1.5.0),
+    readr (>= 1.1.5),
+    readxl (>= 1.4.3),
+    rstatix (>= 0.7.2),
+    stringr (>= 1.5.1),
+    tibble (>= 3.2.1),
+    SummarizedExperiment (>= 1.24.0),
+    rlang (>= 1.1.3)
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

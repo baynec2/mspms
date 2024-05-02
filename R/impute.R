@@ -12,11 +12,13 @@
 #' @examples
 #' impute(mspms::outliers,noise = 0.05,nsd = 1)
 impute = function(outlier_handled_data,noise=0.05,nsd=1){
+  # dealing with no visible binding for global variable ‘.’ NOTE
+  . = NULL
   # taking the lowest end of the values observed to use as a list of values to compose the distribution we will be imputing with.
   values_for_impute = outlier_handled_data %>%
-    dplyr::filter(value != 0 ) %>%
-    dplyr::arrange(-value) %>%
-    dplyr::pull(value) %>%
+    dplyr::filter(.data$value != 0 ) %>%
+    dplyr::arrange(-.data$value) %>%
+    dplyr::pull(.data$value) %>%
     tail(noise * length(.))
 
   # Maximum-likelihood fitting of univariate distributions
@@ -63,11 +65,11 @@ impute = function(outlier_handled_data,noise=0.05,nsd=1){
 
   # Putting in the wide format.
   output = imputed_data %>%
-    dplyr::select(-value) %>%
+    dplyr::select(-.data$value) %>%
     tidyr::pivot_wider(names_from = "sample_id",
-                       values_from = imputed_values) %>%
-    dplyr::mutate(Peptide = gsub("\\.","_",Peptide),
-                  Peptide_no_cleavage = gsub("_","",Peptide),.after = Peptide) %>%
+                       values_from = .data$imputed_values) %>%
+    dplyr::mutate(Peptide = gsub("\\.","_",.data$Peptide),
+                  Peptide_no_cleavage = gsub("_","",.data$Peptide),.after = .data$Peptide) %>%
     tibble::as_tibble()
 
   return(output)

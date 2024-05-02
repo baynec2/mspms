@@ -8,3 +8,10 @@ test_that("there are no duplicate peptides after processing", {
   })
 
 })
+
+test_that("error to find unexpected id columns works", {
+  expect_error({
+    mspms::prepare_pd(filepath = "../testdata/proteome_discoverer_output_bad_names.xlsx")
+  })
+
+})
