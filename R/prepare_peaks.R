@@ -90,7 +90,9 @@ prepare_peaks = function(lfq_filepath,
   # Selecting only the columns that we care about
   output = output %>%
     dplyr::mutate(Peptide = gsub("\\.","_",.data$Peptide)) %>%
-    dplyr::select(.data$Peptide,.data$RT,.data$`Protein Accession`,dplyr::any_of(start:end))
+    dplyr::select(.data$Peptide,.data$RT,.data$`Protein Accession`,dplyr::any_of(start:end)) %>%
+    #Dealing with the case where there are PTMs, removing the mod from peptide seq report.
+    dplyr::mutate(Peptide = gsub("//(.*\\)","",Peptide))
 
   # Replacing 0 with NA
   output[output == 0] = NA_real_
