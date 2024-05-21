@@ -27,7 +27,7 @@ mspms_log2fc = function(prepared_for_stats){
   # Calculating the log2fc
 
   log2fc = dplyr::inner_join(control_data,reference_data,by = c("Peptide","condition")) %>%
-    dplyr::mutate(comparison = paste0(.data$condition,".T0","_",.data$condition,".T",.data$time),
+    dplyr::mutate(comparison = paste0(.data$condition,".T",.data$group2,"/",.data$time,.data$condition,".T0"),
                   log2fc = log2(.data$reference_mean/.data$control_mean)) %>%
     tibble::as_tibble()
 
