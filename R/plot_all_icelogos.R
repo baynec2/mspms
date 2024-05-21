@@ -40,7 +40,8 @@ plot_all_icelogos = function(polished_data,
 
     # generating ice logo
 
-  out = mspms::plot_icelogo(f,type = type,background_universe = background_universe)
+  out = mspms::plot_icelogo(f,type = type,background_universe = background_universe)+
+    ggplot::ggtitle(i)
 
   plot_list[[i]] = out
 
