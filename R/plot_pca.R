@@ -46,7 +46,7 @@ plot_pca = function(prepared_for_stats){
 
   #plotting the PCA
   plot = PCA_df %>%
-    ggplot2::ggplot(ggplot2::aes_string("PC1","PC2",color = "time", shape = "condition"))+
+    ggplot2::ggplot(ggplot2::aes_string("PC1","PC2",color = "time", linetype = "condition",shape = "condition"))+
     ggplot2::geom_point()+
     ggplot2::stat_ellipse(level=0.95)+
     ggplot2::xlab(paste0("PCA-1 ",round(Prop_of_var[1]*100,2),"%"))+

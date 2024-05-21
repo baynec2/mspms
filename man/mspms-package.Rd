@@ -2,7 +2,6 @@
 % Please edit documentation in R/mspms-package.R
 \docType{package}
 \name{mspms-package}
-\alias{mspms}
 \alias{mspms-package}
 \title{mspms: Analysis tools for use with MSP-MS}
 \description{

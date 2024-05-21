@@ -24,7 +24,7 @@ plot_volcano = function(log2fc_t_test_data,log2fc_threshold = 3){
     ggplot2::geom_hline(yintercept = -log10(0.05),linetype = "dashed",color = "red")+
     ggplot2::geom_vline(xintercept = log2fc_threshold, linetype = "dashed",color = "red")+
     ggplot2::geom_vline(xintercept = -log2fc_threshold, linetype = "dashed",color = "red")+
-    ggplot2::labs(x = "Log2 (Time 0/X)",y = "-log10(p value)")+
+    ggplot2::labs(x = "Log2 (Time TX/T0)",y = "-log10(p value)")+
     ggplot2::facet_wrap(~ condition + group2,ncol = ncol)
 
   return(p1)
