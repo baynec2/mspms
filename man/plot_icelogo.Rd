@@ -13,7 +13,7 @@ plot_icelogo(
 \arguments{
 \item{cleavage_seqs}{= these are the cleavage sequences that are observed in the experiment}
 
-\item{background_universe}{= this is a list of all the possible clevage sequences in the peptide library used.}
+\item{background_universe}{= this is a list of all the possible cleavage sequences in the peptide library used.}
 
 \item{type}{= this is the type of visualization you would like to perform, can be either "percent_difference" or "fold_change".}
 }
