@@ -1,0 +1,378 @@
+---
+title: "test_random_sample_motif"
+output: html_document
+date: "2024-05-17"
+---
+
+```{r}
+
+library(dplyr)
+# Reading in the probabilities of an AA at each position
+  probabilities = readxl::read_excel("testdata/motif_sampling_probabilities.xlsx") %>%
+    tibble::column_to_rownames("AA") %>%
+    t() %>%
+    as.data.frame()
+
+
+  # Switching non na values with the AA supplied
+  replace_non_na <- function(x, colname) {
+    sapply(x, function(y) ifelse(is.na(y), NA, colname))
+  }
+  
+  # Defining function to look for columns with zeros
+  is.zero = function(x) {
+    x == 0
+  }
+  
+  positions_with_0 = probabilities %>%
+    dplyr::select_if(~any(is.zero(.)))
+  
+  # switching to zeros
+  positions_with_0_mod <- as.data.frame(lapply(names(positions_with_0), function(col)
+    replace_non_na(positions_with_0[[col]], col)))
+  names(positions_with_0_mod) <- names(positions_with_0)
+  
+    # Changing  NAs to . for pattern extraction
+  positions_with_0_mod = positions_with_0_mod %>%
+    dplyr::mutate(
+      dplyr::across(everything(), tidyr::replace_na, ".")
+    )
+  
+
+  ### removing the peptides with zeros ###
+  
+  zero_removed = tibble::tibble()
+  
+  col_names_with_zero = colnames(positions_with_0_mod)
+
+   for(i in 1:ncol(positions_with_0_mod)){
+    # Extracting the name of the column
+    col_name_with_zero = colnames(positions_with_0_mod)[i]
+    
+    logic = paste0(positions_with_0_mod[[i]],collapse = "")
+    T_F = !grepl(logic,mspms::all_possible_8mers_from_228_library)
+    cleavages = list(mspms::all_possible_8mers_from_228_library[T_F])
+
+    output = tibble::tibble(i = cleavages)
+
+    names(output)[names(output) == 'i'] = col_name_with_zero
+
+    ## Adding to Tibble ##
+    zero_removed = tibble::add_column(output,zero_removed)
+
+   }
+  
+  
+  zero_removed_vector = zero_removed$P[[1]]
+  
+  
+  ### Extracting the Peptides that we would expect to be there ### 
+  
+  df_modified <- as.data.frame(lapply(names(probabilities), function(col) replace_non_na(probabilities[[col]], col)))
+  names(df_modified) <- names(probabilities)
+
+  # Changing  NAs to . for pattern extraction
+  df_modified = df_modified %>%
+    dplyr::mutate(
+      dplyr::across(everything(), tidyr::replace_na, ".")
+    ) %>% 
+    dplyr::select(-col_names_with_zero)
+  
+  
+  # Defining a tibble where the columns have only peptides with the specificed
+  # cleavages at the specificed positions
+
+  cleavage_seq_per_AA = tibble::tibble()
+
+  for(i in 1:ncol(df_modified)){
+
+    # Extracting the name of the column
+    col_name = colnames(df_modified)[i]
+
+    logic = paste0(df_modified[[i]],collapse = "")
+    T_F = grepl(logic,zero_removed_vector)
+    cleavages = list(zero_removed_vector[T_F])
+
+    output = tibble::tibble(i = cleavages)
+
+    names(output)[names(output) == 'i'] = col_name
+
+    ## Adding to Tibble ##
+    cleavage_seq_per_AA = tibble::add_column(output,cleavage_seq_per_AA,)
+
+  }
+
+  
+trypsin_seqs = c(cleavage_seq_per_AA$R[[1]],cleavage_seq_per_AA$K[[1]])
+
+trypsin_seqs
+```
+
+```{r}
+mspms::plot_cleavage_motif(c(trypsin_seqs),mspms::all_possible_8mers_from_228_library)
+
+```
+
+
+
+```{r}
+sum(grepl(".......K",mspms::all_possible_8mers_from_228_library))
+sum(grepl(".......K",trypsin_seqs))
+
+
+
+sum(grepl("....P...",mspms::all_possible_8mers_from_228_library))
+sum(grepl("....P...",trypsin_seqs))
+
+
+sum(grepl("...K....",mspms::all_possible_8mers_from_228_library))
+sum(grepl("...K....",trypsin_seqs))
+
+sum(grepl("...R....",mspms::all_possible_8mers_from_228_library))
+sum(grepl("...R....",trypsin_seqs))
+```
+
+
+There is a problem where the motif plotter won't plot residues if they have a count of zero. These may be the most differnt though! Investigating below:
+
+```{r,fig.height = 5, fig.width = 3}
+cleavage_seqs = readLines("testdata/in_silico_trypsin_digest_out.csv")
+background_universe = mspms::all_possible_8mers_from_228_library
+type = "fold_change"
+
+plot_icelogo = function(cleavage_seqs,
+                        background_universe = mspms::all_possible_8mers_from_228_library,
+                        type = "percent_difference") {
+  ## First need to format this such that we have a matrix with the counts at each location of the sequence
+  nchar_bg = nchar(background_universe[1])
+  
+  # do this for the background first.
+  background_universe = tibble::tibble(sequences = background_universe)
+  
+  # separate the sequences into individual amino acids
+  bg_seq = tidyr::separate(
+    background_universe,
+    col = 1,
+    into = paste0("position", 1:(nchar_bg + 1)),
+    sep = "",
+    remove = TRUE
+  ) %>%
+    dplyr::select(-.data$position1)
+  
+  # Counting the number in each position
+  bg_count = bg_seq %>%
+    purrr::map_df(table) %>%
+    t()
+  
+  #replacing NA with 0
+  bg_count[is.na(bg_count)] = 0
+  
+  bg_prop = bg_count %>%
+    as.data.frame() %>%
+    tibble::rownames_to_column("AA") %>%
+    dplyr::mutate(dplyr::across(dplyr::where(is.numeric), prop.table)) %>%
+    tibble::column_to_rownames("AA") %>%
+    as.matrix()
+
+  # Now doing this for the experimental clevages
+  nchar_cleav = nchar(cleavage_seqs[[1]])
+  
+  # done for the background first
+  cleavage_seqs = tibble::tibble(sequences = cleavage_seqs)
+  
+  clev_seq = tidyr::separate(
+    cleavage_seqs,
+    col = 1,
+    into = paste0("position", 1:(nchar_cleav + 1)),
+    sep = "",
+    remove = TRUE
+  ) %>%
+    dplyr::select(-.data$position1)
+  
+  # counting the number of time each AA appears at each position
+  clev_count = clev_seq %>%
+    purrr::map_df(table) %>%
+    t()
+  
+  # replacing NA with 0 
+  clev_count[is.na(clev_count)] = 0
+  
+  clev_prop = clev_count %>%
+    as.data.frame() %>%
+    tibble::rownames_to_column("AA") %>%
+    dplyr::mutate(dplyr::across(dplyr::where(is.numeric), prop.table)) %>%
+    tibble::column_to_rownames("AA") %>%
+    as.matrix()
+  
+  
+  ### calculating the SD ###
+  # defining function per Icelogo manual
+  standard_deviation = function(proportion_mat, count_mat) {
+    (proportion_mat / colSums(count_mat)) ^ (1 / 2)
+  }
+  
+  # applying to bg data
+  bg_sd = standard_deviation(bg_prop, clev_count)
+  
+  ### Calculating Z score ###
+  
+  # Defining function per icelogo manual
+  zscore = function(cleav_prop, bg_prop, bg_sd) {
+    (cleav_prop - bg_prop) / bg_sd
+  }
+  
+  # applying to our data
+  zscores = zscore(clev_prop, bg_prop, bg_sd) %>%
+    as.data.frame()
+  
+  names(zscores) = paste0("P", c((nchar_cleav / 2):1,
+                                 paste0(1:(nchar_cleav / 2), "'")))
+  
+  #finding the significant zscores
+  sig_zscores = zscores %>%
+    tibble::rownames_to_column("AA") %>%
+    tidyr::pivot_longer(2:length(.), names_to = "position", values_to = "zscore") %>%
+    dplyr::filter(abs(zscore) > 1.96) %>%
+    dplyr::mutate(aa_position = paste0(.data$AA, ".", .data$position))
+  
+  # Calculating percent difference
+  pd = (clev_prop * 100) - (bg_prop * 100) %>%
+    as.data.frame()
+  
+  
+  names(pd) = paste0("P", c((nchar_cleav / 2):1,
+                            paste0(1:(nchar_cleav / 2), "'")))
+  
+  ### Determining the type of plot to create ###
+  
+  if (type == "percent_difference") {
+    sig_final = pd %>%
+      tibble::rownames_to_column("AA") %>%
+      tidyr::pivot_longer(2:length(.), names_to = "position", values_to = "percent_difference") %>%
+      dplyr::mutate(aa_position = paste0(.data$AA, ".", .data$position)) %>%
+      dplyr::filter(.data$aa_position %in% sig_zscores$aa_position) %>%
+      dplyr::select(-.data$aa_position) %>%
+      tidyr::pivot_wider(
+        names_from = .data$position,
+        values_from = .data$percent_difference,
+        names_sort = FALSE
+      )
+    
+    # Dealing with the problem introduced by the pivot wider function
+    missing_cols = 9 - ncol(sig_final)
+    missing_data = as.data.frame(matrix(nrow = nrow(sig_final), ncol = missing_cols, NA))
+    `%!in%` = Negate(`%in%`)
+    missing_names = names(pd)[names(pd) %!in% names(sig_final)]
+    names(missing_data) = missing_names
+    
+    final = sig_final %>%
+      dplyr::bind_cols(missing_data) %>%
+      dplyr::relocate(paste0("P", c((nchar_cleav / 2):1,
+                                    paste0(
+                                      1:(nchar_cleav / 2), "'"
+                                    )))) %>%
+      tibble::column_to_rownames("AA") %>%
+      as.matrix()
+    
+    # Plotting the icelogo
+    p1 = ggseqlogo::ggseqlogo(final,
+                              font = "helvetica_light" ,
+                              method = 'custom',
+                              seq_type = "AA") +
+      ggplot2::scale_x_continuous(labels = paste0("P", c((nchar_cleav / 2):1,
+                                                         paste0(
+                                                           1:(nchar_cleav / 2), "'"
+                                                         ))),
+                                  breaks = 1:nchar_cleav) +
+      ggplot2::ylab("p < 0.05 Percent Difference")
+    
+    return(p1)
+    
+    
+  } else if (type == "fold_change") {
+    fold_change = (clev_prop * 100) / (bg_prop * 100)
+    
+    converted_fc = fold_change
+    
+    # Here we run into a problem with infinite values. If a value is 0 in the count, but greater than that in the background - we have a problem.
+    # To deal with this, ice logo just shows an infinite value as taking up the entire scale.
+    # We could mimic that here by setting the columns with infinite values to the max value of the fold change/ the number of things in the columnns
+    
+    max_sum = max(purrr::map_df(as.data.frame(converted_fc), sum), na.rm = T)
+    final_converted_fc  = data.frame(row.names = rownames(converted_fc))
+    
+    for (i in 1:ncol(converted_fc)) {
+      if (0 %in% converted_fc[, i]) {
+        num_zero = sum(converted_fc[, i] == 0, na.rm = TRUE)
+        
+        col = replace(converted_fc[, i],
+                      converted_fc[, i] == 0,
+                      (max_sum / num_zero * -1))
+        
+        final_converted_fc =  cbind(final_converted_fc, col)
+      } else{
+        final_converted_fc = cbind(final_converted_fc, converted_fc[, i])
+      }
+    }
+    names(final_converted_fc) = paste0("P", c((nchar_cleav / 2):1,
+                                              paste0(1:(nchar_cleav / 2), "'")))
+    sig_final = final_converted_fc %>%
+      tibble::rownames_to_column("AA") %>%
+      tidyr::pivot_longer(2:length(.), names_to = "position", values_to = "fold_change") %>%
+      dplyr::mutate(aa_position = paste0(.data$AA, ".", .data$position)) %>%
+      dplyr::filter(.data$aa_position %in% sig_zscores$aa_position) %>%
+      dplyr::select(-.data$aa_position) %>%
+      tidyr::pivot_wider(
+        names_from = .data$position,
+        values_from = .data$fold_change,
+        names_sort = FALSE
+      )
+    
+    # Dealing with the problem introduced by the pivot wider function
+    missing_cols = 9 - ncol(sig_final)
+    missing_data = as.data.frame(matrix(nrow = nrow(sig_final), ncol = missing_cols, NA))
+    `%!in%` = Negate(`%in%`)
+    missing_names = names(final_converted_fc)[names(final_converted_fc) %!in% names(sig_final)]
+    
+    names(missing_data) = missing_names
+    final = sig_final %>%
+      dplyr::bind_cols(missing_data) %>%
+      dplyr::relocate(paste0("P", c((nchar_cleav / 2):1,
+                                    paste0(
+                                      1:(nchar_cleav / 2), "'"
+                                    ))), ) %>%
+      tibble::column_to_rownames("AA") %>%
+      as.matrix()
+    
+    # Plotting the motif
+    p1 = ggseqlogo::ggseqlogo(final,
+                              font = "helvetica_light" ,
+                              method = 'custom',
+                              seq_type = "AA") +
+      ggplot2::scale_x_continuous(labels = paste0("P", c((nchar_cleav / 2):1,
+                                                         paste0(
+                                                           1:(nchar_cleav / 2), "'"
+                                                         ))),
+                                  breaks = 1:nchar_cleav) +
+      ggplot2::ylab("p < 0.05 log2 fold change")
+    
+    return(p1)
+    
+  } else {
+    stop("type must be either 'percent_difference' or 'fold_change'")
+  }
+}
+
+```
+
+
+
+
+```{r}
+
+
+readr::write_lines(trypsin_seqs,"testdata/in_silico_trypsin_digest_out.csv")
+
+readr::write_lines(mspms::all_possible_8mers_from_228_library,"testdata/background_out.csv")
+```
+
