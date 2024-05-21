@@ -17,7 +17,7 @@ mspms_t_tests = function(prepared_for_stats){
     dplyr::group_by(.data$condition,.data$Peptide) %>%
     rstatix::t_test(value ~ time,ref.group = "0") %>%
     rstatix::adjust_pvalue(method = "fdr") %>%
-    dplyr::mutate(comparison = paste0(.data$condition,".T",.data$group2,"/",.data$time,.data$condition,".T0")) %>%
+    dplyr::mutate(comparison = paste0(.data$condition,".T",.data$group2,"/",.data$condition,".T0")) %>%
     tibble::as_tibble()
 
   return(stat)

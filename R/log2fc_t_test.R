@@ -23,7 +23,8 @@ log2fc_t_test = function(prepared_for_stats){
   #Combining them together
   log2fc_stats = dplyr::inner_join(log2fc,stat,by = c("Peptide","comparison")) %>%
     dplyr::mutate(time = .data$group2,
-           condition = .data$condition.x) %>%
+           condition = .data$condition.x,
+           group2 = forcats::fct_inseq(.data$group2)) %>%
     dplyr::select(-.data$condition.x,-.data$condition.y) %>%
     tibble::as_tibble()
 
