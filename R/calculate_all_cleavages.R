@@ -26,7 +26,7 @@ calculate_all_cleavages = function(peptide_library_seqs,n_AA_after_cleavage=4){
   peptide_sequences = c()
 
   # for each position go through and cut into two pieces
-  for(i in 1:(length-1)){
+  for(i in seq_len(length-1)){
 
     ## Doing this for the first fragment, left side of clevage
     first_fragment = substr(peptide_library_seqs,1,i)

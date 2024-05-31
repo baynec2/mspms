@@ -33,7 +33,7 @@ prepare_fc = function(fold_change,sig_zscores){
     dplyr::bind_cols(missing_data) %>%
     dplyr::relocate(paste0("P", c((ncol(percent_difference) / 2):1,
                                   paste0(
-                                    1:(ncol(percent_difference) / 2), "'"
+                                    seq_len(ncol(percent_difference) / 2), "'"
                                   )))) %>%
     tibble::column_to_rownames("AA") %>%
     as.matrix()

@@ -37,7 +37,7 @@ plot_pca = function(mspms_data,color = "time",shape = "condition"){
 
   # Extracting the metadata.
   md = PCA_data %>%
-    dplyr::select(1:4)
+    dplyr::select(seq_len(4))
 
 
   Prop_of_var = data.frame(summary(prcomp)$importance)[2,]

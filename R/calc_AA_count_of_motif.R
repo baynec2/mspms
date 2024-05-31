@@ -53,7 +53,7 @@ calc_AA_count_of_motif = function(cleavage_motif){
   count_matrix[is.na(count_matrix)] = 0
 
   colnames(count_matrix) = paste0("P", c((nchar / 2):1,
-                                 paste0(1:(nchar/ 2), "'")))
+                                 paste0(seq_len(nchar/ 2), "'")))
 
   return(count_matrix)
 

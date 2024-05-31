@@ -23,9 +23,9 @@ plot_fc_icelogo = function(prepared_fc_data){
                             seq_type = "AA") +
     ggplot2::scale_x_continuous(labels = paste0("P", c((nchar_cleav / 2):1,
                                                        paste0(
-                                                         1:(nchar_cleav / 2), "'"
+                                                         seq_len(nchar_cleav / 2), "'"
                                                        ))),
-                                breaks = 1:nchar_cleav)+
+                                breaks = seq_len(nchar_cleav))+
     ggplot2::ylab("fold change")
 
   return(p1)

@@ -27,7 +27,7 @@
 #'
 count_cleavages_per_pos = function(mspms_data,sig_peptides){
 
-  positions = 1:13
+  positions = seq_len(13)
 
   count = mspms_data %>%
     dplyr::select(Peptide,cleavage_pos) %>%

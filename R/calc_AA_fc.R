@@ -28,7 +28,7 @@ calc_AA_fc= function(experimental_prop_matrix,
   max_sum = max(purrr::map_df(as.data.frame(converted_fc), sum), na.rm = T)
   final_converted_fc  = data.frame(row.names = rownames(converted_fc))
 
-  for (i in 1:ncol(converted_fc)) {
+  for (i in seq_len(ncol(converted_fc))) {
     if (0 %in% converted_fc[, i]) {
       num_zero = sum(converted_fc[, i] == 0, na.rm = TRUE)
 
