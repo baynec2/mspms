@@ -12,24 +12,34 @@ cterm_cleavage(
 )
 }
 \arguments{
-\item{peptide_sequence}{= this is the peptide sequence in single leter AA code. _ denotes cleavage site.}
+\item{peptide_sequence}{= this is the peptide sequence in single letter
+AA code. _ denotes cleavage site.}
 
-\item{library_match_sequence}{= this is the sequence of the corresponding peptide in the library to the peptide_sequence.}
+\item{library_match_sequence}{= this is the sequence of the corresponding
+peptide in the library to the peptide_sequence.}
 
-\item{library_real_sequence}{= this is the library match sequence with the Ls transformed to Ms (This is what the legacy code did so it is kept this way in case there was a good reason for it)}
+\item{library_real_sequence}{= this is the library match sequence with the
+Ls transformed to Ms.}
 
-\item{n_residues}{= this is the number of residues to the left and right of the cleavage site that you want to extract.}
+\item{n_residues}{= this is the number of residues to the left and right of
+the cleavage site that you want to extract.}
 }
 \value{
-a tibble with the peptide sequence, cleavage sequences n number of AA on the left and right of the c term cleavage, and the position of the c term cleavage in the library sequence.
+a tibble with the peptide sequence, cleavage sequences n number of
+AA on the left and right of the c term cleavage, and the position of the
+c-term cleavage in the library sequence.
 }
 \description{
-Finding the cleavage sequences on the C terminus of a given peptide in reference to the peptide library it was derived from
+Finding the cleavage sequences on the C terminus of a given peptide in
+reference to the peptide library it was derived from
 }
 \examples{
-peptide_sequence = "YWLSTHLAGKR_R"
-library_match_sequence = "YWLSTHLAGKRRDW"
-library_real_sequence = "YWMSTHLAGKRRDW"
-cterm_cleavage(peptide_sequence,library_match_sequence,library_real_sequence)
+peptide_sequence <- "YWLSTHLAGKR_R"
+library_match_sequence <- "YWLSTHLAGKRRDW"
+library_real_sequence <- "YWMSTHLAGKRRDW"
+cterm_cleavage(
+  peptide_sequence, library_match_sequence,
+  library_real_sequence
+)
 
 }

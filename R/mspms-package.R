@@ -2,6 +2,7 @@
 "_PACKAGE"
 
 ## usethis namespace: start
+#' @importFrom dplyr n
 #' @importFrom rlang .data
 #' @importFrom stats predict
 #' @importFrom stats qnorm

@@ -19,11 +19,13 @@ log2fct_condition(mspms_data, at_time, ref_condition, comparison_condition)
 a tibble
 }
 \description{
-preforms log2fc and t test analysis at a user specified time point for two specified conditions.
+preforms log2fc and t test analysis at a user specified time point for
+two specified conditions.
 }
 \examples{
-log2t = log2fct_condition(mspms::mspms_data,
-                         at_time = 60,
-                         ref_condition = "DMSO",
-                         comparison_condition = "MZB")
+log2t <- log2fct_condition(mspms::mspms_data,
+  at_time = 60,
+  ref_condition = "DMSO",
+  comparison_condition = "MZB"
+)
 }

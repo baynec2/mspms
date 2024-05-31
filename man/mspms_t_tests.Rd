@@ -7,15 +7,18 @@
 mspms_t_tests(mspms_data)
 }
 \arguments{
-\item{mspms_data}{= this is the data that has been run through the mspms workflow.}
+\item{mspms_data}{= this is the data that has been run through the mspms
+workflow.}
 }
 \value{
-a tibble with the t test statistics for each peptide within each group with t0 as reference
+a tibble with the t test statistics for each peptide within each
+group with t0 as reference
 }
 \description{
-Performs ttests for each peptide within each group with t0 as reference. P value adjustment performed using FDR correction
+Performs ttests for each peptide within each group with t0 as reference.
+P value adjustment performed using FDR correction
 }
 \examples{
 
-t_tests = mspms_t_tests(mspms::mspms_data)
+t_tests <- mspms_t_tests(mspms::mspms_data)
 }

@@ -7,17 +7,22 @@
 calculate_all_cleavages(peptide_library_seqs, n_AA_after_cleavage = 4)
 }
 \arguments{
-\item{peptide_library_seqs}{= these are the sequences from the peptide library. Should be the same length}
+\item{peptide_library_seqs}{= these are the sequences from the peptide
+library. Should be the same length}
 
-\item{n_AA_after_cleavage}{= this is the number of AA after cleavage sites you want to produce peptides for.}
+\item{n_AA_after_cleavage}{= this is the number of AA after cleavage sites
+you want to produce peptides for.}
 }
 \value{
-a vector of all the possible cleavages for the peptide library sequences
+a vector of all the possible cleavages for the peptide
+ library sequences
 }
 \description{
-calculate all possible cleavages for a defined peptide library containing peptides of the same length.
+calculate all possible cleavages for a defined peptide library containing
+ peptides of the same length.
 }
 \examples{
 calculate_all_cleavages(mspms::peptide_library$library_real_sequence,
-                        n_AA_after_cleavage=4)
+  n_AA_after_cleavage = 4
+)
 }

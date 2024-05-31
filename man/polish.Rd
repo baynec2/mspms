@@ -7,15 +7,19 @@
 polish(cleavage_added_data)
 }
 \arguments{
-\item{cleavage_added_data}{= this is a tibble where cleavage information has been added by add_cleavages()}
+\item{cleavage_added_data}{= this is a tibble where cleavage information has
+been added by add_cleavages()}
 }
 \value{
-a tibble with the cleavage information combined into a single column and rows with no cleavage information or double information removed.
+a tibble with the cleavage information combined into a single column
+ and rows with no cleavage information or double information removed.
 }
 \description{
-This function is used to polish the cleavage data. It combines the nterm and cterm cleavage information into a single column and removes rows that
-don't have any cleavage information or have both nterm and cterm cleavage information.
+This function is used to polish the cleavage data. It combines the nterm and
+cterm cleavage information into a single column and removes rows that
+don't have any cleavage information or have both nterm and cterm cleavage
+information.
 }
 \examples{
-polished = polish(mspms::cleavage_added_data)
+polished <- polish(mspms::cleavage_added_data)
 }

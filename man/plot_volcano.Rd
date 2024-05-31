@@ -7,20 +7,23 @@
 plot_volcano(log2fc_t_test_data, log2fc_threshold = 3)
 }
 \arguments{
-\item{log2fc_t_test_data}{= this is the data frame that contains the log2fc and adjusted p values}
+\item{log2fc_t_test_data}{= this is the data frame that contains the log2fc
+and adjusted p values}
 
-\item{log2fc_threshold}{= this is the threshold that you want displayed on plot}
+\item{log2fc_threshold}{= this is the threshold that you want displayed
+on plot}
 }
 \value{
 a ggplot2 object
 }
 \description{
-create a volcano plot to generate log2fc and adjusted p values for experimental conditions
+create a volcano plot to generate log2fc and adjusted p values for
+experimental conditions
 }
 \examples{
 # Generating log2fc t test data
-log2fc_t_test_data = mspms::log2fc_t_test(mspms::mspms_data)
+log2fc_t_test_data <- mspms::log2fc_t_test(mspms::mspms_data)
 # plotting data.
-p1 =  mspms::plot_volcano(log2fc_t_test_data,log2fc_threshold = 3)
+p1 <- mspms::plot_volcano(log2fc_t_test_data, log2fc_threshold = 3)
 p1
 }

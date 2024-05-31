@@ -7,7 +7,8 @@
 prepare_fc(fold_change, sig_zscores)
 }
 \arguments{
-\item{fold_change}{= this is a matrix of the fold changes of the AA by position.}
+\item{fold_change}{= this is a matrix of the fold changes of the AA by
+position.}
 
 \item{sig_zscores}{= this is a tibble of the significant zscores.}
 }

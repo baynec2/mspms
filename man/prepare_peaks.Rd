@@ -3,9 +3,10 @@
 \name{prepare_peaks}
 \alias{prepare_peaks}
 \title{prepare_peaks
-This function prepares the data out from peaks for downstream normalization via normalyzer.
-Briefly, it combines the two files by peptide IDs and filters out peptides that have quality scores <= 0.3. 0s are also replaced with NAs
-Note that there can be multiple matches between these, currently only keeps the values for the best quality scores. This could be a bug.}
+This function prepares the data out from peaks for downstream normalization
+via normalyzer.
+Briefly, it combines the two files by peptide IDs and filters out peptides
+that have quality scores <= 0.3. 0s are also replaced with NAs}
 \usage{
 prepare_peaks(lfq_filepath, id_filepath)
 }
@@ -15,18 +16,22 @@ prepare_peaks(lfq_filepath, id_filepath)
 \item{id_filepath}{= this is the filepath to the second PEAKS output table}
 }
 \value{
-a tibble containing the combined columns from the lfq and id files, with quality scores > 0.3 and 0s replaced with NAs.
+a tibble containing the combined columns from the lfq and id files,
+ with quality scores > 0.3 and 0s replaced with NAs.
 }
 \description{
 prepare_peaks
-This function prepares the data out from peaks for downstream normalization via normalyzer.
-Briefly, it combines the two files by peptide IDs and filters out peptides that have quality scores <= 0.3. 0s are also replaced with NAs
-Note that there can be multiple matches between these, currently only keeps the values for the best quality scores. This could be a bug.
+This function prepares the data out from peaks for downstream normalization
+via normalyzer.
+Briefly, it combines the two files by peptide IDs and filters out peptides
+that have quality scores <= 0.3. 0s are also replaced with NAs
 }
 \examples{
 \dontshow{if (isTRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
-prepare_peaks("tests/testdata/protein-peptides-lfq.csv",
-             "tests/testdata/protein-peptides-id.csv")
+prepare_peaks(
+  "tests/testdata/protein-peptides-lfq.csv",
+  "tests/testdata/protein-peptides-id.csv"
+)
 \dontshow{\}) # examplesIf}
 }

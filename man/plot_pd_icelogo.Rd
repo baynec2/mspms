@@ -16,8 +16,8 @@ a ggplot2 object
 plot a icelogo of the percent difference.
 }
 \examples{
-prepared_sig_pdiff_data = data.frame(P1 = c(50,10),P2 = c(-50,-10))
-rownames(prepared_sig_pdiff_data) = c('R','K')
-prepared_sig_pdiff_data = as.matrix(prepared_sig_pdiff_data)
+prepared_sig_pdiff_data <- data.frame(P1 = c(50, 10), P2 = c(-50, -10))
+rownames(prepared_sig_pdiff_data) <- c("R", "K")
+prepared_sig_pdiff_data <- as.matrix(prepared_sig_pdiff_data)
 plot_pd_icelogo(prepared_sig_pdiff_data)
 }

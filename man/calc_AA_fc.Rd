@@ -7,9 +7,11 @@
 calc_AA_fc(experimental_prop_matrix, background_prop_matrix)
 }
 \arguments{
-\item{experimental_prop_matrix}{this is a matrix of the experimental proportions (from your vector of cleavage sequences) at each position.}
+\item{experimental_prop_matrix}{this is a matrix of the experimental
+proportions (from your vector of cleavage sequences) at each position.}
 
-\item{background_prop_matrix}{this is a matrix of the background proportions of AAs at each position}
+\item{background_prop_matrix}{this is a matrix of the background proportions
+of AAs at each position}
 }
 \value{
 a data frame.
@@ -18,11 +20,10 @@ a data frame.
 calculate the fold change of each AA by position.
 }
 \examples{
-experimental_prop_matrix = matrix(c(0.4,0.2),nrow = 1,dimnames = list("A"))
-background_prop_matrix = matrix(c(0.2,0.4),nrow = 1,dimnames = list("A"))
+experimental_prop_matrix <- matrix(c(0.4, 0.2),
+  nrow = 1, dimnames = list("A")
+)
+background_prop_matrix <- matrix(c(0.2, 0.4), nrow = 1, dimnames = list("A"))
 calc_AA_fc(experimental_prop_matrix, background_prop_matrix)
-
-
-
 
 }

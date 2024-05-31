@@ -16,9 +16,9 @@ a ggplot2 object
 plot an icelogo based on the fold change.
 }
 \examples{
-prepared_fc_data = data.frame(P1 = c(5,10),P2 = c(1,-1))
-rownames(prepared_fc_data) = c('R','K')
-prepared_fc_data = as.matrix(prepared_fc_data)
+prepared_fc_data <- data.frame(P1 = c(5, 10), P2 = c(1, -1))
+rownames(prepared_fc_data) <- c("R", "K")
+prepared_fc_data <- as.matrix(prepared_fc_data)
 plot_fc_icelogo(prepared_fc_data)
 
 }

@@ -19,9 +19,11 @@ generate_report(
 
 \item{peptide_library}{= this is the peptide library used in the experiment.}
 
-\item{n_residues}{= this is the number of residues that you want to show cleavage sequences for left and right of the cut site.}
+\item{n_residues}{= this is the number of residues that you want to show
+cleavage sequences for left and right of the cut site.}
 
-\item{outdir}{= this is the output directory you would like to render the report to.}
+\item{outdir}{= this is the output directory you would like to render the
+report to.}
 }
 \value{
 a knited .html report of the mspms analysis.
@@ -32,8 +34,10 @@ wrapper function to generate an automatic .html report of a basic mspms analysis
 \examples{
 \dontshow{if (isTRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
-generate_report(prepared_data = mspms::peaks_prepared_data,
-design_matrix = mspms::design_matrix,
-outdir = "../Desktop/test_report")
+generate_report(
+  prepared_data = mspms::peaks_prepared_data,
+  design_matrix = mspms::design_matrix,
+  outdir = "../Desktop/test_report"
+)
 \dontshow{\}) # examplesIf}
 }

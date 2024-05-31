@@ -7,16 +7,19 @@
 prepare_for_stats(cleavage_added_data, design_matrix)
 }
 \arguments{
-\item{cleavage_added_data}{= this is the processed data with cleavage information added. Intended to be downstream of the add_cleavages() function.}
+\item{cleavage_added_data}{= this is the processed data with cleavage i
+nformation added. Intended to be downstream of the add_cleavages() function.}
 
-\item{design_matrix}{= this is the design matrix with "sample",group","time","condition" columns.}
+\item{design_matrix}{= this is the design matrix with "sample",group","time",
+"condition" columns.}
 }
 \value{
 a tibble in long format with the design matrix combined.
 }
 \description{
-This function prepares data for downstream statistics by transforming the data to the long format and combining with the design matrix.
+This function prepares data for downstream statistics by transforming the
+data to the long format and combining with the design matrix.
 }
 \examples{
-prepare_for_stats(mspms::cleavage_added_data,mspms::design_matrix)
+prepare_for_stats(mspms::cleavage_added_data, mspms::design_matrix)
 }

@@ -7,7 +7,8 @@
 prepare_pd(filepath)
 }
 \arguments{
-\item{filepath}{= this is the filepath to the proteome discoverer excel formatted file.}
+\item{filepath}{= this is the filepath to the proteome discoverer excel
+formatted file.}
 }
 \value{
 a tibble with the data formatted for use with normalyze
@@ -17,6 +18,6 @@ prepare proteome discoverer output for mspms analysis.
 }
 \examples{
 \dontshow{if (isTRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-prepared_proteome_discoverer = prepare_pd("tests/testdata/proteome_discoverer_output.xlsx")
+prepared_proteome_discoverer <- prepare_pd("tests/testdata/proteome_discoverer_output.xlsx")
 \dontshow{\}) # examplesIf}
 }

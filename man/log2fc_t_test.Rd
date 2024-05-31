@@ -7,17 +7,17 @@
 log2fc_t_test(mspms_data)
 }
 \arguments{
-\item{mspms_data}{= this is data that has been run through the mspms pipeline.}
+\item{mspms_data}{= this is data that has been run in the mspms pipeline.}
 }
 \value{
 a tibble containing log2fc and t test statistics across conditions
 }
 \description{
-Gives log2fc and statistics from t tests across conditions. Gives differences relative to time 0 within each condition.
+Gives log2fc and statistics from t tests across conditions.
+ Gives differences relative to time 0 within each condition.
 }
 \examples{
 
-log2fc_and_t_test = log2fc_t_test(mspms::mspms_data)
-
+log2fc_and_t_test <- log2fc_t_test(mspms::mspms_data)
 
 }

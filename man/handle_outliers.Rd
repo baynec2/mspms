@@ -7,18 +7,25 @@
 handle_outliers(normalyzed_data, design_matrix)
 }
 \arguments{
-\item{normalyzed_data}{= this is the normalized data. Intended to be prepared using mspms::normalyze()}
+\item{normalyzed_data}{= this is the normalized data.
+Intended to be prepared using mspms::normalyze()}
 
-\item{design_matrix}{= this is the design_matrix containing "sample","group","condition","time" columns. Intended to be read in using readr::read_csv()}
+\item{design_matrix}{= this is the design_matrix containing "sample","group",
+"condition","time" columns. Intended to be read in using readr::read_csv()}
 }
 \value{
-a data frame in the long format where outliers according to a dixon test have been handled.
+a data frame in the long format where outliers according to a dixon
+test have been handled.
 }
 \description{
-This function replaces outliers for MSP-MS data with NA based on the results of dixon tests as implemented in the outliers package
+This function replaces outliers for MSP-MS data with NA based on the results
+of dixon tests as implemented in the outliers package
 }
 \examples{
 
 # Here we handle the outliers from the test data
-handled_outliers = handle_outliers(mspms::normalyzed_data,mspms::design_matrix)
+handled_outliers <- handle_outliers(
+  mspms::normalyzed_data,
+  mspms::design_matrix
+)
 }

@@ -7,18 +7,23 @@
 impute(outlier_handled_data, noise = 0.05, nsd = 1)
 }
 \arguments{
-\item{outlier_handled_data}{= this is the data that has been normalized, outlier removed, and is ready for imputation.}
+\item{outlier_handled_data}{= this is the data that has been normalized,
+outlier removed, and is ready for imputation.}
 
-\item{noise}{= this is the level of "noise" that we want to use to create the distribution for imputation. Corresponds to the percentage of the data at the lower end of the distribution that we want to use for imputation.}
+\item{noise}{= this is the level of "noise" that we want to use to create the
+distribution for imputation. Corresponds to the percentage of the data at
+the lower end of the distribution that we want to use for imputation.}
 
-\item{nsd}{= this is the number of standard deviations used to calculate the max and min values for the truncnorm distribution.}
+\item{nsd}{= this is the number of standard deviations used to calculate the
+max and min values for the truncnorm distribution.}
 }
 \value{
 a data frame in the wide format where NAs have been imputed.
 }
 \description{
-This function imputes data using according to the truncated normal distribution as implemented in truncnorm.
+This function imputes data using according to the truncated normal
+distribution as implemented in truncnorm.
 }
 \examples{
-impute(mspms::outliers,noise = 0.05,nsd = 1)
+impute(mspms::outliers, noise = 0.05, nsd = 1)
 }

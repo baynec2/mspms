@@ -7,15 +7,18 @@
 mspms_log2fc(mspms_data)
 }
 \arguments{
-\item{mspms_data}{= this is the data that has been run through the mspms pipeline}
+\item{mspms_data}{= this is the data that has been run through the mspms
+pipeline}
 }
 \value{
-a data frame with the log2fc for each timepoint within each condition relative to time 0
+a data frame with the log2fc for each timepoint within each condition
+relative to time 0
 }
 \description{
-Calculates the log2fc for each timepoint within each condition relative to time 0.
+Calculates the log2fc for each timepoint within each condition relative to
+time 0.
 }
 \examples{
 
-log2fc = mspms_log2fc(mspms::prepared_for_stats)
+log2fc <- mspms_log2fc(mspms::prepared_for_stats)
 }

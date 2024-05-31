@@ -7,18 +7,27 @@
 calc_AA_percent_difference(background_prop_matrix, experimental_prop_matrix)
 }
 \arguments{
-\item{background_prop_matrix}{= proportion matrix of aa per position from background cleavage sequences}
+\item{background_prop_matrix}{= proportion matrix of aa per position from
+background cleavage sequences}
 
-\item{experimental_prop_matrix}{= a proportion matrix of aa per position from experimental cleavage sequences}
+\item{experimental_prop_matrix}{= a proportion matrix of aa per position from
+experimental cleavage sequences}
 }
 \value{
 a data frame of percent differences
 }
 \description{
-calculate the percent difference between a matrix of background proportions and a matrix of experimentally observed proportions.
+calculate the percent difference between a matrix of background proportions
+and a matrix of experimentally observed proportions.
 }
 \examples{
-experimental_prop_matrix = matrix(c(0.2,0.2,0.2,0.2),nrow = 1, dimnames = list("A"))
-background_prop_matrix = matrix(c(0.4,0.4,0.4,0.4),nrow = 1, dimnames = list("A"))
+experimental_prop_matrix <- matrix(c(0.2, 0.2, 0.2, 0.2),
+  nrow = 1,
+  dimnames = list("A")
+)
+background_prop_matrix <- matrix(c(0.4, 0.4, 0.4, 0.4),
+  nrow = 1,
+  dimnames = list("A")
+)
 calc_AA_percent_difference(background_prop_matrix, experimental_prop_matrix)
 }

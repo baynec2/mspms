@@ -11,30 +11,26 @@
 #'
 #' @examples
 #'
-#' p1 = mspms::mspms_data %>%
-#' dplyr::filter(Peptide == "A_GLFNYNQLRGF") %>%
-#' mspms::plot_time_course()
+#' p1 <- mspms::mspms_data %>%
+#'   dplyr::filter(Peptide == "A_GLFNYNQLRGF") %>%
+#'   mspms::plot_time_course()
 #'
 #' p1
-
-plot_time_course = function(mspms_data){
-
- p1 = mspms_data %>%
-  dplyr::group_by(.data$Peptide,.data$condition,.data$time) %>%
-  dplyr::summarize(mean = mean(.data$value,na.rm=T),sd = sd(.data$value,na.rm = T)) %>%
-  ggplot2::ggplot(ggplot2::aes_string(x = "time", y = "mean", color = "condition")) +
-  ggplot2::geom_point() +
-  ggplot2::geom_line()+
-  ggplot2::geom_errorbar(ggplot2::aes(ymax = mean + sd,
-                                      ymin = mean - sd),width = 15) +
-  ggplot2::facet_wrap(~Peptide, scales = "free_y") +
-  ggplot2::theme_minimal() +
-  ggplot2::theme(legend.position = "bottom")
+plot_time_course <- function(mspms_data) {
+  p1 <- mspms_data %>%
+    dplyr::group_by(.data$Peptide, .data$condition, .data$time) %>%
+    dplyr::summarize(mean = mean(.data$value, na.rm = TRUE), sd = sd(.data$value, na.rm = TRUE)) %>%
+    ggplot2::ggplot(ggplot2::aes_string(x = "time", y = "mean", color = "condition")) +
+    ggplot2::geom_point() +
+    ggplot2::geom_line() +
+    ggplot2::geom_errorbar(ggplot2::aes(
+      ymax = mean + sd,
+      ymin = mean - sd
+    ), width = 15) +
+    ggplot2::facet_wrap(~Peptide, scales = "free_y") +
+    ggplot2::theme_minimal() +
+    ggplot2::theme(legend.position = "bottom")
 
 
   return(p1)
-
 }
-
-
-

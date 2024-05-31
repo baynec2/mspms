@@ -7,25 +7,29 @@
 check_for_cleavage_after_AA(cleavage_seq, AA_vector)
 }
 \arguments{
-\item{cleavage_seq}{= this is the cleavage sequecne that is being checked. Represented as 4 AA to the left and right of cleavage site}
+\item{cleavage_seq}{= this is the cleavage sequecne that is being checked.
+Represented as 4 AA to the left and right of cleavage site}
 
-\item{AA_vector}{= this is a vector of AA that you want to check to see if the cleavage site is after. For example c("W","L","Y","F").}
+\item{AA_vector}{= this is a vector of AA that you want to check to see if
+the cleavage site is after. For example c("W","L","Y","F").}
 }
 \value{
 a logical vector of the same length as the input cleavage_seq
 }
 \description{
-This function checks if the cleavage site is after a vector of specified amino acids.
+This function checks if the cleavage site is after a vector of
+specified amino acids.
 }
 \details{
-Note that the cleavage sequence is intended to be represented as 4 AA to the left and right of cleavage site, as single letter codes.
+Note that the cleavage sequence is intended to be represented as 4 AA to
+the left and right of cleavage site, as single letter codes.
 }
 \examples{
 
-#this is true because the cleavage site is after a W
-check_for_cleavage_after_AA("GLYWAFAA",c("W","L","Y","F"))
+# this is true because the cleavage site is after a W
+check_for_cleavage_after_AA("GLYWAFAA", c("W", "L", "Y", "F"))
 
-#this is false because the cleavage site is not after a W, L, Y, or F
-check_for_cleavage_after_AA("GLYAAFAA",c("W","L","Y","F"))
+# this is false because the cleavage site is not after a W, L, Y, or F
+check_for_cleavage_after_AA("GLYAAFAA", c("W", "L", "Y", "F"))
 
 }

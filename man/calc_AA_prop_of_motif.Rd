@@ -13,12 +13,15 @@ calc_AA_prop_of_motif(count_matrix)
 a matrix with proportions of counts.
 }
 \description{
-calculate the proportion of amino acids at each position in a vector of motifs.
+calculate the proportion of amino acids at each position in a vector of
+motifs.
 }
 \examples{
 
-count_matrix = matrix(c(1,10,100,1000,9,90,900,9000), nrow = 2,byrow = TRUE)
+count_matrix <- matrix(c(1, 10, 100, 1000, 9, 90, 900, 9000),
+  nrow = 2,
+  byrow = TRUE
+)
 calc_AA_prop_of_motif(count_matrix)
-
 
 }

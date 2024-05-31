@@ -7,19 +7,22 @@
 plot_heatmap(mspms_data, scale = "column")
 }
 \arguments{
-\item{mspms_data}{= this is the data that has been processed by the mspms pipeline.}
+\item{mspms_data}{= this is the data that has been processed by the
+mspms pipeline.}
 
-\item{scale}{= how would you like the data scaled? default is none, but can be done by "row", "column", or "none"}
+\item{scale}{= how would you like the data scaled? default is none,
+but can be done by "row", "column", or "none"}
 }
 \value{
 a heatmaply interactive heatmap
 }
 \description{
-This produces a heatmaply interactive heatmap of the data with color bars representing the condition and time for each sample.
+This produces a heatmaply interactive heatmap of the data with color bars
+ representing the condition and time for each sample.
 }
 \examples{
 \dontshow{if (isTRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
-plot_heatmap(mspms::prepared_for_stats,scale = "column")
+plot_heatmap(mspms::prepared_for_stats, scale = "column")
 \dontshow{\}) # examplesIf}
 }

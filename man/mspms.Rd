@@ -14,15 +14,22 @@ mspms(
 )
 }
 \arguments{
-\item{prepared_data}{= this is data that has been processed by one of the prepare data functions (which one depends on the upstream data processing software used.)}
+\item{prepared_data}{= this is data that has been processed by one of the
+prepare data functions (which one depends on the upstream software used.)}
 
-\item{design_matrix}{= this is the design matrix. This should be a data frame with a column named "sample" that contains the names of the samples in the data,
-a column named "group" that contains the group that the sample belongs to a column named "time" that contains the time the sample was incubated for,
-and on named "condition" that contains condition cooresponding to each sample (commonly some kind of protease inhibitor).}
+\item{design_matrix}{= this is the design matrix.
+This should be a data frame with a column named "sample" that contains the
+names of the samples in the data,
+a column named "group" that contains the group that the sample belongs to a
+ column named "time" that contains the time the sample was incubated for,
+and on named "condition" that contains condition corresponding to each sample
+(commonly some kind of protease inhibitor).}
 
-\item{peptide_library}{= this is the peptide library that has been used in the experiment.}
+\item{peptide_library}{= this is the peptide library that has been used
+in the experiment.}
 
-\item{n_residues}{= this is the number of cleavages to the left and right of the cleavage site you want to include in the cleavage motif.}
+\item{n_residues}{= this is the number of cleavages to the left and right
+of the cleavage site you want to include in the cleavage motif.}
 
 \item{outdir}{= this is the directory to write the results of normalyze to.}
 }
@@ -36,6 +43,6 @@ runs the standard mspms data analysis pipeline in it's entirety.
 \examples{
 \dontshow{if (isTRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
-out = mspms::mspms(mspms::peaks_prepared_data,mspms::design_matrix)
+out <- mspms::mspms(mspms::peaks_prepared_data, mspms::design_matrix)
 \dontshow{\}) # examplesIf}
 }

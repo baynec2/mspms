@@ -9,7 +9,8 @@ prepare_sig_p_dif(percent_difference, sig_zscores)
 \arguments{
 \item{percent_difference}{= data frame containing the percent differences}
 
-\item{sig_zscores}{= matrix of significant AAs at each position based on z-scores}
+\item{sig_zscores}{= matrix of significant AAs at each position based on
+z-scores}
 }
 \value{
 a tibble
