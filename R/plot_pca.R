@@ -2,20 +2,22 @@
 #'
 #' this creates a pca plot of the data where the points are colored by time and shaped by condition. elipses are drawn around the points at a 95% confidence interval.
 #'
-#' @param prepared_for_stats = this is the data that has been prepared for stats by the prepare_for_stats() function
+#' @param mspms_data = this is the data that has been run through the mspms pipeline.
+#' @param color = this is the string name of the variable you would like to color by.
+#' @param shape = this is the string name of the vairable that you would like to determine shape by.
 #'
 #' @return a ggplot2 object
 #' @export
 #'
 #' @examples
 #'
-#'plot_pca(mspms::prepared_for_stats)
+#'plot_pca(mspms::mspms_data)
 #'
 #'
-plot_pca = function(prepared_for_stats){
+plot_pca = function(mspms_data,color = "time",shape = "condition"){
   # dealing with no visible binding for global variable ‘.’ NOTE
   . = NULL
-  PCA_data = prepared_for_stats %>%
+  PCA_data = mspms_data %>%
     dplyr::select(.data$sample,.data$Peptide,.data$group,.data$condition,.data$time,.data$value) %>%
     tidyr::pivot_wider(names_from = .data$Peptide,values_from = .data$value,values_fn = mean) %>%
     # if a peptide has an na remove it
@@ -46,7 +48,7 @@ plot_pca = function(prepared_for_stats){
 
   #plotting the PCA
   plot = PCA_df %>%
-    ggplot2::ggplot(ggplot2::aes_string("PC1","PC2",color = "time", linetype = "condition",shape = "condition"))+
+    ggplot2::ggplot(ggplot2::aes_string("PC1","PC2",color = color, linetype = "condition",shape = shape))+
     ggplot2::geom_point()+
     ggplot2::stat_ellipse(level=0.95)+
     ggplot2::xlab(paste0("PCA-1 ",round(Prop_of_var[1]*100,2),"%"))+

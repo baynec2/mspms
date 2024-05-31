@@ -7,7 +7,6 @@
 #'
 #' @return a tibble in long format with the design matrix combined.
 #' @export
-#'
 #' @examples
 #' prepare_for_stats(mspms::cleavage_added_data,mspms::design_matrix)
 prepare_for_stats = function(cleavage_added_data,design_matrix){

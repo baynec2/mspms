@@ -8,7 +8,6 @@
 #'
 #' @return a data frame in the wide format where NAs have been imputed.
 #' @export
-#'
 #' @examples
 #' impute(mspms::outliers,noise = 0.05,nsd = 1)
 impute = function(outlier_handled_data,noise=0.05,nsd=1){

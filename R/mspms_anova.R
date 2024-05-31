@@ -2,14 +2,14 @@
 #'
 #' Performs anova on data prepared with prepare_for_stats(). Tests the effect of time for each condition. FDR corrected.
 #'
-#' @param prepared_for_stats = this is the data that has been prepared using prepare_for_stats()
+#' @param mspms_data = this is the data that has been run through the mspms pipeline.
 #'
 #' @return a data frame with anova results for each peptide.
 #' @export
 #'
 #' @examples
-#' anova_results = mspms_anova(mspms::prepared_for_stats)
-mspms_anova = function(prepared_for_stats){
+#' anova_results = mspms_anova(mspms::mspms_data)
+mspms_anova = function(mspms_data){
 
   anova = prepared_for_stats %>%
     dplyr::group_by(.data$condition,.data$Peptide) %>%

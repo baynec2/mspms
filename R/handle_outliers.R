@@ -7,7 +7,6 @@
 #'
 #' @return a data frame in the long format where outliers according to a dixon test have been handled.
 #' @export
-#'
 #' @examples
 #'
 #' # Here we handle the outliers from the test data

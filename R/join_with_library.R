@@ -7,7 +7,6 @@
 #'
 #' @return a tibble with the peptide library information joined to the imputed data.
 #' @export
-#'
 #' @examples
 #'
 #' joined_with_library = join_with_library(mspms::imputed,mspms::peptide_library)

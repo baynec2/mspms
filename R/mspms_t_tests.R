@@ -2,19 +2,19 @@
 #'
 #' Performs ttests for each peptide within each group with t0 as reference. P value adjustment performed using FDR correction
 #'
-#' @param prepared_for_stats = this is the data that has been prepared for stats using prepare_for_stats()
+#' @param mspms_data = this is the data that has been run through the mspms workflow.
 #'
-#' @return a data frame with the t test statistics for each peptide within each group with t0 as reference
+#' @return a tibble with the t test statistics for each peptide within each group with t0 as reference
 #' @export
 #'
 #' @examples
 #'
-#' t_tests = mspms_t_tests(mspms::prepared_for_stats)
-mspms_t_tests = function(prepared_for_stats){
+#' t_tests = mspms_t_tests(mspms::mspms_data)
+mspms_t_tests = function(mspms_data){
 
   # Doing T tests
-  stat = prepared_for_stats %>%
-    dplyr::group_by(.data$condition,.data$Peptide) %>%
+  stat = mspms_data %>%
+    dplyr::group_by(.data$cleavage_seq,.data$condition,.data$Peptide) %>%
     rstatix::t_test(value ~ time,ref.group = "0") %>%
     rstatix::adjust_pvalue(method = "fdr") %>%
     dplyr::mutate(comparison = paste0(.data$condition,".T",.data$group2,"/",.data$condition,".T0")) %>%

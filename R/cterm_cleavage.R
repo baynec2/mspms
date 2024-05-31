@@ -9,7 +9,6 @@
 
 #' @return a tibble with the peptide sequence, cleavage sequences n number of AA on the left and right of the c term cleavage, and the position of the c term cleavage in the library sequence.
 #' @export
-#'
 #' @examples
 #' peptide_sequence = "YWLSTHLAGKR_R"
 #' library_match_sequence = "YWLSTHLAGKRRDW"

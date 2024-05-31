@@ -4,18 +4,18 @@
 \alias{mspms_t_tests}
 \title{mspms_t_tests}
 \usage{
-mspms_t_tests(prepared_for_stats)
+mspms_t_tests(mspms_data)
 }
 \arguments{
-\item{prepared_for_stats}{= this is the data that has been prepared for stats using prepare_for_stats()}
+\item{mspms_data}{= this is the data that has been run through the mspms workflow.}
 }
 \value{
-a data frame with the t test statistics for each peptide within each group with t0 as reference
+a tibble with the t test statistics for each peptide within each group with t0 as reference
 }
 \description{
 Performs ttests for each peptide within each group with t0 as reference. P value adjustment performed using FDR correction
 }
 \examples{
 
-t_tests = mspms_t_tests(mspms::prepared_for_stats)
+t_tests = mspms_t_tests(mspms::mspms_data)
 }

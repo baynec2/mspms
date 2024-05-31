@@ -9,7 +9,6 @@
 
 #' @return a tibble with the peptide sequence, cleavage sequences n specified number of AA on the left and right of the n term cleavage, and the position of the n term cleavage in the library sequence.
 #' @export
-#'
 #' @examples
 #'
 #' peptide_sequence = "F_LAHWVGI"

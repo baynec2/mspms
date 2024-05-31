@@ -4,10 +4,10 @@
 \alias{mspms_anova}
 \title{mspms_anova}
 \usage{
-mspms_anova(prepared_for_stats)
+mspms_anova(mspms_data)
 }
 \arguments{
-\item{prepared_for_stats}{= this is the data that has been prepared using prepare_for_stats()}
+\item{mspms_data}{= this is the data that has been run through the mspms pipeline.}
 }
 \value{
 a data frame with anova results for each peptide.
@@ -16,5 +16,5 @@ a data frame with anova results for each peptide.
 Performs anova on data prepared with prepare_for_stats(). Tests the effect of time for each condition. FDR corrected.
 }
 \examples{
-anova_results = mspms_anova(mspms::prepared_for_stats)
+anova_results = mspms_anova(mspms::mspms_data)
 }

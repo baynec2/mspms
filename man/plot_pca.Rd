@@ -4,10 +4,14 @@
 \alias{plot_pca}
 \title{plot_pca}
 \usage{
-plot_pca(prepared_for_stats)
+plot_pca(mspms_data, color = "time", shape = "condition")
 }
 \arguments{
-\item{prepared_for_stats}{= this is the data that has been prepared for stats by the prepare_for_stats() function}
+\item{mspms_data}{= this is the data that has been run through the mspms pipeline.}
+
+\item{color}{= this is the string name of the variable you would like to color by.}
+
+\item{shape}{= this is the string name of the vairable that you would like to determine shape by.}
 }
 \value{
 a ggplot2 object
@@ -17,7 +21,7 @@ this creates a pca plot of the data where the points are colored by time and sha
 }
 \examples{
 
-plot_pca(mspms::prepared_for_stats)
+plot_pca(mspms::mspms_data)
 
 
 }

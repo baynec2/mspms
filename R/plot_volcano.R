@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' # Generating log2fc t test data
-#' log2fc_t_test_data = mspms::log2fc_t_test(mspms::prepared_for_stats)
+#' log2fc_t_test_data = mspms::log2fc_t_test(mspms::mspms_data)
 #' # plotting data.
 #'p1 =  mspms::plot_volcano(log2fc_t_test_data,log2fc_threshold = 3)
 #'p1
@@ -24,7 +24,7 @@ plot_volcano = function(log2fc_t_test_data,log2fc_threshold = 3){
     ggplot2::geom_hline(yintercept = -log10(0.05),linetype = "dashed",color = "red")+
     ggplot2::geom_vline(xintercept = log2fc_threshold, linetype = "dashed",color = "red")+
     ggplot2::geom_vline(xintercept = -log2fc_threshold, linetype = "dashed",color = "red")+
-    ggplot2::labs(x = "Log2 (Time TX/T0)",y = "-log10(p value)")+
+    ggplot2::labs(x = "Log2 (Time TX/T0)",y = "-log10(p.adj value)")+
     ggplot2::facet_wrap(~ condition + group2,ncol = ncol)
 
   return(p1)

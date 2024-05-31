@@ -4,20 +4,20 @@
 \alias{log2fc_t_test}
 \title{log2fc_t_test}
 \usage{
-log2fc_t_test(prepared_for_stats)
+log2fc_t_test(mspms_data)
 }
 \arguments{
-\item{prepared_for_stats}{= this is data that has been prepared using prepare_for_stats().}
+\item{mspms_data}{= this is data that has been run through the mspms pipeline.}
 }
 \value{
-a tibblecontaining log2fc and t test statistics across conditions
+a tibble containing log2fc and t test statistics across conditions
 }
 \description{
 Gives log2fc and statistics from t tests across conditions. Gives differences relative to time 0 within each condition.
 }
 \examples{
 
-log2fc_and_t_test = log2fc_t_test(mspms::prepared_for_stats)
+log2fc_and_t_test = log2fc_t_test(mspms::mspms_data)
 
 
 }

@@ -5,13 +5,16 @@
 \title{plot_all_icelogos}
 \usage{
 plot_all_icelogos(
-  polished_data,
+  mspms_data,
+  pval = 0.05,
   type = "percent_difference",
   background_universe = mspms::all_possible_8mers_from_228_library
 )
 }
 \arguments{
-\item{polished_data}{= this is the data that has been polished (via mspms::polish()) and is ready for plotting}
+\item{mspms_data}{= this is the data that has been polished (via mspms::polish()) and is ready for plotting}
+
+\item{pval}{= this is the pvalue threshold that you would like to use.}
 
 \item{type}{= this is the type of visualization you would like to perform, can be either "percent_difference" or "fold_change".}
 
@@ -21,10 +24,10 @@ plot_all_icelogos(
 a ggplot object that shows the motif of the cleavage sequences
 }
 \description{
-wrapper function for plotting icelogos for each condition in an experiment
+wrapper function for plotting icelogos for each condition in an experiment. Here we will plot all icelogos for all peptides that were found to be signficant by t test at any timepoint.
 }
 \examples{
 
 
-plot_all_icelogos(mspms::prepared_for_stats \%>\% mspms::polish())
+plot_all_icelogos(mspms::mspms_data)
 }

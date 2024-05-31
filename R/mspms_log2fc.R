@@ -2,7 +2,7 @@
 #'
 #' Calculates the log2fc for each timepoint within each condition relative to time 0.
 #'
-#' @param prepared_for_stats = this is the data that has been prepared for stats using the prepare for stats function.
+#' @param mspms_data = this is the data that has been run through the mspms pipeline
 #'
 #' @return a data frame with the log2fc for each timepoint within each condition relative to time 0
 #' @export
@@ -10,17 +10,17 @@
 #' @examples
 #'
 #' log2fc = mspms_log2fc(mspms::prepared_for_stats)
-mspms_log2fc = function(prepared_for_stats){
+mspms_log2fc = function(mspms_data){
 
   # Extracting just the control data
-  control_data = prepared_for_stats %>%
+  control_data = mspms_data %>%
     dplyr::filter(.data$time == 0) %>%
     dplyr::group_by(.data$condition,.data$Peptide) %>%
     dplyr::summarise(control_mean = mean(.data$value,na.rm = TRUE))
 
 
   # Extracting just the reference data
-  reference_data = prepared_for_stats %>%
+  reference_data = mspms_data %>%
     dplyr::group_by(.data$Peptide,.data$time,.data$condition) %>%
     dplyr::summarise(reference_mean = mean(.data$value,na.rm = TRUE))
 

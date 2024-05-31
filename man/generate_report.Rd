@@ -30,7 +30,7 @@ a knited .html report of the mspms analysis.
 wrapper function to generate an automatic .html report of a basic mspms analysis.
 }
 \examples{
-\dontshow{if (is.TRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (isTRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 generate_report(prepared_data = mspms::peaks_prepared_data,
 design_matrix = mspms::design_matrix,

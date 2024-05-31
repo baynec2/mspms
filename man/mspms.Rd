@@ -9,7 +9,8 @@ mspms(
   prepared_data,
   design_matrix,
   peptide_library = mspms::peptide_library,
-  n_residues = 4
+  n_residues = 4,
+  outdir = getwd()
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ and on named "condition" that contains condition cooresponding to each sample (c
 \item{peptide_library}{= this is the peptide library that has been used in the experiment.}
 
 \item{n_residues}{= this is the number of cleavages to the left and right of the cleavage site you want to include in the cleavage motif.}
+
+\item{outdir}{= this is the directory to write the results of normalyze to.}
 }
 \value{
 a tibble with processed mspms data.
@@ -31,7 +34,8 @@ mspms
 runs the standard mspms data analysis pipeline in it's entirety.
 }
 \examples{
+\dontshow{if (isTRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 out = mspms::mspms(mspms::peaks_prepared_data,mspms::design_matrix)
-
+\dontshow{\}) # examplesIf}
 }

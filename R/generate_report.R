@@ -11,7 +11,7 @@
 #' @return a knited .html report of the mspms analysis.
 #' @export
 #'
-#' @examplesIf is.TRUE(FALSE)
+#' @examplesIf isTRUE(FALSE)
 #'
 #' generate_report(prepared_data = mspms::peaks_prepared_data,
 #' design_matrix = mspms::design_matrix,
@@ -23,7 +23,7 @@ generate_report = function(prepared_data,
                            n_residues = 4,
                            outdir = getwd()){
 
-  rmarkdown::render("inst/rmarkdown/templates/mspms_report/skeleton/skeleton.Rmd",
+  rmarkdown::render(system.file("rmarkdown/templates/mspms_report/skeleton/skeleton.RMD",package = "mspms"),
                     params = list(prepared_data = prepared_data,
                                   design_matrix = design_matrix,
                                   peptide_library = peptide_library,

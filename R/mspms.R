@@ -7,20 +7,21 @@
 #' and on named "condition" that contains condition cooresponding to each sample (commonly some kind of protease inhibitor).
 #' @param peptide_library = this is the peptide library that has been used in the experiment.
 #' @param n_residues = this is the number of cleavages to the left and right of the cleavage site you want to include in the cleavage motif.
-#'
+#' @param outdir = this is the directory to write the results of normalyze to.
 #' @return a tibble with processed mspms data.
 #' @export
 #'
-#' @examples
+#' @examplesIf isTRUE(FALSE)
 #'
 #' out = mspms::mspms(mspms::peaks_prepared_data,mspms::design_matrix)
 #'
 mspms = function(prepared_data,
                  design_matrix,
                  peptide_library = mspms::peptide_library,
-                 n_residues = 4){
+                 n_residues = 4,
+                 outdir = getwd()){
   #Normalyzing data
-  normalyzed_data = mspms::normalyze(prepared_data,design_matrix)
+  normalyzed_data = mspms::normalyze(prepared_data,design_matrix,outdir)
   #handle outliers, impute
   outliers = mspms::handle_outliers(normalyzed_data,design_matrix)
   imputed = mspms::impute(outliers)

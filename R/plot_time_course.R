@@ -2,7 +2,7 @@
 #'
 #' this function plots the time course of each peptide in the data set.
 #'
-#' @param prepared_for_stats this is a data frame that has been prepared for stats.
+#' @param mspms_data this is data from the mspms pipeline.
 #' It should have the following columns: time, value, condition, and Peptide. It is in long format.
 #' Can be filtered to only include the peptides you want to plot.
 #'
@@ -11,15 +11,15 @@
 #'
 #' @examples
 #'
-#' p1 = mspms::prepared_for_stats %>%
+#' p1 = mspms::mspms_data %>%
 #' dplyr::filter(Peptide == "A_GLFNYNQLRGF") %>%
 #' mspms::plot_time_course()
 #'
 #' p1
 
-plot_time_course = function(prepared_for_stats){
+plot_time_course = function(mspms_data){
 
- p1 = prepared_for_stats %>%
+ p1 = mspms_data %>%
   dplyr::group_by(.data$Peptide,.data$condition,.data$time) %>%
   dplyr::summarize(mean = mean(.data$value,na.rm=T),sd = sd(.data$value,na.rm = T)) %>%
   ggplot2::ggplot(ggplot2::aes_string(x = "time", y = "mean", color = "condition")) +

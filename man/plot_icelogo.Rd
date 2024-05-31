@@ -7,6 +7,7 @@
 plot_icelogo(
   cleavage_seqs,
   background_universe = mspms::all_possible_8mers_from_228_library,
+  pval = 0.05,
   type = "percent_difference"
 )
 }
@@ -14,6 +15,8 @@ plot_icelogo(
 \item{cleavage_seqs}{= these are the cleavage sequences that are observed in the experiment}
 
 \item{background_universe}{= this is a list of all the possible cleavage sequences in the peptide library used.}
+
+\item{pval}{= this is the pvalue threshold that you would like to use.}
 
 \item{type}{= this is the type of visualization you would like to perform, can be either "percent_difference" or "fold_change".}
 }
@@ -25,9 +28,9 @@ This function plots the cleavage motifs that were enriched relative to backgroun
 https://iomics.ugent.be/icelogoserver/resources/manual.pdf
 }
 \examples{
-cleavage_seqs = mspms::prepared_for_stats \%>\%
-mspms::polish() \%>\%
+cleavage_seqs = mspms::mspms_data \%>\%
 dplyr::filter(condition == "DMSO",time == 240) \%>\%
 dplyr::pull(cleavage_seq)
+
 plot_icelogo(cleavage_seqs)
 }

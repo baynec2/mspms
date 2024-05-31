@@ -4,10 +4,10 @@
 \alias{mspms_log2fc}
 \title{mspms_log2fc}
 \usage{
-mspms_log2fc(prepared_for_stats)
+mspms_log2fc(mspms_data)
 }
 \arguments{
-\item{prepared_for_stats}{= this is the data that has been prepared for stats using the prepare for stats function.}
+\item{mspms_data}{= this is the data that has been run through the mspms pipeline}
 }
 \value{
 a data frame with the log2fc for each timepoint within each condition relative to time 0

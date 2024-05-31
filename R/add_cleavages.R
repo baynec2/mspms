@@ -9,7 +9,6 @@
 #' @param n_residues = the number of residues to the left and right of the cleavage site to include in the output.
 #' @return a tibble with cleavage information added.
 #' @export
-#'
 #' @examples
 #' # adding the clevages 5 AA to the left and right of the cleavage site.
 #' add_cleavages(mspms::joined_with_library,n_residues = 5)

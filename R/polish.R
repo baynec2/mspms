@@ -7,7 +7,6 @@
 #'
 #' @return a tibble with the cleavage information combined into a single column and rows with no cleavage information or double information removed.
 #' @export
-#'
 #' @examples
 #' polished = polish(mspms::cleavage_added_data)
 polish = function(cleavage_added_data){
@@ -17,6 +16,8 @@ polish = function(cleavage_added_data){
                                                   !is.na(cterm) & is.na(nterm) ~ cterm,
                                                   TRUE ~NA),.after = "cterm_cleavage_pos") %>%
     dplyr::filter(!is.na(.data$cleavage_seq)) %>%
+    dplyr::mutate(cleavage_pos = dplyr::case_when(is.na(cterm_cleavage_pos) ~ nterm_cleavage_pos,
+                                    TRUE ~ cterm_cleavage_pos),.after = "cleavage_seq") %>%
     tibble::as_tibble()
 
 

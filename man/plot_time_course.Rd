@@ -4,10 +4,10 @@
 \alias{plot_time_course}
 \title{plot_time_course}
 \usage{
-plot_time_course(prepared_for_stats)
+plot_time_course(mspms_data)
 }
 \arguments{
-\item{prepared_for_stats}{this is a data frame that has been prepared for stats.
+\item{mspms_data}{this is data from the mspms pipeline.
 It should have the following columns: time, value, condition, and Peptide. It is in long format.
 Can be filtered to only include the peptides you want to plot.}
 }
@@ -19,7 +19,7 @@ this function plots the time course of each peptide in the data set.
 }
 \examples{
 
-p1 = mspms::prepared_for_stats \%>\%
+p1 = mspms::mspms_data \%>\%
 dplyr::filter(Peptide == "A_GLFNYNQLRGF") \%>\%
 mspms::plot_time_course()
 

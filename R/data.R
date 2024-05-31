@@ -139,5 +139,17 @@
 "joined_with_library"
 
 
+#' mspms_data
+#' this is an example dataset processed by mspms that has gone through the entire standar workflow
+#' @format ## `mspms_data`
+#' A tibble with 14,184 rows and 15 columns:
+#' \describe{
+#'   \item{Peptide}{Peptide Sequence Detected}
+#'   ...
+#' }
+#' @source <mspms processed data originally from PEAKS files found in "tests/testdata/protein-peptides-id.csv" and "tests/testdata/protein-peptides-lfq.csv">
+"mspms_data"
+
+
 
 
