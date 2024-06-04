@@ -17,7 +17,7 @@ cleavage site to include in the output.}
 a tibble with cleavage information added.
 }
 \description{
-This functions adds cleavage information to the tibble that has been
+This function adds cleavage information to the tibble that has been
 normalized, outlier removed, imputed, and joined with (peptide) library.
 The cleavage information is represented as the 4 amino acids to the left and
 right of the cleavage site.

@@ -1,6 +1,6 @@
 #' add_cleavages
 #'
-#' This functions adds cleavage information to the tibble that has been
+#' This function adds cleavage information to the tibble that has been
 #' normalized, outlier removed, imputed, and joined with (peptide) library.
 #' The cleavage information is represented as the 4 amino acids to the left and
 #' right of the cleavage site.
@@ -30,9 +30,6 @@ add_cleavages <- function(joined_with_library, n_residues = 4) {
     ),
     mspms::nterm_cleavage
   )
-
-
-
   # Iterating though and applying cterm_cleavage
   cterm <- purrr::pmap_df(
     list(
@@ -43,13 +40,8 @@ add_cleavages <- function(joined_with_library, n_residues = 4) {
     ),
     mspms::cterm_cleavage
   )
-
-
-
   # Combining nterm and cterm
   cleavages <- dplyr::bind_cols(nterm, cterm[, 2:3])
-
-
   # Building final data frame.
   output <- dplyr::bind_cols(joined_with_library, cleavages) %>%
     dplyr::select(
@@ -67,8 +59,5 @@ add_cleavages <- function(joined_with_library, n_residues = 4) {
       -dplyr::any_of("RT")
     ) %>%
     tibble::as_tibble()
-
-
-
   return(output)
 }
