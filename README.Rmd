@@ -42,8 +42,7 @@ utilize the method without requiring any R coding knowledge.
 You can install the development version of mspms from github.
 
 ```{r,eval = FALSE}
-devtools::install_github("baynec2/mspms",
-                         ref = "develop")
+devtools::install_github("baynec2/mspms")
 ```
 
 
