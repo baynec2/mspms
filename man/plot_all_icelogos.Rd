@@ -18,6 +18,9 @@ plot_all_icelogos(
 
 \item{pval}{= this is the pvalue threshold that you would like to use.}
 
+\item{log2fc_threshold}{= this is the log2 fold change threshold that you 
+would like to use. Can be positive or negative if desired.}
+
 \item{type}{= this is the type of visualization you would like to perform,
 can be either "percent_difference" or "fold_change".}
 
