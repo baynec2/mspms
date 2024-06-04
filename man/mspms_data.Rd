@@ -4,7 +4,8 @@
 \name{mspms_data}
 \alias{mspms_data}
 \title{mspms_data
-this is an example dataset processed by mspms that has gone through the entire standar workflow}
+this is an example dataset processed by mspms that has gone through the
+entire standar workflow}
 \format{
 ## `mspms_data`
 A tibble with 14,184 rows and 15 columns:
@@ -14,13 +15,16 @@ A tibble with 14,184 rows and 15 columns:
 }
 }
 \source{
-<mspms processed data originally from PEAKS files found in "tests/testdata/protein-peptides-id.csv" and "tests/testdata/protein-peptides-lfq.csv">
+<mspms processed data originally from PEAKS files found in
+"tests/testdata/protein-peptides-id.csv" and
+"tests/testdata/protein-peptides-lfq.csv">
 }
 \usage{
 mspms_data
 }
 \description{
 mspms_data
-this is an example dataset processed by mspms that has gone through the entire standar workflow
+this is an example dataset processed by mspms that has gone through the
+entire standar workflow
 }
 \keyword{datasets}

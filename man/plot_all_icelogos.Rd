@@ -7,6 +7,7 @@
 plot_all_icelogos(
   mspms_data,
   pval = 0.05,
+  log2fc_threshold = 3,
   type = "percent_difference",
   background_universe = mspms::all_possible_8mers_from_228_library
 )
@@ -32,7 +33,5 @@ wrapper function for plotting icelogos for each condition in an experiment.
  signficant by t test at any timepoint.
 }
 \examples{
-
-
 plot_all_icelogos(mspms::mspms_data)
 }

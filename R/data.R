@@ -13,7 +13,8 @@
 #'   ...
 #' }
 #' @source <mspms processed data originally from PEAKS files found in
-#'  "tests/testdata/protein-peptides-id.csv" and "tests/testdata/protein-peptides-lfq.csv">
+#'  "tests/testdata/protein-peptides-id.csv" and
+#'   "tests/testdata/protein-peptides-lfq.csv">
 "prepared_for_stats"
 
 #' all possible 8mers from the 228 peptide library used by the O’Donoghue

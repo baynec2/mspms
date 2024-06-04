@@ -2,53 +2,44 @@
 #'
 #' count the number of cleavages per position
 #'
-#' @param mspms_data = this is the data that has gone through the
-#' mspms pipeline.
-#' @param sig_peptides = this is a list of peptides of interest.
-#'
-#' @return a tibble with the number of cleavages per position
+#' @param data a tibble containing columns named Peptide,cleavage_pos,condition,
+#' and time. Other column names can be included.
+#' @return a ggplot2 object
 #' @export
 #'
 #' @examples
-#' # Extracting the significant peptides for DMSO
-#' sig_peptides <- mspms::mspms_anova(mspms::mspms_data) %>%
-#'   dplyr::filter(
-#'     p.adj <= 0.05,
-#'     condition == "MZB"
-#'   ) %>%
-#'   dplyr::pull(Peptide)
-#'
-#' # Counting the number of cleavages per position
-#' counts <- count_cleavages_per_pos(mspms::mspms_data, sig_peptides)
-#'
-#' # Plotting the results
-#' p1 <- counts %>%
-#'   ggplot2::ggplot(ggplot2::aes(x = cleavage_pos, y = n)) +
-#'   ggplot2::geom_point() +
-#'   ggplot2::geom_line()
-#' p1
-#'
-count_cleavages_per_pos <- function(mspms_data, sig_peptides) {
+#'data = data.frame(condition = rep("DMSO", 13),
+#'                  time = rep(60,13),
+#'                  cleavage_pos = rep(13,13)
+#'                  )
+#'count_cleavages_per_pos(data)
+
+count_cleavages_per_pos <- function(data) {
   positions <- seq_len(13)
+  #Counting
+  count <- data %>%
+    dplyr::group_by(.data$condition,.data$time,.data$cleavage_pos) %>%
+    dplyr::summarise(n = dplyr::n())
+  #Adding missing positions
+  final = data.frame()
+  for(i in unique(data$condition)){
+    for(t in unique(data$time)){
+    count_f <- dplyr::filter(count,
+                            .data$condition == i,
+                            .data$time == t)
+    missing <- positions[!positions %in% count_f$cleavage_pos]
+    missing_t <- tibble::tibble(condition = i, time = t, cleavage_pos = missing, n = rep(
+      0,
+      length(missing)
+    ))
+    out <- dplyr::bind_rows(count_f, missing_t)
+    final <- dplyr::bind_rows(final,out) %>%
+      dplyr::mutate(time = forcats::fct_inseq(.data$time))
+    }
+  }
 
-  count <- mspms_data %>%
-    dplyr::select(Peptide, cleavage_pos) %>%
-    dplyr::distinct() %>%
-    dplyr::filter(Peptide %in% sig_peptides) %>%
-    dplyr::group_by(cleavage_pos) %>%
-    dplyr::summarise(n = dplyr::n()) %>%
-    dplyr::ungroup()
-
-
-  missing <- positions[!positions %in% count$cleavage_pos]
-
-  missing_t <- tibble::tibble(cleavage_pos = missing, n = rep(
-    0,
-    length(missing)
-  ))
-
-  out <- dplyr::bind_rows(count, missing_t) %>%
-    dplyr::arrange(n)
-
-  return(out)
+  return(final)
 }
+
+
+

@@ -24,25 +24,25 @@ log2fct_condition <- function(mspms_data,
   # Filtering the data set to include the relevant conditions and time point.
   f <- mspms_data %>%
     dplyr::ungroup() %>%
-    dplyr::filter(condition %in% c(ref_condition, comparison_condition)) %>%
-    dplyr::filter(time == at_time)
+    dplyr::filter(.data$condition %in% c(ref_condition, comparison_condition)) %>%
+    dplyr::filter(.data$time == at_time)
 
   # Performing the statistics
   stat <- f %>%
-    dplyr::group_by(Peptide, cleavage_seq) %>%
+    dplyr::group_by(.data$Peptide, .data$cleavage_seq, .data$cleavage_pos) %>%
     rstatix::t_test(value ~ condition, ref.group = ref_condition) %>%
     rstatix::adjust_pvalue(method = "fdr") %>%
     tibble::as_tibble()
 
   # Extracting the control data
   reference_data <- f %>%
-    dplyr::filter(condition == ref_condition) %>%
+    dplyr::filter(.data$condition == ref_condition) %>%
     dplyr::group_by(.data$Peptide) %>%
     dplyr::summarise(reference_mean = mean(.data$value, na.rm = TRUE))
 
   # Extracting the experimental data
   comparison_data <- f %>%
-    dplyr::filter(condition == comparison_condition) %>%
+    dplyr::filter(.data$condition == comparison_condition) %>%
     dplyr::group_by(.data$Peptide) %>%
     dplyr::summarise(comparison_mean = mean(.data$value, na.rm = TRUE))
 

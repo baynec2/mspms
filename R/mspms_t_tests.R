@@ -16,7 +16,7 @@
 mspms_t_tests <- function(mspms_data) {
   # Doing T tests
   stat <- mspms_data %>%
-    dplyr::group_by(.data$cleavage_seq, .data$condition, .data$Peptide) %>%
+    dplyr::group_by(.data$cleavage_seq, .data$condition, .data$Peptide,.data$cleavage_pos) %>%
     rstatix::t_test(value ~ time, ref.group = "0") %>%
     rstatix::adjust_pvalue(method = "fdr") %>%
     dplyr::mutate(comparison = paste0(

@@ -66,8 +66,8 @@ handle_outliers <- function(normalyzed_data, design_matrix) {
 
   NAs_added_back <- out %>%
     # dplyr::filter(!is_outlier) %>%
-    dplyr::select(-.data$group, -.data$condition, -.data$time) %>%
-    tidyr::pivot_wider(names_from = .data$sample, values_from = .data$value) %>%
+    dplyr::select(-"group", -"condition", -"time") %>%
+    tidyr::pivot_wider(names_from = "sample", values_from = "value") %>%
     tidyr::pivot_longer(index:length(.), names_to = "sample_id") %>%
     tibble::as_tibble()
 

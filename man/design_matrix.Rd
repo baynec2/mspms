@@ -9,19 +9,24 @@
 A tibble with 24 rows and 4 columns:
 \describe{
   \item{sample}{sample name as reported by upstream software }
-  \item{group}{information about what group the sample belongs to, should be the same for all replicates}
-  \item{condition}{the condition the sample was exposed to (commonly a protease inhibitor treatment for example)}
+  \item{group}{information about what group the sample belongs to, should be
+   the same for all replicates}
+  \item{condition}{the condition the sample was exposed to
+  (commonly a protease inhibitor treatment for example)}
   \item{time}{the amount of time the sample was incubated for}
   ...
 }
 }
 \source{
-<mspms processed data originally from PEAKS files found in "tests/testdata/protein-peptides-id.csv" and "tests/testdata/protein-peptides-lfq.csv">
+<mspms processed data originally from PEAKS files found in
+"tests/testdata/protein-peptides-id.csv" and
+"tests/testdata/protein-peptides-lfq.csv">
 }
 \usage{
 design_matrix
 }
 \description{
-example design matrix designed to be used with the peaks processed data in the readme
+example design matrix designed to be used with the peaks processed data
+ in the readme
 }
 \keyword{datasets}

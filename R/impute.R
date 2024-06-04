@@ -69,7 +69,7 @@ impute <- function(outlier_handled_data, noise = 0.05, nsd = 1) {
     dplyr::select(-.data$value) %>%
     tidyr::pivot_wider(
       names_from = "sample_id",
-      values_from = .data$imputed_values
+      values_from = "imputed_values"
     ) %>%
     dplyr::mutate(
       Peptide = gsub("\\.", "_", .data$Peptide),

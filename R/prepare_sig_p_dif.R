@@ -8,8 +8,11 @@
 #'
 #' @return a tibble
 #' @export
-#' @examples
+#' @examplesIf isTRUE(FALSE)
+#'
 prepare_sig_p_dif <- function(percent_difference, sig_zscores) {
+  # No visible binding
+  . <- NULL
   sig_final <- percent_difference %>%
     tibble::rownames_to_column("AA") %>%
     tidyr::pivot_longer(2:length(.),

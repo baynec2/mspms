@@ -18,3 +18,7 @@ a matrix of the fold changes of the significant AAs at each position.
 \description{
 prepare fold changes of AA by position for Icelogo visualization.
 }
+\examples{
+\dontshow{if (isTRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{\}) # examplesIf}
+}

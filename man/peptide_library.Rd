@@ -8,9 +8,13 @@
 ## `peptide_library`
 A  data frame with 228 rows and 3 columns:
 \describe{
-  \item{library_reference_id}{reference id of the detected peptide as put in upstream software}
-  \item{library_match_sequence}{the sequence match to the peptide library, methionine is replaced with norleucine,which should function the same as methionine for proteases but has the same mass as L}
-  \item{library_real_sequence}{Ls corresponding to norleucine are replaced back with methionine (even though it is norleucine in reality)}
+  \item{library_reference_id}{reference id of the detected peptide as
+  put in upstream software}
+  \item{library_match_sequence}{the sequence match to the peptide library,
+   methionine is replaced with norleucine,which should function the same as
+    methionine for proteases but has the same mass as L}
+  \item{library_real_sequence}{Ls corresponding to norleucine are replaced
+   back with n (for norleucine )}
   ...
 }
 }

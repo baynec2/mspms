@@ -12,8 +12,8 @@
 #' @examples
 #' anova_results <- mspms_anova(mspms::mspms_data)
 mspms_anova <- function(mspms_data) {
-  anova <- prepared_for_stats %>%
-    dplyr::group_by(.data$condition, .data$Peptide) %>%
+  anova <- mspms_data %>%
+    dplyr::group_by(.data$condition, .data$Peptide,.data$cleavage_pos) %>%
     rstatix::anova_test(value ~ time) %>%
     rstatix::adjust_pvalue(method = "fdr") %>%
     tibble::as_tibble()

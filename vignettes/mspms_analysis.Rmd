@@ -1,46 +1,17 @@
 ---
-output: github_document
+title: "mspms_analysis"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{mspms_analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  cache = FALSE
+  comment = "#>"
 )
-
-ggplot2::theme_set(
-  ggplot2::theme_minimal()
-)
-
-```
-
-# mspms
-
-<!-- badges: start -->
-[![R-CMD-check](https://github.com/baynec2/mspms/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/baynec2/mspms/actions/workflows/R-CMD-check.yaml)
-[![Codecov test coverage](https://codecov.io/gh/baynec2/mspms/branch/main/graph/badge.svg)](https://app.codecov.io/gh/baynec2/mspms?branch=main)
-[![BioC status](http://www.bioconductor.org/shields/build/release/bioc/mspms.svg)](https://bioconductor.org/checkResults/release/bioc-LATEST/mspms)
-<!-- badges: end -->
-
-The goal of mspms is provide a concise code-base for the normalization and 
-data processing required to analyze data from the 
-[Multiplex Substrate Profiling by Mass Spectrometry (MSP-MS) method](https://pubmed.ncbi.nlm.nih.gov/36948708/). 
-
-
-Additionally, we provide a [graphical user interface powered by shiny apps](https://gonzalezlab.shinyapps.io/mspms_shiny/) that allows for a user to
-utilize the method without requiring any R coding knowledge. 
-
-
-## Installation
-
-
-You can install the development version of mspms from github.
-
-```{r,eval = FALSE}
-devtools::install_github("baynec2/mspms")
 ```
 
 
@@ -173,9 +144,9 @@ library(dplyr)
 library(mspms)
 
 ### Loading the files ###
-lfq_filename <- "tests/testdata/protein-peptides-lfq.csv"
+lfq_filename <- "../tests/testdata/protein-peptides-lfq.csv"
 # file "protein-peptides.csv" exported from PEAKS identification
-id_filename <- "tests/testdata/protein-peptides-id.csv"
+id_filename <- "../tests/testdata/protein-peptides-id.csv"
 
 # Prepare the data for normalyzer analysis
 peaks_prepared_data <- prepare_peaks(lfq_filename, id_filename)
@@ -187,7 +158,7 @@ peaks_prepared_data <- prepare_peaks(lfq_filename, id_filename)
 We can prepare proteome discover files for analysis with mspms as follows.
 
 ```{r}
-prepared_proteome_discoverer <- prepare_pd("tests/testdata/proteome_discoverer_output.xlsx")
+prepared_proteome_discoverer <- prepare_pd("../tests/testdata/proteome_discoverer_output.xlsx")
 ```
 
 
@@ -223,7 +194,7 @@ head(all_peptide_sequences)
 
 Before we normalyze data, we need to know what samples are in what groups. We can do that by defining a design matrix. 
 ```{r}
-design_matrix <- readr::read_csv("tests/testdata/design_matrix.csv")
+design_matrix <- readr::read_csv("../tests/testdata/design_matrix.csv")
 
 head(design_matrix)
 ```
@@ -245,9 +216,7 @@ need to specify the design matrix here too. Make sure that the column header
 names are "sample" and "group" just like before.
 
 ```{r}
-design_matrix <- readr::read_csv("tests/testdata/design_matrix.csv")
 outliers <- handle_outliers(normalyzed_data, design_matrix)
-
 ```
 
 ### Imputation of data 
@@ -485,14 +454,12 @@ mspms::plot_pca(mspms_data)
 We can also generate an interactive heatmap with the hierchical clustering 
 results. 
 
-The format of this readme does not allow for interactivity, so a static picture 
-of the output is shown instead. 
+The format of this readme does not allow for interactivity, so it is not shown here. 
 
 ```{r,eval = FALSE}
 mspms::plot_heatmap(mspms_data)
 ```
 
-![](plot_heatmap_output.png)
   
 ### Ploting time course.  
 
@@ -540,4 +507,7 @@ p1
 ```
 
 
+```{r}
+sessionInfo()
+```
 

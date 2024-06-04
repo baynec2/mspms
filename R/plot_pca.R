@@ -17,8 +17,8 @@ plot_pca <- function(mspms_data, color = "time", shape = "condition") {
   # dealing with no visible binding for global variable ‘.’ NOTE
   . <- NULL
   PCA_data <- mspms_data %>%
-    dplyr::select(.data$sample, .data$Peptide, .data$group, .data$condition, .data$time, .data$value) %>%
-    tidyr::pivot_wider(names_from = .data$Peptide, values_from = .data$value, values_fn = mean) %>%
+    dplyr::select("sample", "Peptide", "group", "condition", "time", "value") %>%
+    tidyr::pivot_wider(names_from = "Peptide", values_from = "value", values_fn = NULL) %>%
     # if a peptide has an na remove it
     dplyr::select_if(~ !any(is.na(.)))
 
@@ -51,8 +51,7 @@ plot_pca <- function(mspms_data, color = "time", shape = "condition") {
     ggplot2::geom_point() +
     ggplot2::stat_ellipse(level = 0.95) +
     ggplot2::xlab(paste0("PCA-1 ", round(Prop_of_var[1] * 100, 2), "%")) +
-    ggplot2::ylab(paste0("PCA-2 ", round(Prop_of_var[2] * 100, 2), "%")) +
-    ggplot2::theme_bw()
+    ggplot2::ylab(paste0("PCA-2 ", round(Prop_of_var[2] * 100, 2), "%"))
 
   return(plot)
 }

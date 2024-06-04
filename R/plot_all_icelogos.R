@@ -16,34 +16,42 @@
 #' @export
 #'
 #' @examples
-#'
-#'
 #' plot_all_icelogos(mspms::mspms_data)
 plot_all_icelogos <- function(mspms_data,
                               pval = 0.05,
+                              log2fc_threshold = 3,
                               type = "percent_difference",
-                              background_universe = mspms::all_possible_8mers_from_228_library) {
+                              background_universe =
+                                mspms::all_possible_8mers_from_228_library) {
   # Generating stats,
-  stats <- mspms::log2fc_t_test(mspms_data) %>%
-    # extracting significant peptides
-    dplyr::filter(
-      p.adj <= 0.05,
-      log2fc > 0
-    )
 
+  if(log2fc_threshold >= 0){
+    stats <- mspms::log2fc_t_test(mspms_data) %>%
+      # extracting significant peptides
+      dplyr::filter(
+        .data$p.adj <= pval,
+        .data$log2fc > log2fc_threshold
+      )
+  } else {
+    stats <- mspms::log2fc_t_test(mspms_data) %>%
+      # extracting significant peptides
+      dplyr::filter(
+        .data$p.adj <= pval,
+        .data$log2fc < log2fc_threshold & .data$log2fc < 0
+      )
+  }
   plot_list <- list()
 
   # Plotting Icelogos
   for (i in unique(stats$condition)) {
     # filtering data
-    f <- dplyr::filter(stats, condition == i) %>%
-      dplyr::select(Peptide, cleavage_seq) %>%
+    f <- dplyr::filter(stats, .data$condition == i) %>%
+      dplyr::select("Peptide", "cleavage_seq") %>%
       dplyr::distinct() %>%
       # appending peptide to cleavage_seqs
       dplyr::pull(.data$cleavage_seq)
 
     # generating ice logo
-
     out <- mspms::plot_icelogo(f,
       type = type, pval = pval,
       background_universe = background_universe

@@ -8,8 +8,10 @@
 #'
 #' @return a matrix of the fold changes of the significant AAs at each position.
 #' @export
-#' @examples
+#' @examplesIf isTRUE(FALSE)
 prepare_fc <- function(fold_change, sig_zscores) {
+  # No visible binding for global variable .
+  . <- NULL
   sig_final <- fold_change %>%
     tibble::rownames_to_column("AA") %>%
     tidyr::pivot_longer(2:length(.),
@@ -24,28 +26,25 @@ prepare_fc <- function(fold_change, sig_zscores) {
       values_from = .data$fold_change,
       names_sort = FALSE
     )
-
   # Dealing with the problem introduced by the pivot wider function
-  missing_cols <- ncol(percent_difference) - (ncol(sig_final) - 1)
+  missing_cols <- ncol(fold_change) - (ncol(sig_final) - 1)
   missing_data <- as.data.frame(matrix(
     nrow = nrow(sig_final),
     ncol = missing_cols, NA
   ))
   `%!in%` <- Negate(`%in%`)
-  missing_names <- names(pd)[names(pd) %!in% names(sig_final)]
+  missing_names <- names(fold_change)[names(fold_change) %!in%
+    names(sig_final)]
   names(missing_data) <- missing_names
-
   final <- sig_final %>%
     dplyr::bind_cols(missing_data) %>%
     dplyr::relocate(paste0("P", c(
-      (ncol(percent_difference) / 2):1,
+      (ncol(fold_change) / 2):1,
       paste0(
-        seq_len(ncol(percent_difference) / 2), "'"
+        seq_len(ncol(fold_change) / 2), "'"
       )
     ))) %>%
     tibble::column_to_rownames("AA") %>%
     as.matrix()
-
-
   return(final)
 }

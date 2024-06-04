@@ -3,7 +3,8 @@
 \docType{data}
 \name{all_possible_8mers_from_228_library}
 \alias{all_possible_8mers_from_228_library}
-\title{all possible 8mers from the 228 peptide library used by the O’Donoghue lab as of 26April2024.}
+\title{all possible 8mers from the 228 peptide library used by the O’Donoghue
+ lab as of 26April2024.}
 \format{
 ## `all_possible_8mers_from_228_library`
 A vector with 2964 entries
@@ -15,6 +16,7 @@ A vector with 2964 entries
 all_possible_8mers_from_228_library
 }
 \description{
-equivalent to the result of callling mspms::calculate_all_cleavages() on a vector of the 14 AA peptides used in the library.
+equivalent to the result of callling mspms::calculate_all_cleavages() on a
+ vector of the 14 AA peptides used in the library.
 }
 \keyword{datasets}

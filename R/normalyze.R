@@ -33,6 +33,8 @@
 #' )
 #'
 normalyze <- function(prepared_data, design_matrix, outdir = getwd()) {
+  # No visible binding for global variable.
+  . <- NULL
   # Extracting only the data
   dataOnly <- prepared_data[, design_matrix$sample]
 

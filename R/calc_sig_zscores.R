@@ -14,6 +14,8 @@
 #' rownames(zscores) <- c("A", "B", "C", "D", "E", "F")
 #' calc_sig_zscores(zscores)
 calc_sig_zscores <- function(zscores, pval = 0.05) {
+  # no visible binding for global variable .
+  . <- NULL
   # converting p value to zscore threshold. Divide by two since it is two tailed.
   threshold <- qnorm(p = pval / 2, lower.tail = FALSE)
 
@@ -24,7 +26,7 @@ calc_sig_zscores <- function(zscores, pval = 0.05) {
       names_to = "position",
       values_to = "zscore"
     ) %>%
-    dplyr::filter(abs(zscore) > threshold) %>%
+    dplyr::filter(abs(.data$zscore) > threshold) %>%
     dplyr::mutate(aa_position = paste0(.data$AA, ".", .data$position))
 
   return(sig_zscores)

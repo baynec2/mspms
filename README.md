@@ -21,16 +21,36 @@ user to utilize the method without requiring any R coding knowledge.
 
 ## Installation
 
-You can install the released version of mspms from github
+You can install the development version of mspms from github.
 
 ``` r
 devtools::install_github("baynec2/mspms")
 ```
 
+## Quickstart
+
+To generate a general report using your own data, run the following
+code. It requires data that has been prepared for mspms data analysis by
+a converter function, and a design matrix. For more information see
+subsequent sections.
+
+``` r
+mspms::generate_report(
+  prepared_data = mspms::peaks_prepared_data,
+  design_matrix = mspms::design_matrix,
+  outdir = "../Desktop/mspms_report"
+)
+```
+
+The above command will generate a .html file containing a general mspms
+analysis.
+
+There is much more that can be done using the mspms package- see the
+following sections for more information.
+
 ## Overview
 
-There are 4 different types of functions in this package. Those that are
-involved in:
+There are 4 different types of functions in this package.
 
 1.  Making mspms generically useful. These functions are focused on
     making mspms more generally useful to a wider audience outside of
@@ -45,16 +65,12 @@ involved in:
     on the normalyzed/processed data.
 
 4.  Data visualization. These functions allow the user to visualize the
-    data in a number of useful way.
+    data.
 
 **Making mspms generically useful**.  
 1. *prepare_peaks()*:Takes two input files from PEAKS and combines them.
 2. *prepare_pd()*: prepares exported files from proteome discoverer.  
-3. *extract_design_matrix_pd()*: Extracts the design matrix from the
-proteome discoverer file.  
-4. *prepare_spectronaut()*: prepares exported files from spectronaut -
-note in development, not yet implemented.  
-5. *calculate_all_cleavages()*: Calculates all possible cleavages for
+3. *calculate_all_cleavages()*: Calculates all possible cleavages for
 peptide library sequences.
 
 **Data Proessing/ Normalization**.  
@@ -73,22 +89,61 @@ do this.
 peptides that were cleaved on both sides or not at all.  
 7. *prepare_for_stats()*: Reshapes the data into a long format and
 appends the data in the design matrix to make statistical testing easy
-to perform.
+to perform.  
+8 *mspms():* combines all of the above functions into one convenient
+function.
 
-**Statistics**.  
-1. *log2fc_t_test()*: Calculates the fold change and the p/q value
-across experimental conditions using T-tests.  
-2. *mspms_anova()*: Conducts ANOVA tests to determine if there are any
-peptides that are significantly different across all time points.
+**Calculations/ Statistics**.  
+1. *mspms_log2fc()*: Calculates the log2 fold change across experimental
+conditions relative to T0.  
+2.*mspms_t_tests()*: Conducts T-tests to determine if there are any
+peptides that are significantly different across experimental conditions
+relative to time 0.  
+3. *log2fc_t_test()*: Combines results from mspms_log2fc() and
+mspms_t_tests() into one convienent tibble.  
+4. *log2fct_condtion()*: Calculates the log2 fold change and t tests for
+the specified condition at a user specified time.  
+5.*log2fct_time()*: Calculates the log2 fold change and t tests between
+the specified times within a user specified time.  
+6. *mspms_anova()*: Conducts ANOVA tests to determine if there are any
+peptides that are significantly different across all time points.  
+7. *count_cleavages_per_pos():* Counts the number of cleavages at each
+position of the library. Useful for determining endoprotease vs
+exoprotease activity.
 
 **Data Visualization**.  
 1. *plot_heatmap()*: Conducts hierarchical clustering analysis and plots
 an interactive heatmap to visualize overall patterns in the data.  
 2. *plot_pca()*: PCA analysis to visualize the data in a 2D space.  
 3. *plot_time_course()*: Plot peptides over time by condition.  
-4. *plot_cleavage_motif()*: Visualize the sequence specificity of the
-cleavage sites. Designed to be equivalent to what is implemented in
-IceLogo.
+4. *plot_cleavages_per_pos()*: Plot the number of cleavages at each
+position in the library.Useful for determining endoprotease vs
+exoprotease activity.
+
+**Icelogo**.
+
+1.  *calc_AA_count_of_motif()*: calculates the count of each amino acid
+    at each position in a vector of motifs.  
+2.  *calc_AA_prop_of_motif()*: calcuulates the proportion of each amino
+    acid at each position from the output of calc_AA_count_of_motif().  
+3.  *calc_AA_motif_zscore()*: calculates z scores for each amino acid at
+    each position in a vector of motifs.  
+4.  *calc_AA_percent_difference()*: calculates the percentage difference
+    of
+5.  *prepare_sig_p_dif()*: prepares the data for plotting percent
+    difference icelogos. Removes AAs at positions that are not
+    significantly different.  
+6.  *prepare_fc()*: prepares the data for plotting fold change icelogos.
+    Removes AAs at positions that are not significantly different.  
+7.  *plot_pd_icelogo()*: plots a percent difference icelogo.  
+8.  *plot_fc_icelogo()*: plots a fold change ice logo.  
+9.  *plot_icelogo()*: wraps plot_pd_icelogo() and plot_fc_icelogo() into
+    one function.  
+10. *plot_all_icelogos()*: convience function to plot all icelogos
+    relative to time 0 from an experiment.  
+    **Reports**.
+11. *generate_report()*: Generates a simple analysis of the mspms data
+    that should be generically applicable to all mspms experiments.
 
 ## Making Generically Usefull.
 
@@ -114,12 +169,12 @@ library(dplyr)
 library(mspms)
 
 ### Loading the files ###
-lfq_filename = "tests/testdata/protein-peptides-lfq.csv"
-#file "protein-peptides.csv" exported from PEAKS identification
-id_filename = "tests/testdata/protein-peptides-id.csv"
+lfq_filename <- "tests/testdata/protein-peptides-lfq.csv"
+# file "protein-peptides.csv" exported from PEAKS identification
+id_filename <- "tests/testdata/protein-peptides-id.csv"
 
 # Prepare the data for normalyzer analysis
-peaks_prepared_data = prepare_peaks(lfq_filename,id_filename)
+peaks_prepared_data <- prepare_peaks(lfq_filename, id_filename)
 #> Rows: 1099 Columns: 46
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: ","
@@ -136,13 +191,6 @@ peaks_prepared_data = prepare_peaks(lfq_filename,id_filename)
 #> 
 #> ℹ Use `spec()` to retrieve the full column specification for this data.
 #> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
-
-# saving to data folder in package for tests. Ignore when using on your own data
-usethis::use_data(peaks_prepared_data,overwrite = TRUE)
-#> ✔ Setting active project to '/Users/charliebayne/mspms'
-#> ✔ Saving 'peaks_prepared_data' to 'data/peaks_prepared_data.rda'
-#> • Document your data (see 'https://r-pkgs.org/data.html')
 ```
 
 ### Formating Proteome Discoverer File Outputs.
@@ -151,19 +199,7 @@ We can prepare proteome discover files for analysis with mspms as
 follows.
 
 ``` r
-prepared_proteome_discoverer = prepare_pd("tests/testdata/proteome_discoverer_output.xlsx")
-#> New names:
-#> • `Abundance: F12: Sample, 4, 60 min` -> `Abundance: F12: Sample, 4, 60
-#>   min...15`
-#> • `Abundance: F12: Sample, 4, 60 min` -> `Abundance: F12: Sample, 4, 60
-#>   min...19`
-```
-
-We can also extract a design matrix from the naming scheme used by
-proteome discoverer as follows.
-
-``` r
- design_matrix = extract_design_matrix_pd("tests/testdata/proteome_discoverer_output.xlsx")
+prepared_proteome_discoverer <- prepare_pd("tests/testdata/proteome_discoverer_output.xlsx")
 #> New names:
 #> • `Abundance: F12: Sample, 4, 60 min` -> `Abundance: F12: Sample, 4, 60
 #>   min...15`
@@ -184,19 +220,21 @@ cleavage site that we are interested in. First lets try 4, which is the
 default.
 
 ``` r
-all_peptide_sequences = mspms::calculate_all_cleavages(mspms::peptide_library$library_real_sequence,
-                        n_AA_after_cleavage=4)
+all_peptide_sequences <- mspms::calculate_all_cleavages(mspms::peptide_library$library_real_sequence,
+  n_AA_after_cleavage = 4
+)
 head(all_peptide_sequences)
-#> [1] "XXXLVATV" "XXXMLDKL" "XXXAVRAV" "XXXGIQST" "XXXSLNQA" "XXXFIVFI"
+#> [1] "XXXLVATV" "XXXnLDKL" "XXXAVRAV" "XXXGIQST" "XXXSLNQA" "XXXFIVFI"
 ```
 
 We could also try 5 AA after each cleavage site
 
 ``` r
-all_peptide_sequences = mspms::calculate_all_cleavages(mspms::peptide_library$library_real_sequence,
-                        n_AA_after_cleavage=5)
+all_peptide_sequences <- mspms::calculate_all_cleavages(mspms::peptide_library$library_real_sequence,
+  n_AA_after_cleavage = 5
+)
 head(all_peptide_sequences)
-#> [1] "XXXXLVATVY" "XXXXMLDKLM" "XXXXAVRAVE" "XXXXGIQSTY" "XXXXSLNQAY"
+#> [1] "XXXXLVATVY" "XXXXnLDKLn" "XXXXAVRAVE" "XXXXGIQSTY" "XXXXSLNQAY"
 #> [6] "XXXXFIVFIL"
 ```
 
@@ -208,7 +246,7 @@ Before we normalyze data, we need to know what samples are in what
 groups. We can do that by defining a design matrix.
 
 ``` r
-design_matrix = readr::read_csv("tests/testdata/design_matrix.csv")
+design_matrix <- readr::read_csv("tests/testdata/design_matrix.csv")
 #> Rows: 24 Columns: 4
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: ","
@@ -237,14 +275,14 @@ mspms uses the NormalyzerDE package to do normalization under the hood.
 We can normalyze the data as follows:
 
 ``` r
-normalyzed_data = normalyze(peaks_prepared_data,design_matrix)
+normalyzed_data <- normalyze(peaks_prepared_data, design_matrix)
 #> You are running version 1.19.7 of NormalyzerDE
 #> [Step 1/5] Load data and verify input
 #> Input data checked. All fields are valid.
 #> Sample check: More than one sample group found
 #> Sample replication check: All samples have replicates
 #> RT annotation column found (2)
-#> [Step 1/5] Input verified, job directory prepared at:./2024-05-02_mspms_normalyze_output
+#> [Step 1/5] Input verified, job directory prepared at:./2024-06-03_mspms_normalyze_output
 #> [Step 2/5] Performing normalizations
 #> [Step 2/5] Done!
 #> [Step 3/5] Generating evaluation measures...
@@ -253,7 +291,7 @@ normalyzed_data = normalyze(peaks_prepared_data,design_matrix)
 #> [Step 4/5] Matrices successfully written
 #> [Step 5/5] Generating plots...
 #> [Step 5/5] Plots successfully generated
-#> All done! Results are stored in: ./2024-05-02_mspms_normalyze_output, processing time was 0.3 minutes
+#> All done! Results are stored in: ./2024-06-03_mspms_normalyze_output, processing time was 0.3 minutes
 #> Rows: 820 Columns: 27
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: "\t"
@@ -262,11 +300,6 @@ normalyzed_data = normalyze(peaks_prepared_data,design_matrix)
 #> 
 #> ℹ Use `spec()` to retrieve the full column specification for this data.
 #> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
-# saving to data folder in package for tests. Ignore when using on your own data
-usethis::use_data(normalyzed_data,overwrite = TRUE)
-#> ✔ Saving 'normalyzed_data' to 'data/normalyzed_data.rda'
-#> • Document your data (see 'https://r-pkgs.org/data.html')
 ```
 
 ### Handling Outliers
@@ -278,7 +311,7 @@ sure that the column header names are “sample” and “group” just like
 before.
 
 ``` r
-design_matrix = readr::read_csv("tests/testdata/design_matrix.csv")
+design_matrix <- readr::read_csv("tests/testdata/design_matrix.csv")
 #> Rows: 24 Columns: 4
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: ","
@@ -287,12 +320,7 @@ design_matrix = readr::read_csv("tests/testdata/design_matrix.csv")
 #> 
 #> ℹ Use `spec()` to retrieve the full column specification for this data.
 #> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-outliers = handle_outliers(normalyzed_data,design_matrix)
-
-# saving to data folder in package for tests. Ignore when using on your own data
-usethis::use_data(outliers,overwrite = TRUE)
-#> ✔ Saving 'outliers' to 'data/outliers.rda'
-#> • Document your data (see 'https://r-pkgs.org/data.html')
+outliers <- handle_outliers(normalyzed_data, design_matrix)
 ```
 
 ### Imputation of data
@@ -301,12 +329,7 @@ We have a lot of missing, or 0 values. For these, we need to impute them
 so we can do downstream statistics.
 
 ``` r
-imputed = impute(outliers)
-
-# saving to data folder in package for tests. Ignore when using on your own data
-usethis::use_data(imputed,overwrite = TRUE)
-#> ✔ Saving 'imputed' to 'data/imputed.rda'
-#> • Document your data (see 'https://r-pkgs.org/data.html')
+imputed <- mspms::impute(outliers)
 ```
 
 ### Joining with Library
@@ -315,12 +338,7 @@ Next we need to join everything with the sequences of the peptide
 library.
 
 ``` r
-joined_with_library = join_with_library(imputed)
-
-# saving to data folder in package for tests. Ignore when using on your own data
-usethis::use_data(joined_with_library,overwrite = TRUE)
-#> ✔ Saving 'joined_with_library' to 'data/joined_with_library.rda'
-#> • Document your data (see 'https://r-pkgs.org/data.html')
+joined_with_library <- mspms::join_with_library(imputed)
 ```
 
 ### Calcuating cleavages.
@@ -332,22 +350,22 @@ We check both the N and C terminus.
 Sequences are presented as the user specified number of amino acids on
 both sides of a cleavage. The default is 4, but there is interest in
 looking at motifs that are farther away from the cut site. Note that X
-indicates that there was nothing on that side in the library because it
-was cleaved close to the edge.
+indicates that there was nothing at that position because it is over the
+end.
 
 ``` r
-cleavage_added_data = add_cleavages(joined_with_library,n_residues = 4)
+cleavage_added_data <- mspms::add_cleavages(joined_with_library, n_residues = 4)
 
 head(cleavage_added_data)
 #> # A tibble: 6 × 32
 #>   Peptide      library_reference_id library_match_sequence library_real_sequence
 #>   <chr>        <chr>                <chr>                  <chr>                
-#> 1 LVATVYEFGHI… TDP1|TDP1|generatio… LVATVYEFGHIDHL         LVATVYEFGHIDHM       
-#> 2 L_VATVYEFGH… TDP1|TDP1|generatio… LVATVYEFGHIDHL         LVATVYEFGHIDHM       
-#> 3 T_VYEFGHIDHL TDP1|TDP1|generatio… LVATVYEFGHIDHL         LVATVYEFGHIDHM       
-#> 4 A_TVYEFGHID… TDP1|TDP1|generatio… LVATVYEFGHIDHL         LVATVYEFGHIDHM       
-#> 5 LVATVYEFGHI… TDP1|TDP1|generatio… LVATVYEFGHIDHL         LVATVYEFGHIDHM       
-#> 6 LLDKLLNWPQR… TDP2|TDP2|generatio… LLDKLLNWPQRRGL         MLDKLMNWPQRRGM       
+#> 1 LVATVYEFGHI… TDP1|TDP1|generatio… LVATVYEFGHIDHL         LVATVYEFGHIDHn       
+#> 2 L_VATVYEFGH… TDP1|TDP1|generatio… LVATVYEFGHIDHL         LVATVYEFGHIDHn       
+#> 3 T_VYEFGHIDHL TDP1|TDP1|generatio… LVATVYEFGHIDHL         LVATVYEFGHIDHn       
+#> 4 A_TVYEFGHID… TDP1|TDP1|generatio… LVATVYEFGHIDHL         LVATVYEFGHIDHn       
+#> 5 LVATVYEFGHI… TDP1|TDP1|generatio… LVATVYEFGHIDHL         LVATVYEFGHIDHn       
+#> 6 LLDKLLNWPQR… TDP2|TDP2|generatio… LLDKLLNWPQRRGL         nLDKLnNWPQRRGn       
 #> # ℹ 28 more variables: nterm <chr>, nterm_cleavage_pos <dbl>, cterm <chr>,
 #> #   cterm_cleavage_pos <dbl>, DMSO_T060_1 <dbl>, DMSO_T060_2 <dbl>,
 #> #   DMSO_T060_3 <dbl>, DMSO_T060_4 <dbl>, DMSO_T240_1 <dbl>, DMSO_T240_2 <dbl>,
@@ -355,23 +373,64 @@ head(cleavage_added_data)
 #> #   MZB_T240_1 <dbl>, MZB_T240_4 <dbl>, DMSO_T000_1 <dbl>, DMSO_T000_2 <dbl>,
 #> #   DMSO_T000_3 <dbl>, DMSO_T000_4 <dbl>, MZB_T000_1 <dbl>, MZB_T000_2 <dbl>,
 #> #   MZB_T000_3 <dbl>, MZB_T000_4 <dbl>, MZB_T060_1 <dbl>, MZB_T060_2 <dbl>, …
+```
 
-# saving to data folder in package for tests. Ignore when using on your own data
-usethis::use_data(cleavage_added_data,overwrite = TRUE)
-#> ✔ Saving 'cleavage_added_data' to 'data/cleavage_added_data.rda'
-#> • Document your data (see 'https://r-pkgs.org/data.html')
+### Adding metadata back
+
+We need to add information about our samples back to perform downstream
+statistics on the data. We accomplish this with the prepare for stats
+file.
+
+``` r
+prepared_for_stats <- mspms::prepare_for_stats(cleavage_added_data,
+                                               design_matrix)
 ```
 
 ### Polishing
 
-Someimes there is a need to polish the data a bit for downstream
-analysis. This function does that by removing combining the cterm and
-nterm cleavage information into one column while removing any rows that
-don’t have any cleavage information or have cleavage information on the
-cterm and nterm.
+This function polishes the data by combining the cterm and nterm
+cleavage information into one column while removing any rows that don’t
+have any cleavage information or have cleavage information on the cterm
+and nterm.
 
 ``` r
-polished_data = polish(cleavage_added_data)
+polished_data <- mspms::polish(cleavage_added_data)
+```
+
+### Complete workflow
+
+There are a lot of steps to get to the final normalyzed data we listed
+above. We have combined all of these steps into one function, mspms()
+for convenience. This offers a nice balance between allowing the user
+the option to use individual stepsand providing a quick way to get to
+the final data.
+
+``` r
+mspms_data <- mspms::mspms(peaks_prepared_data, design_matrix)
+#> You are running version 1.19.7 of NormalyzerDE
+#> [Step 1/5] Load data and verify input
+#> Input data checked. All fields are valid.
+#> Sample check: More than one sample group found
+#> Sample replication check: All samples have replicates
+#> RT annotation column found (2)
+#> [Step 1/5] Input verified, job directory prepared at:./2024-06-03_mspms_normalyze_output
+#> [Step 2/5] Performing normalizations
+#> [Step 2/5] Done!
+#> [Step 3/5] Generating evaluation measures...
+#> [Step 3/5] Done!
+#> [Step 4/5] Writing matrices to file
+#> [Step 4/5] Matrices successfully written
+#> [Step 5/5] Generating plots...
+#> [Step 5/5] Plots successfully generated
+#> All done! Results are stored in: ./2024-06-03_mspms_normalyze_output, processing time was 0.3 minutes
+#> Rows: 820 Columns: 27
+#> ── Column specification ────────────────────────────────────────────────────────
+#> Delimiter: "\t"
+#> chr  (2): Peptide, Protein Accession
+#> dbl (25): RT, DMSO_T000_1, DMSO_T000_2, DMSO_T000_3, DMSO_T000_4, DMSO_T060_...
+#> 
+#> ℹ Use `spec()` to retrieve the full column specification for this data.
+#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ```
 
 ## Statistics
@@ -385,15 +444,7 @@ then appending the data in the design matrix that allows us to determine
 what sample contains what conditions/time and conduct the appropriate
 statistics.
 
-``` r
-prepared_for_stats = prepare_for_stats(cleavage_added_data,design_matrix)
-
-usethis::use_data(prepared_for_stats,overwrite = TRUE)
-#> ✔ Saving 'prepared_for_stats' to 'data/prepared_for_stats.rda'
-#> • Document your data (see 'https://r-pkgs.org/data.html')
-```
-
-Noe we can conduct the statistics.
+Now we can conduct the statistics:
 
 ### T tests
 
@@ -417,7 +468,7 @@ follows:
 
 ``` r
 # Perform T test
-t_test_stats = mspms::mspms_t_tests(prepared_for_stats)
+t_test_stats <- mspms::mspms_t_tests(mspms_data)
 ```
 
 ### log2FC
@@ -427,63 +478,94 @@ the same as for the T tests.
 
 ``` r
 # calclulate log2fc
-log2fc = mspms::mspms_log2fc(prepared_for_stats)
+log2fc <- mspms::mspms_log2fc(mspms_data)
 
 head(log2fc)
 #> # A tibble: 6 × 7
-#>   condition Peptide        control_mean  time reference_mean comparison   log2fc
-#>   <chr>     <chr>                 <dbl> <dbl>          <dbl> <chr>         <dbl>
-#> 1 DMSO      AAPYHKLETNITSG   231287600.     0     231287600. DMSO.T0_DMS…  0    
-#> 2 DMSO      AAPYHKLETNITSG   231287600.    60     385450615. DMSO.T0_DMS…  0.737
-#> 3 DMSO      AAPYHKLETNITSG   231287600.   240     278208500. DMSO.T0_DMS…  0.266
-#> 4 DMSO      ADARKYWNVHGTHQ   101113749.     0     101113749. DMSO.T0_DMS…  0    
-#> 5 DMSO      ADARKYWNVHGTHQ   101113749.    60     166235600. DMSO.T0_DMS…  0.717
-#> 6 DMSO      ADARKYWNVHGTHQ   101113749.   240     119066521. DMSO.T0_DMS…  0.236
+#>   condition Peptide         control_mean  time reference_mean comparison  log2fc
+#>   <chr>     <chr>                  <dbl> <dbl>          <dbl> <chr>        <dbl>
+#> 1 DMSO      AETSIKVFLPYYG_H       89862.     0         89862. DMSO.T0/DM…  0    
+#> 2 DMSO      AETSIKVFLPYYG_H       89862.    60        186881. DMSO.T60/D…  1.06 
+#> 3 DMSO      AETSIKVFLPYYG_H       89862.   240         82512. DMSO.T240/… -0.123
+#> 4 DMSO      AETSIKVFL_P          144116.     0        144116. DMSO.T0/DM…  0    
+#> 5 DMSO      AETSIKVFL_P          144116.    60        293736. DMSO.T60/D…  1.03 
+#> 6 DMSO      AETSIKVFL_P          144116.   240         11338. DMSO.T240/… -3.67
 ```
 
 ### log2fc_t_tests.
 
-Sometimes (such as when you want to make volcano plots) it is useful to
-look at the log2fc and the t test statistics at the same time. This
-function does that.
+Oftentimes (such as when you want to make volcano plots) it is most
+useful to look at the log2fc and the t test statistics at the same time.
 
 ``` r
-log2fc_t_test = mspms::log2fc_t_test(prepared_for_stats)
+log2fc_t_test <- mspms::log2fc_t_test(mspms_data)
 
 head(log2fc_t_test)
-#> # A tibble: 6 × 17
-#>   Peptide       control_mean time  reference_mean comparison log2fc .y.   group1
-#>   <chr>                <dbl> <chr>          <dbl> <chr>       <dbl> <chr> <chr> 
-#> 1 AAPYHKLETNIT…   231287600. 60        385450615. DMSO.T0_D…  0.737 value 0     
-#> 2 AAPYHKLETNIT…   231287600. 240       278208500. DMSO.T0_D…  0.266 value 0     
-#> 3 ADARKYWNVHGT…   101113749. 60        166235600. DMSO.T0_D…  0.717 value 0     
-#> 4 ADARKYWNVHGT…   101113749. 240       119066521. DMSO.T0_D…  0.236 value 0     
-#> 5 ADIVANFTGHGY…   264432528. 60        459550722. DMSO.T0_D…  0.797 value 0     
-#> 6 ADIVANFTGHGY…   264432528. 240       314130902. DMSO.T0_D…  0.248 value 0     
-#> # ℹ 9 more variables: group2 <chr>, n1 <int>, n2 <int>, statistic <dbl>,
-#> #   df <dbl>, p <dbl>, p.adj <dbl>, p.adj.signif <chr>, condition <chr>
+#> # A tibble: 6 × 19
+#>   Peptide       control_mean time  reference_mean comparison log2fc cleavage_seq
+#>   <chr>                <dbl> <chr>          <dbl> <chr>       <dbl> <chr>       
+#> 1 AETSIKVFLPYY…       89862. 60           186881. DMSO.T60/…  1.06  PYYGHXXX    
+#> 2 AETSIKVFLPYY…       89862. 240           82512. DMSO.T240… -0.123 PYYGHXXX    
+#> 3 AETSIKVFL_P        144116. 60           293736. DMSO.T60/…  1.03  KVFnPYYG    
+#> 4 AETSIKVFL_P        144116. 240           11338. DMSO.T240… -3.67  KVFnPYYG    
+#> 5 AGSWKGVRNDF_T       69630. 60           138473. DMSO.T60/…  0.992 RNDFTEAX    
+#> 6 AGSWKGVRNDF_T       69630. 240           10902. DMSO.T240… -2.68  RNDFTEAX    
+#> # ℹ 12 more variables: cleavage_pos <dbl>, .y. <chr>, group1 <chr>,
+#> #   group2 <fct>, n1 <int>, n2 <int>, statistic <dbl>, df <dbl>, p <dbl>,
+#> #   p.adj <dbl>, p.adj.signif <chr>, condition <chr>
 ```
 
-Now that we have this data we can visualize these results easily using
-the ggplot2 package as follows.
+### log2fct_condition
+
+You may wish to compare two conditions at a specific time point. This
+function allows this
 
 ``` r
-library(ggplot2)
+condition_t = mspms::log2fct_condition(mspms_data,
+                                       ref_condition = "DMSO",
+                                       comparison_condition = "MZB",
+                                       at_time = 60)
 
-p1 = log2fc_t_test %>% 
-  ggplot(aes(x = log2fc,y = -log10(p.adj)))+
-  geom_point(size =0.5)+
-  geom_hline(yintercept = -log10(0.05),linetype = "dashed",color = "red")+
-  geom_vline(xintercept = 3, linetype = "dashed",color = "red")+
-  geom_vline(xintercept = -3, linetype = "dashed",color = "red")+
-  theme_minimal()+
-  labs(x = "Log2 Fold Change",y = "-log10(p value)")+
-  facet_wrap(~comparison,scales = "free")
 
-p1
+head(condition_t)
+#> # A tibble: 6 × 16
+#>   Peptide         comparison_mean reference_mean log2fc comparison  cleavage_seq
+#>   <chr>                     <dbl>          <dbl>  <dbl> <chr>       <chr>       
+#> 1 AETSIKVFLPYYG_H          40659.        186881. -2.20  MZB/DMSO a… PYYGHXXX    
+#> 2 AETSIKVFL_P              71663.        293736. -2.04  MZB/DMSO a… KVFnPYYG    
+#> 3 AGSWKGVRNDF_T            98844.        138473. -0.486 MZB/DMSO a… RNDFTEAX    
+#> 4 AGSWKGVRND_F              6667.         38851. -2.54  MZB/DMSO a… VRNDFTEA    
+#> 5 AHLFNALTWPSG_H          113039.        101771.  0.151 MZB/DMSO a… WPSGHNXX    
+#> 6 AKGLGPFHIV_K              6879          97945. -3.83  MZB/DMSO a… FHIVKWAS    
+#> # ℹ 10 more variables: cleavage_pos <dbl>, .y. <chr>, group1 <chr>,
+#> #   group2 <chr>, n1 <int>, n2 <int>, statistic <dbl>, df <dbl>, p <dbl>,
+#> #   p.adj <dbl>
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+### log2fct_time
+
+You may wish to compare two time points within a specific condition.
+This function allows
+
+``` r
+time_t = mspms::log2fct_time(mspms_data,
+                             within_condition = "DMSO",
+                             ref_time = 0,
+                             comparison_time = 60)
+
+head(time_t)
+#> # A tibble: 6 × 15
+#>   Peptide   comparison_mean reference_mean  log2fc comparison cleavage_seq .y.  
+#>   <chr>               <dbl>          <dbl>   <dbl> <chr>      <chr>        <chr>
+#> 1 AETSIKVF…         186881.         89862. 1.06    60/0 with… PYYGHXXX     value
+#> 2 AETSIKVF…         293736.        144116. 1.03    60/0 with… KVFnPYYG     value
+#> 3 AGSWKGVR…         138473.         69630. 0.992   60/0 with… RNDFTEAX     value
+#> 4 AGSWKGVR…          38851.         21308. 0.867   60/0 with… VRNDFTEA     value
+#> 5 AHLFNALT…         101771.        101580. 0.00272 60/0 with… WPSGHNXX     value
+#> 6 AKGLGPFH…          97945.         10389. 3.24    60/0 with… FHIVKWAS     value
+#> # ℹ 8 more variables: group1 <chr>, group2 <chr>, n1 <int>, n2 <int>,
+#> #   statistic <dbl>, df <dbl>, p <dbl>, p.adj <dbl>
+```
 
 ### ANOVA
 
@@ -496,25 +578,26 @@ for the effect of time for each peptide within DMSO or MZB.
 
 ``` r
 # Doing ANOVA
-anova_stats = mspms::mspms_anova(prepared_for_stats)
-#> Warning: There were 170 warnings in `mutate()`.
+anova_stats <- mspms::mspms_anova(mspms_data)
+#> Warning: There were 100 warnings in `mutate()`.
 #> The first warning was:
 #> ℹ In argument: `data = map(.data$data, .f, ...)`.
 #> Caused by warning:
 #> ! NA detected in rows: 6,12.
 #> Removing this rows before the analysis.
-#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 169 remaining warnings.
+#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 99 remaining warnings.
 
 head(anova_stats)
-#> # A tibble: 6 × 10
-#>   Peptide         condition Effect   DFn   DFd     F     p `p<.05`     ges p.adj
-#>   <chr>           <chr>     <chr>  <dbl> <dbl> <dbl> <dbl> <chr>     <dbl> <dbl>
-#> 1 AAPYHKLETNITSG  DMSO      time       1    10 0.003 0.956 ""      3.24e-4 0.998
-#> 2 ADARKYWNVHGTHQ  DMSO      time       1    10 0.001 0.975 ""      1   e-4 0.998
-#> 3 ADIVANFTGHGYHQ  DMSO      time       1    10 0.009 0.928 ""      8.7 e-4 0.997
-#> 4 AETSIKVFLPYYGH  DMSO      time       1    10 1.06  0.328 ""      9.5 e-2 0.727
-#> 5 AETSIKVFLPYYG_H DMSO      time       1    10 0.316 0.587 ""      3.1 e-2 0.892
-#> 6 AETSIKVFL_P     DMSO      time       1    10 3.32  0.098 ""      2.49e-1 0.356
+#> # A tibble: 6 × 11
+#>   Peptide      cleavage_pos condition Effect   DFn   DFd       F       p `p<.05`
+#>   <chr>               <dbl> <chr>     <chr>  <dbl> <dbl>   <dbl>   <dbl> <chr>  
+#> 1 AETSIKVFLPY…           13 DMSO      time       1    10   0.335 5.75e-1 ""     
+#> 2 AETSIKVFL_P             9 DMSO      time       1    10   3.27  1.01e-1 ""     
+#> 3 AGSWKGVRNDF…           11 DMSO      time       1    10   1.54  2.43e-1 ""     
+#> 4 AGSWKGVRND_F           10 DMSO      time       1    10   0.53  4.83e-1 ""     
+#> 5 AHLFNALTWPS…           12 DMSO      time       1    10   3.50  9.1 e-2 ""     
+#> 6 AKGLGPFHIV_K           10 DMSO      time       1    10 262.    1.67e-8 "*"    
+#> # ℹ 2 more variables: ges <dbl>, p.adj <dbl>
 ```
 
 ## Common Data Visualizations
@@ -522,30 +605,67 @@ head(anova_stats)
 We also provide some functions that make common data visualizations
 easier.
 
+### volcano plots
+
+``` r
+volcano_plot <- mspms::plot_volcano(log2fc_t_test)
+
+volcano_plot
+```
+
+![](README_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
+
 ### Plotting sequence specificity motif
 
-Here use an approach similar to what is implemented in ICELogo to
+Here use an approach similar to what is implemented in ICELOGO to
 visualize the sequence specificity of the cleavage sites. This was used
 as reference to build the code:
 <https://iomics.ugent.be/icelogoserver/resources/manual.pdf>.
 
+Below we can see this applied to see what cleavage sequences are
+enriched among the peptides signficicantly different between time 0 and
+time 60 within DMSO.
+
 ``` r
-cleavage_seqs = mspms::prepared_for_stats %>%
-  mspms::polish() %>% 
-  filter(condition == "DMSO",time == 240) %>%
-  pull(cleavage_seq)
+cleavage_seqs <- time_t %>%
+  dplyr::filter(log2fc > 3, p.adj <= 0.05) %>%
+  dplyr::pull(cleavage_seq)
 
-background_universe = mspms::all_possible_8mers_from_228_library
+background_universe <- mspms::all_possible_8mers_from_228_library
 
 
-mspms::plot_cleavage_motif(cleavage_seqs,background_universe)
+mspms::plot_icelogo(cleavage_seqs, background_universe)
 #> Scale for x is already present.
 #> Adding another scale for x, which will replace the existing scale.
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
 
-### PCA
+We could also look at the fold change instead of the percent difference
+
+``` r
+mspms::plot_icelogo(cleavage_seqs, background_universe, type = "fold change")
+#> Scale for x is already present.
+#> Adding another scale for x, which will replace the existing scale.
+```
+
+![](README_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
+
+We also provide a convenience function for looking at all icelogos
+relative to time 0 within the experiment.
+
+This function includes cleavages that were signficant at any time point
+once in the experimental set of the ICELOGO.
+
+``` r
+mspms::plot_all_icelogos(mspms_data)
+#> Scale for x is already present.
+#> Adding another scale for x, which will replace the existing scale.
+```
+
+![](README_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
+
+### PCA.
 
 We can generate a PCA plot to visualize the data. Here, the colors show
 the different time points while the shape shows the different
@@ -555,7 +675,7 @@ conditions.
 mspms::plot_pca(prepared_for_stats)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
 
 ### Hierchical clustering
 
@@ -566,7 +686,6 @@ The format of this readme does not allow for interactivity, so a static
 picture of the output is shown instead.
 
 ``` r
-
 mspms::plot_heatmap(prepared_for_stats)
 ```
 
@@ -578,23 +697,44 @@ We also provide a function for plotting the mean intensity and standard
 deviation over time for each peptide in the data set by conditions.
 Facets show peptide, color shows the condition.
 
-This is best used in combination with the ANOVA function. Below, we will
+This can be used in combination with the ANOVA function. Below, we will
 use anova to calculate the peptides where we see an effect of time (in
 the DMSO group), and then plot these.
 
 ``` r
 
-top10sig = anova_stats %>% 
-  arrange(p.adj) %>%
-  pull(Peptide) %>% 
+top10sig <- anova_stats %>%
+  dplyr::arrange(p.adj) %>%
+  dplyr::pull(Peptide) %>%
   head(10)
 
 
-p1 = prepared_for_stats %>%
+p1 <- mspms_data %>%
   dplyr::filter(Peptide %in% top10sig) %>%
   mspms::plot_time_course()
 
 p1
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
+
+## Calculating the number of cleavages at each position in the library
+
+We can also calculate the number of cleavages at each position of the
+library. Here we will do this for peptides significantly different
+relative to time 0 for DMSO and MZB.
+
+``` r
+# Peforming T tests
+t_tests = log2fc_t_test(mspms_data) %>% 
+  dplyr::filter(p.adj < 0.05,
+                log2fc > 3)
+
+count = mspms::count_cleavages_per_pos(t_tests)
+
+p1 = mspms:::plot_cleavages_per_pos(count)
+
+p1
+```
+
+![](README_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->

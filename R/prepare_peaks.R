@@ -67,10 +67,9 @@ prepare_peaks <- function(lfq_filepath,
     names(id)) > 0) {
     stop(
       "The id file does not have the correct headers.
-       The headers should contain:", "Protein Group", "Protein ID",
-      "Protein Accession", "Peptide",
-      "Unique", "-10lgP", "Mass", "Length", "ppm", "m/z", "z", "RT",
-      "and columns corresponding to your sample names"
+       The headers should contain: Protein Group, Protein ID,
+       Protein Accession, Peptide, Unique, -10lgP, Mass, Length, ppm, m/z, z, RT,
+       and columns corresponding to your sample names"
     )
   }
 
@@ -79,7 +78,7 @@ prepare_peaks <- function(lfq_filepath,
     dplyr::group_by(.data$Peptide) %>%
     dplyr::filter(.data$`-10lgP` == max(.data$`-10lgP`)) %>%
     dplyr::ungroup() %>%
-    dplyr::select(.data$Peptide, .data$RT, 6:12)
+    dplyr::select("Peptide", "RT", 6:12)
 
   # Combining data frame and filtering to only contain quality scores > 0.3
   output <- lfq %>%
@@ -102,11 +101,11 @@ prepare_peaks <- function(lfq_filepath,
   output <- output %>%
     dplyr::mutate(Peptide = gsub("\\.", "_", .data$Peptide)) %>%
     dplyr::select(
-      .data$Peptide, .data$RT, .data$`Protein Accession`,
+      "Peptide", "RT", "Protein Accession",
       dplyr::any_of(start:end)
     ) %>%
     # Dealing with the case where there are PTMs, removing the mod
-    dplyr::mutate(Peptide = gsub("\\(.*\\)", "", Peptide))
+    dplyr::mutate(Peptide = gsub("\\(.*\\)", "", .data$Peptide))
 
   # Replacing 0 with NA
   output[output == 0] <- NA_real_

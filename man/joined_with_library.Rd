@@ -4,7 +4,8 @@
 \name{joined_with_library}
 \alias{joined_with_library}
 \title{joined_with_library
-this is an example dataset processed by mspms that has been joined with the peptide library}
+this is an example dataset processed by mspms that has been joined with
+the peptide library}
 \format{
 ## `joined_with_library`
 A tibble with 820 rows and 30 columns:
@@ -14,13 +15,16 @@ A tibble with 820 rows and 30 columns:
 }
 }
 \source{
-<mspms processed data originally from PEAKS files found in "tests/testdata/protein-peptides-id.csv" and "tests/testdata/protein-peptides-lfq.csv">
+<mspms processed data originally from PEAKS files found in
+ "tests/testdata/protein-peptides-id.csv" and
+  "tests/testdata/protein-peptides-lfq.csv">
 }
 \usage{
 joined_with_library
 }
 \description{
 joined_with_library
-this is an example dataset processed by mspms that has been joined with the peptide library
+this is an example dataset processed by mspms that has been joined with
+the peptide library
 }
 \keyword{datasets}

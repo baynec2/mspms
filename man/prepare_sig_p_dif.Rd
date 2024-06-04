@@ -18,3 +18,7 @@ a tibble
 \description{
 prepare significant percent difference data frame for ice logo
 }
+\examples{
+\dontshow{if (isTRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{\}) # examplesIf}
+}

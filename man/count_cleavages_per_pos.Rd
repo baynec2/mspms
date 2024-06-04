@@ -4,37 +4,22 @@
 \alias{count_cleavages_per_pos}
 \title{count_cleavages_per_pos}
 \usage{
-count_cleavages_per_pos(mspms_data, sig_peptides)
+count_cleavages_per_pos(data)
 }
 \arguments{
-\item{mspms_data}{= this is the data that has gone through the
-mspms pipeline.}
-
-\item{sig_peptides}{= this is a list of peptides of interest.}
+\item{data}{a tibble containing columns named Peptide,cleavage_pos,condition,
+and time. Other column names can be included.}
 }
 \value{
-a tibble with the number of cleavages per position
+a ggplot2 object
 }
 \description{
 count the number of cleavages per position
 }
 \examples{
-# Extracting the significant peptides for DMSO
-sig_peptides <- mspms::mspms_anova(mspms::mspms_data) \%>\%
-  dplyr::filter(
-    p.adj <= 0.05,
-    condition == "MZB"
-  ) \%>\%
-  dplyr::pull(Peptide)
-
-# Counting the number of cleavages per position
-counts <- count_cleavages_per_pos(mspms::mspms_data, sig_peptides)
-
-# Plotting the results
-p1 <- counts \%>\%
-  ggplot2::ggplot(ggplot2::aes(x = cleavage_pos, y = n)) +
-  ggplot2::geom_point() +
-  ggplot2::geom_line()
-p1
-
+data = data.frame(condition = rep("DMSO", 13),
+                 time = rep(60,13),
+                 cleavage_pos = rep(13,13)
+                 )
+count_cleavages_per_pos(data)
 }

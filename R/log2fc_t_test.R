@@ -29,7 +29,7 @@ log2fc_t_test <- function(mspms_data) {
       condition = .data$condition.x,
       group2 = forcats::fct_inseq(.data$group2)
     ) %>%
-    dplyr::select(-.data$condition.x, -.data$condition.y) %>%
+    dplyr::select(-"condition.x", -"condition.y") %>%
     tibble::as_tibble()
 
   return(log2fc_stats)

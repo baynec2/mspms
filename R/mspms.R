@@ -36,7 +36,7 @@ mspms <- function(prepared_data,
   joined_with_library <- mspms::join_with_library(imputed)
   # Add cleavage information
   cleavage_added_data <- mspms::add_cleavages(joined_with_library,
-    n_residues = 4
+    n_residues = n_residues
   )
 
   # Prepare for stats

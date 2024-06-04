@@ -23,33 +23,34 @@ log2fct_time <- function(mspms_data,
                          within_condition,
                          ref_time,
                          comparison_time) {
+  # Converting the times to character, allows it to work if put in as numeric.
+  ref_time = as.character(ref_time)
+  comparison_time = as.character(comparison_time)
   # Filtering the data set to only include the relevant conditions and time
-  point.
   f <- mspms_data %>%
     dplyr::filter(
-      time %in% c(ref_time, comparison_time),
-      condition == within_condition
+      .data$time %in% c(ref_time, comparison_time),
+      .data$condition == within_condition
     )
 
   # Performing the statistics
   stat <- f %>%
-    dplyr::group_by(Peptide, cleavage_seq) %>%
+    dplyr::group_by(.data$Peptide, .data$cleavage_seq) %>%
     rstatix::t_test(value ~ time, ref.group = ref_time) %>%
     rstatix::adjust_pvalue(method = "fdr") %>%
     tibble::as_tibble()
 
   # Extracting the reference means
   reference_data <- f %>%
-    dplyr::filter(condition == ref_time) %>%
+    dplyr::filter(.data$time == ref_time) %>%
     dplyr::group_by(.data$Peptide) %>%
     dplyr::summarise(reference_mean = mean(.data$value, na.rm = TRUE))
 
   # Extracting the comparison means
   comparison_data <- f %>%
-    dplyr::filter(condition == comparison_time) %>%
+    dplyr::filter(.data$time == comparison_time) %>%
     dplyr::group_by(.data$Peptide) %>%
     dplyr::summarise(comparison_mean = mean(.data$value, na.rm = TRUE))
-
   # Calculating the log2fc
   log2fc <- dplyr::inner_join(comparison_data, reference_data,
     by = c("Peptide")

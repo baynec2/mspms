@@ -10,14 +10,17 @@ A tibble with 19,680 rows and 5 columns:
 \describe{
   \item{Peptide}{Peptide Sequence Detected}
   \item{RT}{Retention Time}
-  \item{Protein Accession}{What each peptide was detected as belonging to by the upstream data processing software}
+  \item{Protein Accession}{What each peptide was detected as belonging to
+  by the upstream data processing software}
   \item{sample_id}{the sample identifier}
   \item{value}{normalyzed values}
   ...
 }
 }
 \source{
-<mspms processed data originally from PEAKS files found in "tests/testdata/protein-peptides-id.csv" and "tests/testdata/protein-peptides-lfq.csv">
+<mspms processed data originally from PEAKS files found in
+"tests/testdata/protein-peptides-id.csv" and
+"tests/testdata/protein-peptides-lfq.csv">
 }
 \usage{
 outliers

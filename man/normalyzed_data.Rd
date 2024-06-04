@@ -14,7 +14,9 @@ A tibble with 820 rows and 27 columns:
 }
 }
 \source{
-<mspms processed data originally from PEAKS files found in "tests/testdata/protein-peptides-id.csv" and "tests/testdata/protein-peptides-lfq.csv">
+<mspms processed data originally from PEAKS files found in
+ "tests/testdata/protein-peptides-id.csv" and
+  "tests/testdata/protein-peptides-lfq.csv">
 }
 \usage{
 normalyzed_data

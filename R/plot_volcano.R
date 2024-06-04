@@ -21,7 +21,8 @@ plot_volcano <- function(log2fc_t_test_data, log2fc_threshold = 3) {
   ncol <- length(unique(log2fc_t_test_data$group2))
 
   p1 <- log2fc_t_test_data %>%
-    ggplot2::ggplot(ggplot2::aes(x = log2fc, y = -log10(p.adj))) +
+    dplyr::mutate(`log_10_p.adj` = -log10(.data$p.adj)) %>%
+    ggplot2::ggplot(ggplot2::aes_string(x = "log2fc", y = "log_10_p.adj")) +
     ggplot2::geom_point(size = 0.5) +
     ggplot2::geom_hline(
       yintercept = -log10(0.05),

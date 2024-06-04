@@ -9,14 +9,18 @@
 A tibble with 19,680 rows and 13 columns:
 \describe{
   \item{Peptide}{Peptide Sequence Detected}
-  \item{library_reference_id}{reference id of the detected peptide to that of the library reported by software}
+  \item{library_reference_id}{reference id of the detected peptide to that
+   of the library reported by software}
   \item{library_match_sequence}{the sequence match to the peptide library}
-  \item{library_real_sequence}{the real sequence of the peptide in the library}
+  \item{library_real_sequence}{the real sequence of the peptide in the
+   library}
   ...
 }
 }
 \source{
-<mspms processed data originally from PEAKS files found in "tests/testdata/protein-peptides-id.csv" and "tests/testdata/protein-peptides-lfq.csv">
+<mspms processed data originally from PEAKS files found in
+ "tests/testdata/protein-peptides-id.csv" and
+  "tests/testdata/protein-peptides-lfq.csv">
 }
 \usage{
 prepared_for_stats
