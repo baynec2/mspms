@@ -7,6 +7,8 @@
 #' @param mspms_data = this is the data that has been polished
 #' (via mspms::polish()) and is ready for plotting
 #' @param pval = this is the pvalue threshold that you would like to use.
+#' @param log2fc_threshold = this is the log2 fold change threshold that you 
+#' would like to use. Can be positive or negative if desired. 
 #' @param type = this is the type of visualization you would like to perform,
 #'  can be either "percent_difference" or "fold_change".
 #' @param background_universe = this is a list of all the possible cleavage

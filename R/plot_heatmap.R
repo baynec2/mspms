@@ -16,29 +16,36 @@
 #' plot_heatmap(mspms::mspms_data, scale = "column")
 #'
 plot_heatmap <- function(mspms_data, scale = "column") {
+  
   heatmap_data <- mspms_data %>%
-    dplyr::select("sample", "Peptide", "condition", "time", "value") %>%
+    dplyr::select("sample","condition","time","Peptide", "value") %>%
     tidyr::pivot_wider(
       names_from = "Peptide",
       values_from = "value",
       values_fn = NULL,
     ) %>%
-    tibble::column_to_rownames("sample") %>%
-    dplyr::mutate(time = as.factor(.data$time))
-
-
-  peptide_order <- names(heatmap_data)[3:length(heatmap_data)]
-
-  lab <- mspms_data %>%
-    dplyr::select("sample", "Peptide", "cleavage_seq", "condition", "time") %>%
-    tidyr::pivot_wider(names_from = "Peptide", values_from = "cleavage_seq") %>%
-    tibble::column_to_rownames("sample") %>%
-    dplyr::select("condition", "time", dplyr::all_of(peptide_order)) %>%
-    as.matrix()
-
-  heatmaply::heatmaply(heatmap_data,
-    scale = scale,
-    showticklabels = c(FALSE, TRUE),
-    custom_hovertext = lab
+    tibble::column_to_rownames("sample") 
+    
+    values = heatmap_data %>% 
+      dplyr::select(-"condition",-"time") %>% 
+      as.matrix() 
+    
+    colors = heatmap_data %>% 
+      dplyr::select("condition","time")
+    
+    peptide_order <- colnames(values)
+    
+    mat <- mspms_data %>%
+      dplyr::select("sample", "Peptide", "cleavage_seq") %>%
+      tidyr::pivot_wider(names_from = "Peptide", values_from = "cleavage_seq") %>%
+      tibble::column_to_rownames("sample") %>%
+      dplyr::select(dplyr::all_of(peptide_order)) %>%
+      as.matrix()
+  
+    heatmaply::heatmaply(values,
+      scale = scale,
+      showticklabels = c(FALSE, TRUE),
+      custom_hovertext = mat,
+      row_side_colors = colors
   )
 }

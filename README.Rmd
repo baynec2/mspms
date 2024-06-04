@@ -1,5 +1,7 @@
 ---
-output: github_document
+output:
+  github_document: default
+  self_contained: default
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -40,7 +42,8 @@ utilize the method without requiring any R coding knowledge.
 You can install the development version of mspms from github.
 
 ```{r,eval = FALSE}
-devtools::install_github("baynec2/mspms")
+devtools::install_github("baynec2/mspms",
+                         ref = "develop")
 ```
 
 
@@ -79,7 +82,7 @@ upstream proteomic data processing, different peptide libraries, etc.
 and process the MSP-MS data.    
 
 3. Statistics. These methods allow the user to perform basic statistics on the 
-normalyzed/processed data.   
+normalized/processed data.   
 
 4. Data visualization. These functions allow the user to visualize the data.
 
@@ -90,14 +93,14 @@ normalyzed/processed data.
 3. *calculate_all_cleavages()*: Calculates all possible cleavages for peptide
 library sequences. 
 
-**Data Proessing/ Normalization**.  
+**Data Processing/ Normalization**.  
 1. *normalyze()*: Normalizes values.     
 2. *handle_outliers()*: Looks for outliers across replicates. Removes them.       
 3. *impute()*: Imputes data for missing values (not including NAs introduced 
 by handle_outliers()).  
-4. *join_with_library()*: Joins the normalyzed data with the peptide library 
+4. *join_with_library()*: Joins the normalized data with the peptide library 
 sequences.  
-5. *add_cleavages()*: Figures out the locations of the detected clevages within
+5. *add_cleavages()*: Figures out the locations of the detected cleavages within
 the library of peptide sequences used. Is it cleaved at the N or C terminus, 
 or both? Uses *cterm_cleavage()* and *nterm_cleavage()* to do this.      
 6. *polish()*: combines the cleavage info into one column. Discards peptides
@@ -113,8 +116,8 @@ conditions relative to T0.
 that are significantly different across experimental conditions relative to time 
 0.  
 3. *log2fc_t_test()*: Combines results from mspms_log2fc() and mspms_t_tests() 
-into one convienent tibble.   
-4. *log2fct_condtion()*: Calculates the log2 fold change and t tests for the 
+into one convenient tibble.   
+4. *log2fct_condition()*: Calculates the log2 fold change and t tests for the 
 specified condition at a user specified time.    
 5.*log2fct_time()*: Calculates the log2 fold change and t tests between the 
 specified times within a user specified time.   
@@ -135,7 +138,7 @@ in the library.Useful for determining endoprotease vs exoprotease activity.
 
 1. *calc_AA_count_of_motif()*: calculates the count of each amino acid at each
 position in a vector of motifs.  
-2. *calc_AA_prop_of_motif()*: calcuulates the proportion of each amino acid at 
+2. *calc_AA_prop_of_motif()*: calculates the proportion of each amino acid at 
 each position from the output of calc_AA_count_of_motif().  
 3. *calc_AA_motif_zscore()*: calculates z scores for each amino acid at each 
 position in a vector of motifs.  
@@ -148,7 +151,7 @@ Removes AAs at positions that are not significantly different.
 8. *plot_fc_icelogo()*: plots a fold change ice logo.  
 9. *plot_icelogo()*:  wraps plot_pd_icelogo() and plot_fc_icelogo() into 
 one function.  
-10. *plot_all_icelogos()*: convience function to plot all icelogos relative to 
+10. *plot_all_icelogos()*: convenience function to plot all icelogos relative to 
 time 0 from an experiment.    
 **Reports**. 
 1. *generate_report()*: Generates a simple analysis of the mspms data that 
@@ -239,7 +242,7 @@ normalyzed_data <- normalyze(peaks_prepared_data, design_matrix)
 
 ### Handling Outliers
 
-Here we use a dixon test from the outliers package to detect outliers from each 
+Here we use a Dixon test from the outliers package to detect outliers from each 
 of our replicates. We need to know what samples are part of which groups, so we 
 need to specify the design matrix here too. Make sure that the column header 
 names are "sample" and "group" just like before.
@@ -308,10 +311,10 @@ polished_data <- mspms::polish(cleavage_added_data)
 
 ### Complete workflow
 
-There are a lot of steps to get to the final normalyzed data we listed above. 
+There are a lot of steps to get to the final normalized data we listed above. 
 We have combined all of these steps into one function, mspms() for convenience.
 This offers a nice balance between allowing the user the option to use 
-individual stepsand providing a quick way to get to the final data. 
+individual steps and providing a quick way to get to the final data. 
 
 ```{r}
 mspms_data <- mspms::mspms(peaks_prepared_data, design_matrix)
@@ -331,7 +334,7 @@ Now we can conduct the statistics:
 
 ### T tests
 
-Ttests are performed within each condition and compared to time 0.
+T tests are performed within each condition and compared to time 0.
 
 For example, for an experiment where there are two conditions, 
 DMSO and MZB as well as 3 time points, 0, 1, and 2, the t tests would be
@@ -355,7 +358,7 @@ t_test_stats <- mspms::mspms_t_tests(mspms_data)
 We can also calculate the log 2 fold change. 
 The comparisons here are the same as for the T tests.  
 ```{r}
-# calclulate log2fc
+# calculate log2fc
 log2fc <- mspms::mspms_log2fc(mspms_data)
 
 head(log2fc)
@@ -406,7 +409,7 @@ head(time_t)
 
 ### ANOVA
 
-We also might want to perfom an anova. Here, we have it set up to show the 
+We also might want to perform an anova. Here, we have it set up to show the 
 effect of time within each condition. 
 
 For example, for an experiment where there are two conditions, DMSO and MZB as
@@ -440,7 +443,7 @@ sequence specificity of the cleavage sites. This was used as reference to build
 the code: https://iomics.ugent.be/icelogoserver/resources/manual.pdf. 
 
 Below we can see this applied to see what cleavage sequences are enriched among
-the peptides signficicantly different between time 0 and time 60 
+the peptides significantly different between time 0 and time 60 
 within DMSO.
 
 ```{r}
@@ -463,7 +466,7 @@ mspms::plot_icelogo(cleavage_seqs, background_universe, type = "fold change")
 We also provide a convenience function for looking at all icelogos relative to 
 time 0 within the experiment. 
 
-This function includes cleavages that were signficant at any time point once in 
+This function includes cleavages that were significant at any time point once in 
 the experimental set of the ICELOGO. 
 
 ```{r}
@@ -482,7 +485,7 @@ mspms::plot_pca(mspms_data)
 
 ### Hierchical clustering
 
-We can also generate an interactive heatmap with the hierchical clustering 
+We can also generate an interactive heatmap with the hierarchical clustering 
 results. 
 
 The format of this readme does not allow for interactivity, so a static picture 
@@ -527,7 +530,7 @@ Here we will do this for peptides significantly different relative to time 0 for
 DMSO and MZB. 
 
 ```{r}
-# Peforming T tests
+# Performing T tests
 t_tests = log2fc_t_test(mspms_data) %>% 
   dplyr::filter(p.adj < 0.05,
                 log2fc > 3)

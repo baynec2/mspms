@@ -34,7 +34,7 @@ count_cleavages_per_pos <- function(data) {
     ))
     out <- dplyr::bind_rows(count_f, missing_t)
     final <- dplyr::bind_rows(final,out) %>%
-      dplyr::mutate(time = forcats::fct_inseq(.data$time))
+      dplyr::mutate(time = forcats::fct_inseq(as.character(.data$time)))
     }
   }
 

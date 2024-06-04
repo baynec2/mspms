@@ -23,6 +23,6 @@ This produces a heatmaply interactive heatmap of the data with color bars
 \examples{
 \dontshow{if (isTRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
-plot_heatmap(mspms::prepared_for_stats, scale = "column")
+plot_heatmap(mspms::mspms_data, scale = "column")
 \dontshow{\}) # examplesIf}
 }
