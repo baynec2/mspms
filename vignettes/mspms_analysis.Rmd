@@ -282,7 +282,11 @@ This offers a nice balance between allowing the user the option to use
 individual stepsand providing a quick way to get to the final data. 
 
 ```{r}
-mspms_data <- mspms::mspms(peaks_prepared_data, design_matrix)
+# Having problems getting the vignette to build on linux due to following
+# mspms_data <- mspms::mspms(peaks_prepared_data, design_matrix)
+
+# Getting around by using internal package data. Is equivalent in this case. 
+mspms_data = mspms::mspms(mspms::peaks_prepared_data, mspms::design_matrix)
 ```
 
 ## Statistics
