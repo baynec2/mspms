@@ -286,7 +286,7 @@ individual stepsand providing a quick way to get to the final data.
 # mspms_data <- mspms::mspms(peaks_prepared_data, design_matrix)
 
 # Getting around by using internal package data. Is equivalent in this case. 
-mspms_data = mspms::mspms(mspms::peaks_prepared_data, mspms::design_matrix)
+mspms_data = mspms::mspms_data
 ```
 
 ## Statistics
