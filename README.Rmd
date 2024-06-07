@@ -493,7 +493,7 @@ of the output is shown instead.
 mspms::plot_heatmap(mspms_data)
 ```
 
-![](plot_heatmap_output.png)
+![](README_files/plot_heatmap_output.png)
   
 ### Ploting time course.  
 

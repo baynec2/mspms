@@ -498,10 +498,10 @@ head(log2fc)
 #>   <chr>     <chr>                  <dbl> <dbl>          <dbl> <chr>        <dbl>
 #> 1 DMSO      AETSIKVFLPYYG_H       89862.     0         89862. DMSO.T0/DM…  0    
 #> 2 DMSO      AETSIKVFLPYYG_H       89862.    60        186881. DMSO.T60/D…  1.06 
-#> 3 DMSO      AETSIKVFLPYYG_H       89862.   240         82255. DMSO.T240/… -0.128
-#> 4 DMSO      AETSIKVFL_P          144856.     0        144856. DMSO.T0/DM…  0    
-#> 5 DMSO      AETSIKVFL_P          144856.    60        293898. DMSO.T60/D…  1.02 
-#> 6 DMSO      AETSIKVFL_P          144856.   240          8152. DMSO.T240/… -4.15
+#> 3 DMSO      AETSIKVFLPYYG_H       89862.   240         82954. DMSO.T240/… -0.115
+#> 4 DMSO      AETSIKVFL_P          144250.     0        144250. DMSO.T0/DM…  0    
+#> 5 DMSO      AETSIKVFL_P          144250.    60        292380. DMSO.T60/D…  1.02 
+#> 6 DMSO      AETSIKVFL_P          144250.   240          8347. DMSO.T240/… -4.11
 ```
 
 ### log2fc_t_tests.
@@ -517,11 +517,11 @@ head(log2fc_t_test)
 #>   Peptide       control_mean time  reference_mean comparison log2fc cleavage_seq
 #>   <chr>                <dbl> <chr>          <dbl> <chr>       <dbl> <chr>       
 #> 1 AETSIKVFLPYY…       89862. 60           186881. DMSO.T60/…  1.06  PYYGHXXX    
-#> 2 AETSIKVFLPYY…       89862. 240           82255. DMSO.T240… -0.128 PYYGHXXX    
-#> 3 AETSIKVFL_P        144856. 60           293898. DMSO.T60/…  1.02  KVFnPYYG    
-#> 4 AETSIKVFL_P        144856. 240            8152. DMSO.T240… -4.15  KVFnPYYG    
-#> 5 AGSWKGVRNDF_T       68274. 60           138601. DMSO.T60/…  1.02  RNDFTEAX    
-#> 6 AGSWKGVRNDF_T       68274. 240            7393  DMSO.T240… -3.21  RNDFTEAX    
+#> 2 AETSIKVFLPYY…       89862. 240           82954. DMSO.T240… -0.115 PYYGHXXX    
+#> 3 AETSIKVFL_P        144250. 60           292380. DMSO.T60/…  1.02  KVFnPYYG    
+#> 4 AETSIKVFL_P        144250. 240            8347. DMSO.T240… -4.11  KVFnPYYG    
+#> 5 AGSWKGVRNDF_T       69703. 60           137489. DMSO.T60/…  0.980 RNDFTEAX    
+#> 6 AGSWKGVRNDF_T       69703. 240            8044. DMSO.T240… -3.12  RNDFTEAX    
 #> # ℹ 12 more variables: cleavage_pos <dbl>, .y. <chr>, group1 <chr>,
 #> #   group2 <fct>, n1 <int>, n2 <int>, statistic <dbl>, df <dbl>, p <dbl>,
 #> #   p.adj <dbl>, p.adj.signif <chr>, condition <chr>
@@ -543,12 +543,12 @@ head(condition_t)
 #> # A tibble: 6 × 16
 #>   Peptide         comparison_mean reference_mean log2fc comparison  cleavage_seq
 #>   <chr>                     <dbl>          <dbl>  <dbl> <chr>       <chr>       
-#> 1 AETSIKVFLPYYG_H          43360.        186881. -2.11  MZB/DMSO a… PYYGHXXX    
-#> 2 AETSIKVFL_P              72833.        293898. -2.01  MZB/DMSO a… KVFnPYYG    
-#> 3 AGSWKGVRNDF_T            98764.        138601. -0.489 MZB/DMSO a… RNDFTEAX    
-#> 4 AGSWKGVRND_F              6667.         40161. -2.59  MZB/DMSO a… VRNDFTEA    
-#> 5 AHLFNALTWPSG_H          112601.        101771.  0.146 MZB/DMSO a… WPSGHNXX    
-#> 6 AKGLGPFHIV_K              9469.         99376. -3.39  MZB/DMSO a… FHIVKWAS    
+#> 1 AETSIKVFLPYYG_H          42354.        186881. -2.14  MZB/DMSO a… PYYGHXXX    
+#> 2 AETSIKVFL_P              71584.        292380. -2.03  MZB/DMSO a… KVFnPYYG    
+#> 3 AGSWKGVRNDF_T            98966.        137489. -0.474 MZB/DMSO a… RNDFTEAX    
+#> 4 AGSWKGVRND_F              6667.         41039. -2.62  MZB/DMSO a… VRNDFTEA    
+#> 5 AHLFNALTWPSG_H          112802.        101771.  0.148 MZB/DMSO a… WPSGHNXX    
+#> 6 AKGLGPFHIV_K             10739.         97835. -3.19  MZB/DMSO a… FHIVKWAS    
 #> # ℹ 10 more variables: cleavage_pos <dbl>, .y. <chr>, group1 <chr>,
 #> #   group2 <chr>, n1 <int>, n2 <int>, statistic <dbl>, df <dbl>, p <dbl>,
 #> #   p.adj <dbl>
@@ -569,12 +569,12 @@ head(time_t)
 #> # A tibble: 6 × 15
 #>   Peptide   comparison_mean reference_mean  log2fc comparison cleavage_seq .y.  
 #>   <chr>               <dbl>          <dbl>   <dbl> <chr>      <chr>        <chr>
-#> 1 AETSIKVF…         186881.         89862.  1.06   60/0 with… PYYGHXXX     value
-#> 2 AETSIKVF…         293898.        144856.  1.02   60/0 with… KVFnPYYG     value
-#> 3 AGSWKGVR…         138601.         68274.  1.02   60/0 with… RNDFTEAX     value
-#> 4 AGSWKGVR…          40161.         23209.  0.791  60/0 with… VRNDFTEA     value
-#> 5 AHLFNALT…         101771.        103120. -0.0190 60/0 with… WPSGHNXX     value
-#> 6 AKGLGPFH…          99376.          9981.  3.32   60/0 with… FHIVKWAS     value
+#> 1 AETSIKVF…         186881.         89862. 1.06    60/0 with… PYYGHXXX     value
+#> 2 AETSIKVF…         292380.        144250. 1.02    60/0 with… KVFnPYYG     value
+#> 3 AGSWKGVR…         137489.         69703. 0.980   60/0 with… RNDFTEAX     value
+#> 4 AGSWKGVR…          41039.         23358. 0.813   60/0 with… VRNDFTEA     value
+#> 5 AHLFNALT…         101771.        101507. 0.00375 60/0 with… WPSGHNXX     value
+#> 6 AKGLGPFH…          97835.          8333. 3.55    60/0 with… FHIVKWAS     value
 #> # ℹ 8 more variables: group1 <chr>, group2 <chr>, n1 <int>, n2 <int>,
 #> #   statistic <dbl>, df <dbl>, p <dbl>, p.adj <dbl>
 ```
@@ -606,12 +606,12 @@ head(anova_stats)
 #> # A tibble: 6 × 11
 #>   Peptide      cleavage_pos condition Effect   DFn   DFd       F       p `p<.05`
 #>   <chr>               <dbl> <chr>     <chr>  <dbl> <dbl>   <dbl>   <dbl> <chr>  
-#> 1 AETSIKVFLPY…           13 DMSO      time       1    10   0.34  5.73e-1 ""     
-#> 2 AETSIKVFL_P             9 DMSO      time       1    10   3.42  9.4 e-2 ""     
-#> 3 AGSWKGVRNDF…           11 DMSO      time       1    10   1.62  2.32e-1 ""     
-#> 4 AGSWKGVRND_F           10 DMSO      time       1    10   0.498 4.96e-1 ""     
-#> 5 AHLFNALTWPS…           12 DMSO      time       1    10   3.52  9   e-2 ""     
-#> 6 AKGLGPFHIV_K           10 DMSO      time       1    10 272.    1.41e-8 "*"    
+#> 1 AETSIKVFLPY…           13 DMSO      time       1    10   0.328 5.79e-1 ""     
+#> 2 AETSIKVFL_P             9 DMSO      time       1    10   3.34  9.8 e-2 ""     
+#> 3 AGSWKGVRNDF…           11 DMSO      time       1    10   1.63  2.3 e-1 ""     
+#> 4 AGSWKGVRND_F           10 DMSO      time       1    10   0.382 5.5 e-1 ""     
+#> 5 AHLFNALTWPS…           12 DMSO      time       1    10   3.50  9.1 e-2 ""     
+#> 6 AKGLGPFHIV_K           10 DMSO      time       1    10 267.    1.54e-8 "*"    
 #> # ℹ 2 more variables: ges <dbl>, p.adj <dbl>
 ```
 
@@ -704,7 +704,7 @@ picture of the output is shown instead.
 mspms::plot_heatmap(mspms_data)
 ```
 
-![](plot_heatmap_output.png)
+![](README_files/plot_heatmap_output.png)
 
 ### Ploting time course.
 
