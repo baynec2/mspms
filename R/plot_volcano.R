@@ -41,8 +41,8 @@ plot_volcano <- function(log2fc_t_test_data,
     ) +
     ggplot2::labs(x = "Log2 (Time TX/T0)", y = "-log10(p.adj value)") 
   if(facets == "grid"){
-    p2 = p1 + ggplot2::facet_grid(rows = vars(condition),
-                                  cols = vars(time)) 
+    p2 = p1 + ggplot2::facet_grid(rows = dplyr::vars(condition),
+                                  cols = dplyr::vars(time)) 
   } else if (facets == "wrap"){
     p2 = p1 + ggplot2::facet_wrap(~condition + time,
                                   ncol = ncol) 

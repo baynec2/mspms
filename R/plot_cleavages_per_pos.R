@@ -29,8 +29,8 @@ plot_cleavages_per_pos = function(count_of_cleavages,
     ggplot2::scale_x_continuous(breaks = seq(0, 13))
 
   if(facets == "grid"){
-    p2 = p1 + ggplot2::facet_grid(rows = vars(condition),
-                                  cols = vars(time)) 
+    p2 = p1 + ggplot2::facet_grid(rows = dplyr::vars(condition),
+                                  cols = dplyr::vars(time)) 
   } else if (facets == "wrap"){
     p2 = p1 + ggplot2::facet_wrap(~condition + time,
                                   ncol = ncol,
