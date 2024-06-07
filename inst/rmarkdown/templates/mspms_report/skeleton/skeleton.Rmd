@@ -93,11 +93,26 @@ print(mspms::plot_all_icelogos(mspms_data))
 
 
 
-**Figure 4.** Here the cleavage motifs enriched in each condition are shown.
+**Figure 4.** Here the cleavage motifs enriched in each condition are shown. 
+Enriched cleavage motifs are defined as having a p.adj <= 0.05 and a log2fc >3
+relative to time 0. 
 
 
+# Position Specificity 
 
+```{r}
+sig = t2 %>% 
+  filter(p.adj <= 0.05, log2fc >3)
 
+d = count_cleavages_per_pos(sig)
+
+plot_cleavages_per_pos(d)
+```
+
+**Figure 5.** Here the count of significant cleavages at each position of the 
+peptide library are shown for each condition (facet) per time point (color). 
+Significant cleavages are defined as having a p.adj <= 0.05 and a log2fc > 3 
+relative to time 0.  
 
 
 

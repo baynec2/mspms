@@ -20,6 +20,8 @@ plot_icelogo <- function(cleavage_seqs,
                          background_universe = mspms::all_possible_8mers_from_228_library,
                          pval = 0.05,
                          type = "percent_difference") {
+  # calculate n 
+  n = length(cleavage_seqs)
   # calculation proportions of background
   background_counts <- mspms::calc_AA_count_of_motif(background_universe)
   background_proportions <- mspms::calc_AA_prop_of_motif(background_counts)
@@ -45,7 +47,8 @@ plot_icelogo <- function(cleavage_seqs,
       background_prop_matrix = background_proportions
     )
     final_pd <- mspms::prepare_sig_p_dif(pd, sig_zscores)
-    plot <- mspms::plot_pd_icelogo(final_pd)
+    plot <- mspms::plot_pd_icelogo(final_pd)+
+      ggplot2::labs(subtitle = paste0("n = ",n))
     return(plot)
   } else if (type == "fold change") {
     fc <- mspms::calc_AA_fc(
@@ -53,7 +56,8 @@ plot_icelogo <- function(cleavage_seqs,
       background_prop_matrix = background_proportions
     )
     final_fc <- mspms::prepare_fc(fc, sig_zscores)
-    plot <- mspms::plot_fc_icelogo(final_fc)
+    plot <- mspms::plot_fc_icelogo(final_fc) +
+      ggplot2::labs(subtitle = paste0("n = ",n))
     return(plot)
   } else {
     stop("type must be either 'percent_difference' or 'fold change'")

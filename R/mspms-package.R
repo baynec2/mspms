@@ -3,6 +3,7 @@
 
 ## usethis namespace: start
 #' @importFrom dplyr n
+#' @importFrom DT datatable
 #' @importFrom rlang .data
 #' @importFrom stats predict
 #' @importFrom stats qnorm
