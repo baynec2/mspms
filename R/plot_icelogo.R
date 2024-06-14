@@ -22,44 +22,38 @@ plot_icelogo <- function(cleavage_seqs,
                          type = "percent_difference") {
   # calculate n 
   n = length(cleavage_seqs)
-  # calculation proportions of background
-  background_counts <- mspms::calc_AA_count_of_motif(background_universe)
-  background_proportions <- mspms::calc_AA_prop_of_motif(background_counts)
-
-  # calculate proportions of experimentally identified motifs
-  experimental_counts <- mspms::calc_AA_count_of_motif(cleavage_seqs)
-  experimental_proprotions <- mspms::calc_AA_prop_of_motif(experimental_counts)
-
-  # calculate zscores
-  zscores <- mspms::calc_AA_motif_zscore(
-    background_count_matrix = background_counts,
-    background_prop_matrix = background_proportions,
-    experimental_count_matrix = experimental_counts,
-    experimental_prop_matrix = experimental_proprotions
-  )
-
-  # calculate significant zscores
-  sig_zscores <- mspms::calc_sig_zscores(zscores, pval)
-
-  if (type == "percent_difference") {
-    pd <- mspms::calc_AA_percent_difference(
-      experimental_prop_matrix = experimental_proprotions,
-      background_prop_matrix = background_proportions
-    )
-    final_pd <- mspms::prepare_sig_p_dif(pd, sig_zscores)
-    plot <- mspms::plot_pd_icelogo(final_pd)+
-      ggplot2::labs(subtitle = paste0("n = ",n))
-    return(plot)
-  } else if (type == "fold change") {
-    fc <- mspms::calc_AA_fc(
-      experimental_prop_matrix = experimental_proprotions,
-      background_prop_matrix = background_proportions
-    )
-    final_fc <- mspms::prepare_fc(fc, sig_zscores)
-    plot <- mspms::plot_fc_icelogo(final_fc) +
-      ggplot2::labs(subtitle = paste0("n = ",n))
-    return(plot)
-  } else {
-    stop("type must be either 'percent_difference' or 'fold change'")
-  }
+  
+# processing data to plot
+ icelogo_data = mspms::prepare_icelogo_data(cleavage_seqs,
+                               background_universe,
+                               pval,
+                               type)
+  
+ nchar_cleav <- ncol(icelogo_data)
+ 
+ # Plotting the motif
+ p1 <- ggseqlogo::ggseqlogo(icelogo_data,
+                            font = "helvetica_light",
+                            method = "custom",
+                            seq_type = "AA") +
+   ggplot2::scale_x_continuous(
+     labels = paste0("P", c(
+       (nchar_cleav / 2):1,
+       paste0(
+         seq_len(nchar_cleav / 2), "'"
+       )
+     )),
+     breaks = seq_len(nchar_cleav)
+   ) +
+   ggplot2::labs(subtitle = paste0("n = ",n))+
+   if(type == "percent_difference") {
+     ggplot2::ylab("percent difference")
+   } else if(type == "fold_change") {
+     ggplot2::ylab("fold change")
+   }else{
+     stop("type must be either percent_difference or fold_change")
+   }
+ 
+ return(p1)
 }
+
