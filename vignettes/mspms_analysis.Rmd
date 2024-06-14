@@ -429,13 +429,13 @@ mspms::plot_icelogo(cleavage_seqs, background_universe)
 We could also look at the fold change instead of the percent difference
 
 ```{r}
-mspms::plot_icelogo(cleavage_seqs, background_universe, type = "fold change")
+mspms::plot_icelogo(cleavage_seqs, background_universe, type = "fold_change")
 ```
   
 We also provide a convenience function for looking at all icelogos relative to 
 time 0 within the experiment. 
 
-This function includes cleavages that were signficant at any time point once in 
+This function includes cleavages that were significant at any time point once in 
 the experimental set of the ICELOGO. 
 
 ```{r}
@@ -454,7 +454,7 @@ mspms::plot_pca(mspms_data)
 
 ### Hierchical clustering
 
-We can also generate an interactive heatmap with the hierchical clustering 
+We can also generate an interactive heatmap with the hierarchical clustering 
 results. 
 
 The format of this readme does not allow for interactivity, so it is not shown here. 
