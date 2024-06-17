@@ -254,7 +254,6 @@ need to specify the design matrix here too. Make sure that the column header
 names are "sample" and "group" just like before.
 
 ```{r}
-
 normalyzed_data = mspms::normalyzed_data
 
 design_matrix <- readr::read_csv("../tests/testdata/design_matrix.csv")
@@ -325,7 +324,7 @@ We have combined all of these steps into one function, mspms() for convenience.
 This offers a nice balance between allowing the user the option to use 
 individual steps and providing a quick way to get to the final data. 
 
-```{r}
+```{r,eval = FALSE}}
 mspms_data <- mspms::mspms(peaks_prepared_data, design_matrix)
 ```
 
@@ -358,6 +357,8 @@ as follows:
 * MZB.T0 vs MZB.T2. 
 
 ```{r}
+
+mspms_data = mspms::mspms_data
 # Perform T test
 t_test_stats <- mspms::mspms_t_tests(mspms_data)
 ```
