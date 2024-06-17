@@ -66,7 +66,7 @@ impute <- function(outlier_handled_data, noise = 0.05, nsd = 1) {
 
   # Putting in the wide format.
   output <- imputed_data %>%
-    dplyr::select(-.data$value) %>%
+    dplyr::select(-"value") %>%
     tidyr::pivot_wider(
       names_from = "sample_id",
       values_from = "imputed_values"

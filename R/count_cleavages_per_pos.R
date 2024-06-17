@@ -23,8 +23,9 @@ count_cleavages_per_pos <- function(data) {
   #Adding missing positions
   final = data.frame()
   for(i in unique(data$condition)){
-    for(t in unique(data$time)){
-    count_f <- dplyr::filter(count,
+    f = count %>% dplyr::filter(.data$condition == i)
+    for(t in unique(f$time)){
+    count_f <- dplyr::filter(f,
                             .data$condition == i,
                             .data$time == t)
     missing <- positions[!positions %in% count_f$cleavage_pos]

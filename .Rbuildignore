@@ -6,3 +6,4 @@
 ^PeaksDataAnalysis_howto\.pdf$
 ^plot_heatmap_output\.png$
 ^codecov\.yml$
+^README\.Rmd$

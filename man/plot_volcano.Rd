@@ -4,7 +4,7 @@
 \alias{plot_volcano}
 \title{plot_volcano}
 \usage{
-plot_volcano(log2fc_t_test_data, log2fc_threshold = 3)
+plot_volcano(log2fc_t_test_data, log2fc_threshold = 3, facets = "grid")
 }
 \arguments{
 \item{log2fc_t_test_data}{= this is the data frame that contains the log2fc
@@ -12,6 +12,9 @@ and adjusted p values}
 
 \item{log2fc_threshold}{= this is the threshold that you want displayed
 on plot}
+
+\item{facets}{= grid or wrap. If grid facets for each condition and time are
+shown even if data does not exist. Wrap on the other hand is condensed.}
 }
 \value{
 a ggplot2 object

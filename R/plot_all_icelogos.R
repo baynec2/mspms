@@ -49,9 +49,9 @@ plot_all_icelogos <- function(mspms_data,
     # filtering data
     f <- dplyr::filter(stats, .data$condition == i) %>%
       dplyr::select("Peptide", "cleavage_seq") %>%
-      dplyr::distinct() %>%
       # appending peptide to cleavage_seqs
-      dplyr::pull(.data$cleavage_seq)
+      dplyr::pull(.data$cleavage_seq) %>% 
+      unique()
 
     # generating ice logo
     out <- mspms::plot_icelogo(f,

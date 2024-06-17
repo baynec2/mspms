@@ -34,13 +34,13 @@ Imports:
     readr (>= 1.1.5),
     readxl (>= 1.4.3),
     rstatix (>= 0.7.2),
-    stringr (>= 1.5.1),
     tibble (>= 3.2.1),
     SummarizedExperiment (>= 1.24.0),
     rlang (>= 1.1.3),
     forcats (>= 1.0.0),
     ggpubr (>= 0.6.0),
-    rmarkdown (>= 2.26)
+    rmarkdown (>= 2.26),
+    DT (>= 0.33)
 Suggests: 
     knitr,
     testthat (>= 3.0.0)
