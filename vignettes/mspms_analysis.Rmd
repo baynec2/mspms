@@ -242,9 +242,8 @@ head(design_matrix)
 mspms uses the NormalyzerDE package to do normalization under the hood. 
 
 We can normalyze the data as follows:  
-```{r}
+```{r,eval = FALSE}
 normalyzed_data <- normalyze(peaks_prepared_data, design_matrix)
-
 ```
 
 ### Handling Outliers
@@ -255,6 +254,8 @@ need to specify the design matrix here too. Make sure that the column header
 names are "sample" and "group" just like before.
 
 ```{r}
+normalyzed_data = mspms::normalyzed_data
+
 design_matrix <- readr::read_csv("../tests/testdata/design_matrix.csv")
 outliers <- handle_outliers(normalyzed_data, design_matrix)
 
@@ -323,7 +324,7 @@ We have combined all of these steps into one function, mspms() for convenience.
 This offers a nice balance between allowing the user the option to use 
 individual steps and providing a quick way to get to the final data. 
 
-```{r}
+```{r,eval = FALSE}
 mspms_data <- mspms::mspms(peaks_prepared_data, design_matrix)
 ```
 
@@ -356,6 +357,8 @@ as follows:
 * MZB.T0 vs MZB.T2. 
 
 ```{r}
+
+mspms_data = mspms::mspms_data
 # Perform T test
 t_test_stats <- mspms::mspms_t_tests(mspms_data)
 ```
@@ -573,10 +576,11 @@ mspms::plot_pca(mspms_data)
 ### Hierchical clustering
 
 We can also generate an interactive heatmap with the hierarchical clustering 
-results. 
+results. This cannot be displayed in the vignette, but the below code can be 
+used to generate this. 
 
 
-```{r}
+```{r,eval=FALSE}
 mspms::plot_heatmap(mspms_data)
 ```
 
