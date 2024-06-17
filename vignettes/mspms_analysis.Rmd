@@ -41,7 +41,7 @@ sections for more information.
 
 There are 4 different types of functions in this package.
 
-1. Making mspms generically useful. These functions are focused on making mspms 
+1. Pre-processing data. These functions are focused on making mspms 
 more generally useful to a wider audience outside of the very specific workflow
 traditionally used in the O’Donoghue lab. Allows for the use of other types of
 upstream proteomic data processing, different peptide libraries, etc.    
@@ -50,25 +50,26 @@ upstream proteomic data processing, different peptide libraries, etc.
 and process the MSP-MS data.    
 
 3. Statistics. These methods allow the user to perform basic statistics on the 
-normalyzed/processed data.   
+normalized/processed data.   
 
 4. Data visualization. These functions allow the user to visualize the data.
 
 
-**Making mspms generically useful**.   
-1. *prepare_peaks()*:Takes two input files from PEAKS and combines them. 
+**Preprocessing data**.   
+1. *prepare_peaks()*:Takes two exported files from PEAKS software, 
+combines them, and prepares for processing by the mspms R package. 
 2. *prepare_pd()*: prepares exported files from proteome discoverer.  
 3. *calculate_all_cleavages()*: Calculates all possible cleavages for peptide
 library sequences. 
 
-**Data Proessing/ Normalization**.  
+**Data Processing/ Normalization**.  
 1. *normalyze()*: Normalizes values.     
 2. *handle_outliers()*: Looks for outliers across replicates. Removes them.       
 3. *impute()*: Imputes data for missing values (not including NAs introduced 
 by handle_outliers()).  
-4. *join_with_library()*: Joins the normalyzed data with the peptide library 
+4. *join_with_library()*: Joins the normalized data with the peptide library 
 sequences.  
-5. *add_cleavages()*: Figures out the locations of the detected clevages within
+5. *add_cleavages()*: Figures out the locations of the detected cleavages within
 the library of peptide sequences used. Is it cleaved at the N or C terminus, 
 or both? Uses *cterm_cleavage()* and *nterm_cleavage()* to do this.      
 6. *polish()*: combines the cleavage info into one column. Discards peptides
@@ -84,8 +85,8 @@ conditions relative to T0.
 that are significantly different across experimental conditions relative to time 
 0.  
 3. *log2fc_t_test()*: Combines results from mspms_log2fc() and mspms_t_tests() 
-into one convienent tibble.   
-4. *log2fct_condtion()*: Calculates the log2 fold change and t tests for the 
+into one convenient tibble.   
+4. *log2fct_condition()*: Calculates the log2 fold change and t tests for the 
 specified condition at a user specified time.    
 5.*log2fct_time()*: Calculates the log2 fold change and t tests between the 
 specified times within a user specified time.   
@@ -93,6 +94,32 @@ specified times within a user specified time.
 that are significantly different across all time points.   
 7. *count_cleavages_per_pos():* Counts the number of cleavages at each position 
 of the library. Useful for determining endoprotease vs exoprotease activity.
+8. *count_cleavages_per_pos()*: Counts the number of cleavages at the position
+of the initial peptide detected peptides were cleaved from. 
+
+
+**Icelogo calculations**
+
+1. *calc_AA_count_of_motif()*: calculates the count of each amino acid at each
+position in a vector of motifs.  
+2. *calc_AA_prop_of_motif()*: calculates the proportion of each amino acid at 
+each position from the output of calc_AA_count_of_motif().  
+3. *calc_AA_motif_zscore()*: calculates z scores for each amino acid at each 
+position in a vector of motifs.  
+4. *calc_sig_zscore()*: given a matrix of zscores, determines which are significant given a user defined p value. 
+5. *calc_AA_percent_difference()*: calculates the percentage difference of 
+6. *calc_AA_fold_change()*: calculates the fold change of a matrix containing 
+the proportions of amino acids at each position relative to a background matrix. 
+7. *prepare_sig_p_dif()*: prepares the data for plotting percent difference 
+icelogos. Removes AAs at positions that are not significantly different.  
+8. *prepare_pd()*:prepares a matrix with significant amino acid percent 
+differences by position for plotting.
+9. *prepare_fc()*: prepares the data for plotting fold change icelogos.
+10. *prepare_icelogo_data()*: uses all the functions described above to 
+prepare the data for plotting icelogos. 
+11. *extract_re()*: extracts regular expressions specifying amino acids above a
+defined threshold cutoff for each position of a cleavage motif from an icelogo 
+matrix. 
 
 **Data Visualization**.   
 1. *plot_heatmap()*: Conducts hierarchical clustering analysis and plots an
@@ -101,44 +128,53 @@ interactive heatmap to visualize overall patterns in the data.
 3. *plot_time_course()*: Plot peptides over time by condition.  
 4. *plot_cleavages_per_pos()*: Plot the number of cleavages at each position 
 in the library.Useful for determining endoprotease vs exoprotease activity.
+5.*plot_icelogo()*: Plot an icelogo given an icelogo matrix. 
+6.*plot_all_icelogos()*: generates icelogos representing enriched sequences 
+relative to time 0 for each conditions. This function compares cleavage 
+sequences corresponding to peptides that are significant 
+(p.adj < 0.05 and log2 fold change > 3) to a background of all possible
+sequences present in the initial peptide library.  
 
-**Icelogo**. 
 
-1. *calc_AA_count_of_motif()*: calculates the count of each amino acid at each
-position in a vector of motifs.  
-2. *calc_AA_prop_of_motif()*: calcuulates the proportion of each amino acid at 
-each position from the output of calc_AA_count_of_motif().  
-3. *calc_AA_motif_zscore()*: calculates z scores for each amino acid at each 
-position in a vector of motifs.  
-4. *calc_AA_percent_difference()*: calculates the percentage difference of 
-5. *prepare_sig_p_dif()*: prepares the data for plotting percent difference 
-icelogos. Removes AAs at positions that are not significantly different.  
-6. *prepare_fc()*: prepares the data for plotting fold change icelogos.
-Removes AAs at positions that are not significantly different.  
-7. *plot_pd_icelogo()*: plots a percent difference icelogo.  
-8. *plot_fc_icelogo()*: plots a fold change ice logo.  
-9. *plot_icelogo()*:  wraps plot_pd_icelogo() and plot_fc_icelogo() into 
-one function.  
-10. *plot_all_icelogos()*: convience function to plot all icelogos relative to 
-time 0 from an experiment.    
 **Reports**. 
 1. *generate_report()*: Generates a simple analysis of the mspms data that 
 should be generically applicable to all mspms experiments.   
 
 
-## Making Generically Usefull. 
+## Data Pre-processing
 
 
 ### Formating Peaks File Outputs. 
 
-All analysis performed by this package is downstream of the data generated by 
-the PEAKS software. The first step is to combine the two files generated by
-PEAKS.  
+Analysis downstream of data exported from PEAKS software is supported.
 
-The files coming from peaks should be generated according to the instructions 
-found [here](www/PeaksDataAnalysis_howto.pdf).  
+exported files are generated in the O'donoghue lab as follows:  
 
-
+1. Create a New Project in PEAKS.  
+2. Select data to add to PEAKS project.  
+3. Add data, rename samples, set correct parameters. 
+  • Highlight all the added data.  
+  • Select Create new sample for each file. 
+  • Select appropriate instrument and fragmentation method. 
+  •  Set Enzyme to “None”. 
+  • Rename samples according to enzymes, time points, and replicates. 
+      • Can also ensure appropriate data is selected for these   
+  • Select “Data Refinement” to continue. 
+4. Data Refinement. 
+  • On the top right, select MSP-MS as the predefined parameters. 
+  •  Parameters shown are what should be used for MSP-MS data analysis. 
+  •  Select “Identification” to continue. 
+5. Peptide Identification. 
+  • On the top right, select MSP-MS as the predefined parameters. 
+  • Parameters shown are what should be used for MSP-MS data analysis. 
+  • Identification -> Select Database -> TPD_237. 
+  • Identification -> no PTMs. 
+  • Can remove the PTMs by highlighting them and selecting Remove  
+6. Label Free Quantification. 
+  • Make sure Label Free is selected. 
+  • Group samples -> add quadruplicates of samples to new group. 
+  
+  
 ```{r}
 library(dplyr)
 library(mspms)
@@ -158,7 +194,8 @@ peaks_prepared_data <- prepare_peaks(lfq_filename, id_filename)
 We can prepare proteome discover files for analysis with mspms as follows.
 
 ```{r}
-prepared_proteome_discoverer <- prepare_pd("../tests/testdata/proteome_discoverer_output.xlsx")
+prepared_proteome_discoverer <-
+  prepare_pd("../tests/testdata/proteome_discoverer_output.xlsx")
 ```
 
 
@@ -173,16 +210,18 @@ We can do this by specifying the number of amino acids after the cleavage site
 that we are interested in. First lets try 4, which is the default. 
 
 ```{r}
-all_peptide_sequences <- mspms::calculate_all_cleavages(mspms::peptide_library$library_real_sequence,
+all_peptide_sequences <- mspms::calculate_all_cleavages(
+  mspms::peptide_library$library_real_sequence,
   n_AA_after_cleavage = 4
-)
+  )
 head(all_peptide_sequences)
 ```
 
 We could also try 5 AA after each cleavage site 
 
 ```{r}
-all_peptide_sequences <- mspms::calculate_all_cleavages(mspms::peptide_library$library_real_sequence,
+all_peptide_sequences <- mspms::calculate_all_cleavages(
+  mspms::peptide_library$library_real_sequence,
   n_AA_after_cleavage = 5
 )
 head(all_peptide_sequences)
@@ -203,19 +242,22 @@ head(design_matrix)
 mspms uses the NormalyzerDE package to do normalization under the hood. 
 
 We can normalyze the data as follows:  
-```{r,eval = FALSE}
+```{r}
 normalyzed_data <- normalyze(peaks_prepared_data, design_matrix)
+
 ```
 
 ### Handling Outliers
 
-Here we use a dixon test from the outliers package to detect outliers from each 
+Here we use a Dixon test from the outliers package to detect outliers from each 
 of our replicates. We need to know what samples are part of which groups, so we 
 need to specify the design matrix here too. Make sure that the column header 
 names are "sample" and "group" just like before.
 
 ```{r}
+design_matrix <- readr::read_csv("../tests/testdata/design_matrix.csv")
 outliers <- handle_outliers(normalyzed_data, design_matrix)
+
 ```
 
 ### Imputation of data 
@@ -276,17 +318,13 @@ polished_data <- mspms::polish(cleavage_added_data)
 
 ### Complete workflow
 
-There are a lot of steps to get to the final normalyzed data we listed above. 
+There are a lot of steps to get to the final normalized data we listed above. 
 We have combined all of these steps into one function, mspms() for convenience.
 This offers a nice balance between allowing the user the option to use 
-individual stepsand providing a quick way to get to the final data. 
+individual steps and providing a quick way to get to the final data. 
 
 ```{r}
-# Having problems getting the vignette to build on linux due to following
-# mspms_data <- mspms::mspms(peaks_prepared_data, design_matrix)
-
-# Getting around by using internal package data. Is equivalent in this case. 
-mspms_data = mspms::mspms_data
+mspms_data <- mspms::mspms(peaks_prepared_data, design_matrix)
 ```
 
 ## Statistics
@@ -303,7 +341,7 @@ Now we can conduct the statistics:
 
 ### T tests
 
-Ttests are performed within each condition and compared to time 0.
+T tests are performed within each condition and compared to time 0.
 
 For example, for an experiment where there are two conditions, 
 DMSO and MZB as well as 3 time points, 0, 1, and 2, the t tests would be
@@ -327,7 +365,7 @@ t_test_stats <- mspms::mspms_t_tests(mspms_data)
 We can also calculate the log 2 fold change. 
 The comparisons here are the same as for the T tests.  
 ```{r}
-# calclulate log2fc
+# calculate log2fc
 log2fc <- mspms::mspms_log2fc(mspms_data)
 
 head(log2fc)
@@ -378,7 +416,7 @@ head(time_t)
 
 ### ANOVA
 
-We also might want to perfom an anova. Here, we have it set up to show the 
+We also might want to perform an anova. Here, we have it set up to show the 
 effect of time within each condition. 
 
 For example, for an experiment where there are two conditions, DMSO and MZB as
@@ -412,7 +450,7 @@ sequence specificity of the cleavage sites. This was used as reference to build
 the code: https://iomics.ugent.be/icelogoserver/resources/manual.pdf. 
 
 Below we can see this applied to see what cleavage sequences are enriched among
-the peptides signficicantly different between time 0 and time 60 
+the peptides significantly different between time 0 and time 60 
 within DMSO.
 
 ```{r}
@@ -425,23 +463,103 @@ background_universe <- mspms::all_possible_8mers_from_228_library
 
 mspms::plot_icelogo(cleavage_seqs, background_universe)
 ```
-  
-We could also look at the fold change instead of the percent difference
 
+We could also look at the fold change instead of the percent difference.
 ```{r}
 mspms::plot_icelogo(cleavage_seqs, background_universe, type = "fold_change")
 ```
-  
+
 We also provide a convenience function for looking at all icelogos relative to 
 time 0 within the experiment. 
 
 This function includes cleavages that were significant at any time point once in 
-the experimental set of the ICELOGO. 
+the experimental set of the ICELOGO. Below we show this applied to create
+percent difference and fold change icelogos.  
 
 ```{r}
-mspms::plot_all_icelogos(mspms_data)
+plot_all_icelogos(mspms_data)
+
+plot_all_icelogos(mspms_data, type = "fold_change")
 ```
+
   
+
+### Extracting regular expressions from icelogos 
+
+It might be useful for the user to extract the information contained in the 
+Icelogo and use it to filter their data for peptides that are predicted 
+to be well cleaved, or not cleaved according to the icelogo plot. 
+
+For example, we can get the amino acids that are enriched at each position of 
+the icelogo using the code below. 
+
+```{r}
+
+# Getting data for Icelog 
+cleavage_seqs <- time_t %>%
+  dplyr::filter(log2fc > 3, p.adj <= 0.05) %>%
+  dplyr::pull(cleavage_seq)
+
+background_universe <- mspms::all_possible_8mers_from_228_library
+
+# Plotting icelogo
+mspms::plot_icelogo(cleavage_seqs, background_universe)
+
+# corresponding icelogo data to the plot
+icelogo_matrix = mspms::prepare_icelogo_data(cleavage_seqs, background_universe)
+
+# Extracting regular expressions
+RE_pos = mspms::extract_re(icelogo_matrix)
+
+RE_pos
+```
+
+We can also do this for amino acids that are negatively enriched. 
+
+```{r}
+RE_neg = mspms::extract_re(icelogo_matrix,type = "negative")
+
+RE_neg
+```
+
+
+Once we have these regular expressions, we can use it to filter our data as
+follows: 
+
+```{r}
+pos_enriched = mspms_data %>% 
+  dplyr::filter(grepl(RE_pos, cleavage_seq))
+```
+
+
+In this case, none of the peptides in the original data set match all the rules
+in our library (peptide library does not contain all possible combinations, so
+none of the peptides was a match to the combination of rules at each position)
+
+
+We could then filter to only include peptides that are greater than a certain
+threshold percent difference. We can then visualize these results easily with 
+the plot_time_course function described further below. Here we will only 
+consider AAs with a percent difference greater than 10 at each position. 
+
+```{r}
+# Extracting regular expressions 
+RE_pos = mspms::extract_re(icelogo_matrix,threshold = 10)
+
+RE_pos
+
+# Filtering data for peptides that have cleavage sequences matching regular 
+# expressions
+f = mspms_data %>% 
+  dplyr::filter(grepl(RE_pos, cleavage_seq))
+
+#visualizing these peptides that match over time.
+plot_time_course(f)
+```
+
+Here we see that these peptides were cleaved over time in DMSO, as would be 
+expected based on the icelogo plot. 
+
 ### PCA.  
 
 We can generate a PCA plot to visualize the data. 
@@ -457,9 +575,8 @@ mspms::plot_pca(mspms_data)
 We can also generate an interactive heatmap with the hierarchical clustering 
 results. 
 
-The format of this readme does not allow for interactivity, so it is not shown here. 
 
-```{r,eval = FALSE}
+```{r}
 mspms::plot_heatmap(mspms_data)
 ```
 
@@ -497,7 +614,7 @@ Here we will do this for peptides significantly different relative to time 0 for
 DMSO and MZB. 
 
 ```{r}
-# Peforming T tests
+# Performing T tests
 t_tests = log2fc_t_test(mspms_data) %>% 
   dplyr::filter(p.adj < 0.05,
                 log2fc > 3)

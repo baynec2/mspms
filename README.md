@@ -55,11 +55,11 @@ following sections for more information.
 
 There are 4 different types of functions in this package.
 
-1.  Making mspms generically useful. These functions are focused on
-    making mspms more generally useful to a wider audience outside of
-    the very specific workflow traditionally used in the O’Donoghue lab.
-    Allows for the use of other types of upstream proteomic data
-    processing, different peptide libraries, etc.
+1.  Pre-processing data. These functions are focused on making mspms
+    more generally useful to a wider audience outside of the very
+    specific workflow traditionally used in the O’Donoghue lab. Allows
+    for the use of other types of upstream proteomic data processing,
+    different peptide libraries, etc.
 
 2.  Data processing/ normalization. These functions allow the user to
     normalize and process the MSP-MS data.
@@ -70,9 +70,10 @@ There are 4 different types of functions in this package.
 4.  Data visualization. These functions allow the user to visualize the
     data.
 
-**Making mspms generically useful**.  
-1. *prepare_peaks()*:Takes two input files from PEAKS and combines them.
-2. *prepare_pd()*: prepares exported files from proteome discoverer.  
+**Preprocessing data**.  
+1. *prepare_peaks()*:Takes two exported files from PEAKS software,
+combines them, and prepares for processing by the mspms R package. 2.
+*prepare_pd()*: prepares exported files from proteome discoverer.  
 3. *calculate_all_cleavages()*: Calculates all possible cleavages for
 peptide library sequences.
 
@@ -112,7 +113,36 @@ the specified times within a user specified time.
 peptides that are significantly different across all time points.  
 7. *count_cleavages_per_pos():* Counts the number of cleavages at each
 position of the library. Useful for determining endoprotease vs
-exoprotease activity.
+exoprotease activity. 8. *count_cleavages_per_pos()*: Counts the number
+of cleavages at the position of the initial peptide detected peptides
+were cleaved from.
+
+**Icelogo calculations**
+
+1.  *calc_AA_count_of_motif()*: calculates the count of each amino acid
+    at each position in a vector of motifs.  
+2.  *calc_AA_prop_of_motif()*: calculates the proportion of each amino
+    acid at each position from the output of calc_AA_count_of_motif().  
+3.  *calc_AA_motif_zscore()*: calculates z scores for each amino acid at
+    each position in a vector of motifs.  
+4.  *calc_sig_zscore()*: given a matrix of zscores, determines which are
+    significant given a user defined p value.
+5.  *calc_AA_percent_difference()*: calculates the percentage difference
+    of
+6.  *calc_AA_fold_change()*: calculates the fold change of a matrix
+    containing the proportions of amino acids at each position relative
+    to a background matrix.
+7.  *prepare_sig_p_dif()*: prepares the data for plotting percent
+    difference icelogos. Removes AAs at positions that are not
+    significantly different.  
+8.  *prepare_pd()*:prepares a matrix with significant amino acid percent
+    differences by position for plotting.
+9.  *prepare_fc()*: prepares the data for plotting fold change icelogos.
+10. *prepare_icelogo_data()*: uses all the functions described above to
+    prepare the data for plotting icelogos.
+11. *extract_re()*: extracts regular expressions specifying amino acids
+    above a defined threshold cutoff for each position of a cleavage
+    motif from an icelogo matrix.
 
 **Data Visualization**.  
 1. *plot_heatmap()*: Conducts hierarchical clustering analysis and plots
@@ -121,43 +151,44 @@ an interactive heatmap to visualize overall patterns in the data.
 3. *plot_time_course()*: Plot peptides over time by condition.  
 4. *plot_cleavages_per_pos()*: Plot the number of cleavages at each
 position in the library.Useful for determining endoprotease vs
-exoprotease activity.
+exoprotease activity. 5.*plot_icelogo()*: Plot an icelogo given an
+icelogo matrix. 6.*plot_all_icelogos()*: generates icelogos representing
+enriched sequences relative to time 0 for each conditions. This function
+compares cleavage sequences corresponding to peptides that are
+significant (p.adj \< 0.05 and log2 fold change \> 3) to a background of
+all possible sequences present in the initial peptide library.
 
-**Icelogo**.
+**Reports**. 1. *generate_report()*: Generates a simple analysis of the
+mspms data that should be generically applicable to all mspms
+experiments.
 
-1.  *calc_AA_count_of_motif()*: calculates the count of each amino acid
-    at each position in a vector of motifs.  
-2.  *calc_AA_prop_of_motif()*: calculates the proportion of each amino
-    acid at each position from the output of calc_AA_count_of_motif().  
-3.  *calc_AA_motif_zscore()*: calculates z scores for each amino acid at
-    each position in a vector of motifs.  
-4.  *calc_AA_percent_difference()*: calculates the percentage difference
-    of
-5.  *prepare_sig_p_dif()*: prepares the data for plotting percent
-    difference icelogos. Removes AAs at positions that are not
-    significantly different.  
-6.  *prepare_fc()*: prepares the data for plotting fold change icelogos.
-    Removes AAs at positions that are not significantly different.  
-7.  *plot_pd_icelogo()*: plots a percent difference icelogo.  
-8.  *plot_fc_icelogo()*: plots a fold change ice logo.  
-9.  *plot_icelogo()*: wraps plot_pd_icelogo() and plot_fc_icelogo() into
-    one function.  
-10. *plot_all_icelogos()*: convenience function to plot all icelogos
-    relative to time 0 from an experiment.  
-    **Reports**.
-11. *generate_report()*: Generates a simple analysis of the mspms data
-    that should be generically applicable to all mspms experiments.
-
-## Making Generically Usefull.
+## Data Pre-processing
 
 ### Formating Peaks File Outputs.
 
-All analysis performed by this package is downstream of the data
-generated by the PEAKS software. The first step is to combine the two
-files generated by PEAKS.
+Analysis downstream of data exported from PEAKS software is supported.
 
-The files coming from peaks should be generated according to the
-instructions found [here](www/PeaksDataAnalysis_howto.pdf).
+exported files are generated in the O’donoghue lab as follows:
+
+1.  Create a New Project in PEAKS.  
+2.  Select data to add to PEAKS project.  
+3.  Add data, rename samples, set correct parameters. • Highlight all
+    the added data.  
+    • Select Create new sample for each file. • Select appropriate
+    instrument and fragmentation method. • Set Enzyme to “None”. •
+    Rename samples according to enzymes, time points, and replicates. •
+    Can also ensure appropriate data is selected for these  
+    • Select “Data Refinement” to continue.
+4.  Data Refinement. • On the top right, select MSP-MS as the predefined
+    parameters. • Parameters shown are what should be used for MSP-MS
+    data analysis. • Select “Identification” to continue.
+5.  Peptide Identification. • On the top right, select MSP-MS as the
+    predefined parameters. • Parameters shown are what should be used
+    for MSP-MS data analysis. • Identification -\> Select Database -\>
+    TPD_237. • Identification -\> no PTMs. • Can remove the PTMs by
+    highlighting them and selecting Remove  
+6.  Label Free Quantification. • Make sure Label Free is selected. •
+    Group samples -\> add quadruplicates of samples to new group.
 
 ``` r
 library(dplyr)
@@ -205,7 +236,8 @@ We can prepare proteome discover files for analysis with mspms as
 follows.
 
 ``` r
-prepared_proteome_discoverer <- prepare_pd("tests/testdata/proteome_discoverer_output.xlsx")
+prepared_proteome_discoverer <-
+  prepare_pd("tests/testdata/proteome_discoverer_output.xlsx")
 #> New names:
 #> • `Abundance: F12: Sample, 4, 60 min` -> `Abundance: F12: Sample, 4, 60
 #>   min...15`
@@ -226,9 +258,10 @@ cleavage site that we are interested in. First lets try 4, which is the
 default.
 
 ``` r
-all_peptide_sequences <- mspms::calculate_all_cleavages(mspms::peptide_library$library_real_sequence,
+all_peptide_sequences <- mspms::calculate_all_cleavages(
+  mspms::peptide_library$library_real_sequence,
   n_AA_after_cleavage = 4
-)
+  )
 head(all_peptide_sequences)
 #> [1] "XXXLVATV" "XXXnLDKL" "XXXAVRAV" "XXXGIQST" "XXXSLNQA" "XXXFIVFI"
 ```
@@ -236,7 +269,8 @@ head(all_peptide_sequences)
 We could also try 5 AA after each cleavage site
 
 ``` r
-all_peptide_sequences <- mspms::calculate_all_cleavages(mspms::peptide_library$library_real_sequence,
+all_peptide_sequences <- mspms::calculate_all_cleavages(
+  mspms::peptide_library$library_real_sequence,
   n_AA_after_cleavage = 5
 )
 head(all_peptide_sequences)
@@ -291,7 +325,7 @@ normalyzed_data <- normalyze(peaks_prepared_data, design_matrix)
 #> Sample check: More than one sample group found
 #> Sample replication check: All samples have replicates
 #> RT annotation column found (2)
-#> [Step 1/5] Input verified, job directory prepared at:./2024-06-07_mspms_normalyze_output
+#> [Step 1/5] Input verified, job directory prepared at:./2024-06-17_mspms_normalyze_output
 #> [Step 2/5] Performing normalizations
 #> [Step 2/5] Done!
 #> [Step 3/5] Generating evaluation measures...
@@ -300,7 +334,7 @@ normalyzed_data <- normalyze(peaks_prepared_data, design_matrix)
 #> [Step 4/5] Matrices successfully written
 #> [Step 5/5] Generating plots...
 #> [Step 5/5] Plots successfully generated
-#> All done! Results are stored in: ./2024-06-07_mspms_normalyze_output, processing time was 0.3 minutes
+#> All done! Results are stored in: ./2024-06-17_mspms_normalyze_output, processing time was 0.3 minutes
 #> Rows: 820 Columns: 27
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: "\t"
@@ -425,7 +459,7 @@ mspms_data <- mspms::mspms(peaks_prepared_data, design_matrix)
 #> Sample check: More than one sample group found
 #> Sample replication check: All samples have replicates
 #> RT annotation column found (2)
-#> [Step 1/5] Input verified, job directory prepared at:./2024-06-07_mspms_normalyze_output
+#> [Step 1/5] Input verified, job directory prepared at:./2024-06-17_mspms_normalyze_output
 #> [Step 2/5] Performing normalizations
 #> [Step 2/5] Done!
 #> [Step 3/5] Generating evaluation measures...
@@ -434,7 +468,7 @@ mspms_data <- mspms::mspms(peaks_prepared_data, design_matrix)
 #> [Step 4/5] Matrices successfully written
 #> [Step 5/5] Generating plots...
 #> [Step 5/5] Plots successfully generated
-#> All done! Results are stored in: ./2024-06-07_mspms_normalyze_output, processing time was 0.4 minutes
+#> All done! Results are stored in: ./2024-06-17_mspms_normalyze_output, processing time was 0.3 minutes
 #> Rows: 820 Columns: 27
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: "\t"
@@ -498,10 +532,10 @@ head(log2fc)
 #>   <chr>     <chr>                  <dbl> <dbl>          <dbl> <chr>        <dbl>
 #> 1 DMSO      AETSIKVFLPYYG_H       89862.     0         89862. DMSO.T0/DM…  0    
 #> 2 DMSO      AETSIKVFLPYYG_H       89862.    60        186881. DMSO.T60/D…  1.06 
-#> 3 DMSO      AETSIKVFLPYYG_H       89862.   240         82954. DMSO.T240/… -0.115
-#> 4 DMSO      AETSIKVFL_P          144250.     0        144250. DMSO.T0/DM…  0    
-#> 5 DMSO      AETSIKVFL_P          144250.    60        292380. DMSO.T60/D…  1.02 
-#> 6 DMSO      AETSIKVFL_P          144250.   240          8347. DMSO.T240/… -4.11
+#> 3 DMSO      AETSIKVFLPYYG_H       89862.   240         83331. DMSO.T240/… -0.109
+#> 4 DMSO      AETSIKVFL_P          144266.     0        144266. DMSO.T0/DM…  0    
+#> 5 DMSO      AETSIKVFL_P          144266.    60        292626. DMSO.T60/D…  1.02 
+#> 6 DMSO      AETSIKVFL_P          144266.   240          8760. DMSO.T240/… -4.04
 ```
 
 ### log2fc_t_tests.
@@ -517,11 +551,11 @@ head(log2fc_t_test)
 #>   Peptide       control_mean time  reference_mean comparison log2fc cleavage_seq
 #>   <chr>                <dbl> <chr>          <dbl> <chr>       <dbl> <chr>       
 #> 1 AETSIKVFLPYY…       89862. 60           186881. DMSO.T60/…  1.06  PYYGHXXX    
-#> 2 AETSIKVFLPYY…       89862. 240           82954. DMSO.T240… -0.115 PYYGHXXX    
-#> 3 AETSIKVFL_P        144250. 60           292380. DMSO.T60/…  1.02  KVFnPYYG    
-#> 4 AETSIKVFL_P        144250. 240            8347. DMSO.T240… -4.11  KVFnPYYG    
-#> 5 AGSWKGVRNDF_T       69703. 60           137489. DMSO.T60/…  0.980 RNDFTEAX    
-#> 6 AGSWKGVRNDF_T       69703. 240            8044. DMSO.T240… -3.12  RNDFTEAX    
+#> 2 AETSIKVFLPYY…       89862. 240           83331. DMSO.T240… -0.109 PYYGHXXX    
+#> 3 AETSIKVFL_P        144266. 60           292626. DMSO.T60/…  1.02  KVFnPYYG    
+#> 4 AETSIKVFL_P        144266. 240            8760. DMSO.T240… -4.04  KVFnPYYG    
+#> 5 AGSWKGVRNDF_T       69553. 60           138434. DMSO.T60/…  0.993 RNDFTEAX    
+#> 6 AGSWKGVRNDF_T       69553. 240            8274. DMSO.T240… -3.07  RNDFTEAX    
 #> # ℹ 12 more variables: cleavage_pos <dbl>, .y. <chr>, group1 <chr>,
 #> #   group2 <fct>, n1 <int>, n2 <int>, statistic <dbl>, df <dbl>, p <dbl>,
 #> #   p.adj <dbl>, p.adj.signif <chr>, condition <chr>
@@ -543,12 +577,12 @@ head(condition_t)
 #> # A tibble: 6 × 16
 #>   Peptide         comparison_mean reference_mean log2fc comparison  cleavage_seq
 #>   <chr>                     <dbl>          <dbl>  <dbl> <chr>       <chr>       
-#> 1 AETSIKVFLPYYG_H          42354.        186881. -2.14  MZB/DMSO a… PYYGHXXX    
-#> 2 AETSIKVFL_P              71584.        292380. -2.03  MZB/DMSO a… KVFnPYYG    
-#> 3 AGSWKGVRNDF_T            98966.        137489. -0.474 MZB/DMSO a… RNDFTEAX    
-#> 4 AGSWKGVRND_F              6667.         41039. -2.62  MZB/DMSO a… VRNDFTEA    
-#> 5 AHLFNALTWPSG_H          112802.        101771.  0.148 MZB/DMSO a… WPSGHNXX    
-#> 6 AKGLGPFHIV_K             10739.         97835. -3.19  MZB/DMSO a… FHIVKWAS    
+#> 1 AETSIKVFLPYYG_H          40956.        186881. -2.19  MZB/DMSO a… PYYGHXXX    
+#> 2 AETSIKVFL_P              72704.        292626. -2.01  MZB/DMSO a… KVFnPYYG    
+#> 3 AGSWKGVRNDF_T            99506.        138434. -0.476 MZB/DMSO a… RNDFTEAX    
+#> 4 AGSWKGVRND_F              6667.         39768. -2.58  MZB/DMSO a… VRNDFTEA    
+#> 5 AHLFNALTWPSG_H          113521.        101771.  0.158 MZB/DMSO a… WPSGHNXX    
+#> 6 AKGLGPFHIV_K             10217          98073. -3.26  MZB/DMSO a… FHIVKWAS    
 #> # ℹ 10 more variables: cleavage_pos <dbl>, .y. <chr>, group1 <chr>,
 #> #   group2 <chr>, n1 <int>, n2 <int>, statistic <dbl>, df <dbl>, p <dbl>,
 #> #   p.adj <dbl>
@@ -567,14 +601,14 @@ time_t = mspms::log2fct_time(mspms_data,
 
 head(time_t)
 #> # A tibble: 6 × 15
-#>   Peptide   comparison_mean reference_mean  log2fc comparison cleavage_seq .y.  
-#>   <chr>               <dbl>          <dbl>   <dbl> <chr>      <chr>        <chr>
-#> 1 AETSIKVF…         186881.         89862. 1.06    60/0 with… PYYGHXXX     value
-#> 2 AETSIKVF…         292380.        144250. 1.02    60/0 with… KVFnPYYG     value
-#> 3 AGSWKGVR…         137489.         69703. 0.980   60/0 with… RNDFTEAX     value
-#> 4 AGSWKGVR…          41039.         23358. 0.813   60/0 with… VRNDFTEA     value
-#> 5 AHLFNALT…         101771.        101507. 0.00375 60/0 with… WPSGHNXX     value
-#> 6 AKGLGPFH…          97835.          8333. 3.55    60/0 with… FHIVKWAS     value
+#>   Peptide  comparison_mean reference_mean   log2fc comparison cleavage_seq .y.  
+#>   <chr>              <dbl>          <dbl>    <dbl> <chr>      <chr>        <chr>
+#> 1 AETSIKV…         186881.         89862.  1.06    60/0 with… PYYGHXXX     value
+#> 2 AETSIKV…         292626.        144266.  1.02    60/0 with… KVFnPYYG     value
+#> 3 AGSWKGV…         138434.         69553.  0.993   60/0 with… RNDFTEAX     value
+#> 4 AGSWKGV…          39768.         22053.  0.851   60/0 with… VRNDFTEA     value
+#> 5 AHLFNAL…         101771.        102342. -0.00808 60/0 with… WPSGHNXX     value
+#> 6 AKGLGPF…          98073.          8784.  3.48    60/0 with… FHIVKWAS     value
 #> # ℹ 8 more variables: group1 <chr>, group2 <chr>, n1 <int>, n2 <int>,
 #> #   statistic <dbl>, df <dbl>, p <dbl>, p.adj <dbl>
 ```
@@ -606,12 +640,12 @@ head(anova_stats)
 #> # A tibble: 6 × 11
 #>   Peptide      cleavage_pos condition Effect   DFn   DFd       F       p `p<.05`
 #>   <chr>               <dbl> <chr>     <chr>  <dbl> <dbl>   <dbl>   <dbl> <chr>  
-#> 1 AETSIKVFLPY…           13 DMSO      time       1    10   0.328 5.79e-1 ""     
-#> 2 AETSIKVFL_P             9 DMSO      time       1    10   3.34  9.8 e-2 ""     
-#> 3 AGSWKGVRNDF…           11 DMSO      time       1    10   1.63  2.3 e-1 ""     
-#> 4 AGSWKGVRND_F           10 DMSO      time       1    10   0.382 5.5 e-1 ""     
-#> 5 AHLFNALTWPS…           12 DMSO      time       1    10   3.50  9.1 e-2 ""     
-#> 6 AKGLGPFHIV_K           10 DMSO      time       1    10 267.    1.54e-8 "*"    
+#> 1 AETSIKVFLPY…           13 DMSO      time       1    10   0.322 5.83e-1 ""     
+#> 2 AETSIKVFL_P             9 DMSO      time       1    10   3.33  9.8 e-2 ""     
+#> 3 AGSWKGVRNDF…           11 DMSO      time       1    10   1.64  2.3 e-1 ""     
+#> 4 AGSWKGVRND_F           10 DMSO      time       1    10   0.479 5.05e-1 ""     
+#> 5 AHLFNALTWPS…           12 DMSO      time       1    10   3.51  9   e-2 ""     
+#> 6 AKGLGPFHIV_K           10 DMSO      time       1    10 267.    1.53e-8 "*"    
 #> # ℹ 2 more variables: ges <dbl>, p.adj <dbl>
 ```
 
@@ -656,10 +690,10 @@ mspms::plot_icelogo(cleavage_seqs, background_universe)
 
 ![](README_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
 
-We could also look at the fold change instead of the percent difference
+We could also look at the fold change instead of the percent difference.
 
 ``` r
-mspms::plot_icelogo(cleavage_seqs, background_universe, type = "fold change")
+mspms::plot_icelogo(cleavage_seqs, background_universe, type = "fold_change")
 #> Scale for x is already present.
 #> Adding another scale for x, which will replace the existing scale.
 ```
@@ -670,15 +704,116 @@ We also provide a convenience function for looking at all icelogos
 relative to time 0 within the experiment.
 
 This function includes cleavages that were significant at any time point
-once in the experimental set of the ICELOGO.
+once in the experimental set of the ICELOGO. Below we show this applied
+to create percent difference and fold change icelogos.
 
 ``` r
-mspms::plot_all_icelogos(mspms_data)
+plot_all_icelogos(mspms_data)
 #> Scale for x is already present.
 #> Adding another scale for x, which will replace the existing scale.
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
+
+``` r
+
+plot_all_icelogos(mspms_data, type = "fold_change")
+#> Scale for x is already present.
+#> Adding another scale for x, which will replace the existing scale.
+```
+
+![](README_files/figure-gfm/unnamed-chunk-26-2.png)<!-- -->
+
+### Extracting regular expressions from icelogos
+
+It might be useful for the user to extract the information contained in
+the Icelogo and use it to filter their data for peptides that are
+predicted to be well cleaved, or not cleaved according to the icelogo
+plot.
+
+For example, we can get the amino acids that are enriched at each
+position of the icelogo using the code below.
+
+``` r
+
+# Getting data for Icelog 
+cleavage_seqs <- time_t %>%
+  dplyr::filter(log2fc > 3, p.adj <= 0.05) %>%
+  dplyr::pull(cleavage_seq)
+
+background_universe <- mspms::all_possible_8mers_from_228_library
+
+# Plotting icelogo
+mspms::plot_icelogo(cleavage_seqs, background_universe)
+#> Scale for x is already present.
+#> Adding another scale for x, which will replace the existing scale.
+```
+
+![](README_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
+
+``` r
+
+# corresponding icelogo data to the plot
+icelogo_matrix = mspms::prepare_icelogo_data(cleavage_seqs, background_universe)
+
+# Extracting regular expressions
+RE_pos = mspms::extract_re(icelogo_matrix)
+
+RE_pos
+#> [1] "(F|L|P)(L|R|V)(K|T)(A|F|R)(A)(L|n)(F|G)(P)"
+```
+
+We can also do this for amino acids that are negatively enriched.
+
+``` r
+RE_neg = mspms::extract_re(icelogo_matrix,type = "negative")
+
+RE_neg
+#> [1] "(X)(X)(X)(.)(.)(X)(.)(.)"
+```
+
+Once we have these regular expressions, we can use it to filter our data
+as follows:
+
+``` r
+pos_enriched = mspms_data %>% 
+  dplyr::filter(grepl(RE_pos, cleavage_seq))
+```
+
+In this case, none of the peptides in the original data set match all
+the rules in our library (peptide library does not contain all possible
+combinations, so none of the peptides was a match to the combination of
+rules at each position)
+
+We could then filter to only include peptides that are greater than a
+certain threshold percent difference. We can then visualize these
+results easily with the plot_time_course function described further
+below. Here we will only consider AAs with a percent difference greater
+than 10 at each position.
+
+``` r
+# Extracting regular expressions 
+RE_pos = mspms::extract_re(icelogo_matrix,threshold = 10)
+
+RE_pos
+#> [1] "(F)(.)(.)(.)(A)(.)(.)(.)"
+```
+
+``` r
+
+# Filtering data for peptides that have cleavage sequences matching regular 
+# expressions
+f = mspms_data %>% 
+  dplyr::filter(grepl(RE_pos, cleavage_seq))
+
+#visualizing these peptides that match over time.
+plot_time_course(f)
+```
+
+![](README_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
+
+Here we see that these peptides were cleaved over time in DMSO, as would
+be expected based on the icelogo plot.
 
 ### PCA.
 
@@ -690,7 +825,7 @@ conditions.
 mspms::plot_pca(mspms_data)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
 
 ### Hierchical clustering
 
@@ -731,7 +866,7 @@ p1 <- mspms_data %>%
 p1
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-33-1.png)<!-- -->
 
 ## Calculating the number of cleavages at each position in the library
 
@@ -752,4 +887,4 @@ p1 = mspms:::plot_cleavages_per_pos(count)
 p1
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->
