@@ -573,10 +573,11 @@ mspms::plot_pca(mspms_data)
 ### Hierchical clustering
 
 We can also generate an interactive heatmap with the hierarchical clustering 
-results. 
+results. This cannot be displayed in the vignette, but the below code can be 
+used to generate this. 
 
 
-```{r}
+```{r,eval=FALSE}
 mspms::plot_heatmap(mspms_data)
 ```
 
