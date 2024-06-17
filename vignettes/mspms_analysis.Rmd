@@ -324,7 +324,7 @@ We have combined all of these steps into one function, mspms() for convenience.
 This offers a nice balance between allowing the user the option to use 
 individual steps and providing a quick way to get to the final data. 
 
-```{r,eval = FALSE}}
+```{r,eval = FALSE}
 mspms_data <- mspms::mspms(peaks_prepared_data, design_matrix)
 ```
 
