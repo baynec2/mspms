@@ -48,11 +48,11 @@ prepare_icelogo_data <- function(cleavage_seqs,
   } else if (type == "fold_change") {
     fc <- mspms::calc_AA_fc(
       experimental_prop_matrix = experimental_proprotions,
-      background_prop_matrix = background_proportions
+      background_prop_matrix = background_proportions,
+      sig_zscores = sig_zscores
     )
-    final_fc <- mspms::prepare_fc(fc, sig_zscores)
-    return(final_fc)
+    return(fc)
   } else {
-    stop("type must be either 'percent_difference' or 'fold change'")
+    stop("type must be either 'percent_difference' or 'fold_change'")
   }
 }
