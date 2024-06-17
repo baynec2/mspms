@@ -242,9 +242,8 @@ head(design_matrix)
 mspms uses the NormalyzerDE package to do normalization under the hood. 
 
 We can normalyze the data as follows:  
-```{r}
+```{r,eval = FALSE}
 normalyzed_data <- normalyze(peaks_prepared_data, design_matrix)
-
 ```
 
 ### Handling Outliers
@@ -255,6 +254,9 @@ need to specify the design matrix here too. Make sure that the column header
 names are "sample" and "group" just like before.
 
 ```{r}
+
+normalyzed_data = mspms::normalyzed_data
+
 design_matrix <- readr::read_csv("../tests/testdata/design_matrix.csv")
 outliers <- handle_outliers(normalyzed_data, design_matrix)
 
