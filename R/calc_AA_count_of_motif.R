@@ -26,7 +26,7 @@ calc_AA_count_of_motif <- function(cleavage_motif) {
     sep = "",
     remove = TRUE
   ) %>%
-    dplyr::select(-.data$exclude)
+    dplyr::select(-"exclude")
 
   # Define the desired order.
   # This ensures that the amino acids will always be in the same order.
@@ -49,7 +49,7 @@ calc_AA_count_of_motif <- function(cleavage_motif) {
   missing_df <- tibble::as_tibble(missing_matrix)
 
   count_matrix <- dplyr::bind_cols(count, missing_df) %>%
-    dplyr::relocate(desired_order) %>%
+    dplyr::relocate(dplyr::all_of(desired_order)) %>%
     t()
 
   # replacing NA with 0

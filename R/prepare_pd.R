@@ -31,8 +31,8 @@ prepare_pd <- function(filepath) {
 
   name_fixed <- data %>%
     dplyr::rename(
-      Peptide = .data$`Annotated Sequence`,
-      `Protein Accession` = .data$`Master Protein Accessions`
+      Peptide = "Annotated Sequence",
+      `Protein Accession` = "Master Protein Accessions"
     )
 
   # Converting the peptide notation from proteome discover to standard format.
@@ -60,7 +60,8 @@ prepare_pd <- function(filepath) {
 
   out <- sample_name_fixed %>%
     dplyr::select(
-      .data$Peptide, .data$`Protein Accession`,
+      "Peptide",
+      "Protein Accession",
       dplyr::all_of(sample_cols)
     )
 
