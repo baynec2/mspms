@@ -14,6 +14,26 @@ knitr::opts_chunk$set(
 )
 ```
 
+## Abstract/ Motivation
+
+Multiplex Substrate Profiling by Mass Spectrometry 
+[(MSP-MS)](https://pubmed.ncbi.nlm.nih.gov/36948708/) is a powerful method used
+to determine the substrate specificity of proteases. This method is of interest
+for groups interested in the study of proteases and their role as regulators of
+biological pathways, whether applied to the study of disease states, the 
+development of diagnostic and prognostic tests, generation of tool compounds, 
+or rational design of protease targeting therapeutics. Analysis of the MS based 
+data produced by MSP-MS is a multi-step process involving detection and 
+quantification of peptides, normalization, outlier detection, imputation, 
+cleavage sequence identification, statistics, and data visualizations. 
+his process can be challenging, especially for biologists/ mass spectrometrists
+with limited programming experience. To overcome these issues, we developed the
+mspms R package to facilitate the analysis of MSP-MS data utilizing good 
+software/data analysis practices. 
+
+This differs from existing proteomics software available on Bioconductor in
+that it is specifically designed to analyze data resulting from the MSP-MS 
+assay.
 
 ## Quickstart
 
@@ -106,7 +126,8 @@ position in a vector of motifs.
 each position from the output of calc_AA_count_of_motif().  
 3. *calc_AA_motif_zscore()*: calculates z scores for each amino acid at each 
 position in a vector of motifs.  
-4. *calc_sig_zscore()*: given a matrix of zscores, determines which are significant given a user defined p value. 
+4. *calc_sig_zscore()*: given a matrix of zscores, determines which are 
+significant given a user defined p value. 
 5. *calc_AA_percent_difference()*: calculates the percentage difference of 
 6. *calc_AA_fold_change()*: calculates the fold change of a matrix containing 
 the proportions of amino acids at each position relative to a background matrix. 
@@ -180,9 +201,12 @@ library(dplyr)
 library(mspms)
 
 ### Loading the files ###
-lfq_filename <- "../tests/testdata/protein-peptides-lfq.csv"
+lfq_filename <- system.file("extdata/protein-peptides-lfq.csv",
+                            package = "mspms")
+  
 # file "protein-peptides.csv" exported from PEAKS identification
-id_filename <- "../tests/testdata/protein-peptides-id.csv"
+id_filename <- system.file("extdata/protein-peptides-id.csv",
+                           package = "mspms")
 
 # Prepare the data for normalyzer analysis
 peaks_prepared_data <- prepare_peaks(lfq_filename, id_filename)
@@ -194,8 +218,11 @@ peaks_prepared_data <- prepare_peaks(lfq_filename, id_filename)
 We can prepare proteome discover files for analysis with mspms as follows.
 
 ```{r}
-prepared_proteome_discoverer <-
-  prepare_pd("../tests/testdata/proteome_discoverer_output.xlsx")
+
+pd_file = system.file("extdata/proteome_discoverer_output.xlsx",
+                      package = "mspms")
+
+prepared_proteome_discoverer <- prepare_pd(pd_file)
 ```
 
 
@@ -231,9 +258,14 @@ head(all_peptide_sequences)
 
 ### Loading design matrix
 
-Before we normalyze data, we need to know what samples are in what groups. We can do that by defining a design matrix. 
+Before we normalyze data, we need to know what samples are in what groups.
+We can do that by defining a design matrix. 
 ```{r}
-design_matrix <- readr::read_csv("../tests/testdata/design_matrix.csv")
+design_matrix_fp <- system.file("extdata/design_matrix.csv",
+                             package = "mspms")
+  
+  
+design_matrix = readr::read_csv(design_matrix_fp)
 
 head(design_matrix)
 ```
@@ -242,7 +274,7 @@ head(design_matrix)
 mspms uses the NormalyzerDE package to do normalization under the hood. 
 
 We can normalyze the data as follows:  
-```{r,eval = FALSE}
+```{r}
 normalyzed_data <- normalyze(peaks_prepared_data, design_matrix)
 ```
 
@@ -254,11 +286,7 @@ need to specify the design matrix here too. Make sure that the column header
 names are "sample" and "group" just like before.
 
 ```{r}
-normalyzed_data = mspms::normalyzed_data
-
-design_matrix <- readr::read_csv("../tests/testdata/design_matrix.csv")
 outliers <- handle_outliers(normalyzed_data, design_matrix)
-
 ```
 
 ### Imputation of data 
@@ -268,7 +296,6 @@ can do downstream statistics.
 
 ```{r}
 imputed <- mspms::impute(outliers)
-
 ```
 
 
@@ -324,7 +351,7 @@ We have combined all of these steps into one function, mspms() for convenience.
 This offers a nice balance between allowing the user the option to use 
 individual steps and providing a quick way to get to the final data. 
 
-```{r,eval = FALSE}
+```{r}
 mspms_data <- mspms::mspms(peaks_prepared_data, design_matrix)
 ```
 
