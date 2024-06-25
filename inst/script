@@ -1,0 +1,90 @@
+Below are instructions for producing the files found in inst/extdata
+
+protein-peptides-id.csv and protein-peptides-lfq.csv were produced by exporting
+data from an example MSP-MS run from PEAKS. Instructions to set up the Peaks run 
+and export each of these files are provided below. 
+
+Setting Up PEAKS run
+
+  A project was opened in PEAKS and .raw files cooresponding to the mass
+  spectrometry runs for the experiment were uploaded. A new sample was created 
+  for each file. The appropiate instrument (Q-exactive), fragmentation method 
+  (HCD), and enzyme (None) for the experiment was selected. The data refinement
+  tab was then clicked and the following parameters were set:
+  
+    Merge scans - checked
+      Retention time window (for raw files) - 0.8 min
+      Precursor m/z error tolerance - 10.0 ppm
+      Merge CID and HCD scans together - unchecked
+    Correct Precursor - checked. 
+      Mass only (recommended) - checked 
+      Mass and Charge states - unchecked 
+    Filter Scans - checked
+      only keep scans satisfying:
+        Precursor mass between - unchecked
+        Retention time between - 0 and 95 min
+        Quality value greater than - unchecked 
+      
+  The identification tab was then clicked and the following parameters were set: 
+  
+    Precursor mass- 20ppm using monoisotopic mass 
+    Fragment ion- 0.01 Da
+    Enzyme- None
+    
+    PTM
+    - no PTMs specified
+    
+    Database 
+    - database for peptide library used in the MSP-MS experiment was used
+    
+    General options
+    Estimate FDR with decoy-fusion - checked
+    
+  Then the quantification tab button was selected.
+
+    Tools
+      Label-free - checked
+    Basic options
+      Mass error tolerance - 9 ppm
+      Retention Time Shift Tolerance - 3.0 min
+    Sample Groups
+      replicate samples were added to a new group.
+  
+  Finished was clicked and the PEAKS run was started. 
+  
+Exporting protein-peptides-lfq.csv
+  Quantification was selected once PEAKS run finished
+    Normalization Factor was changed to "No normalization"
+    Peptide Filters were changed so no filtering occurs
+      quality >= 0
+      Avg. Area >= 0
+      Peptide ID Count >= 0
+      Charge between 1 and 10
+      Have at least 1 confident samples. 
+    Protein Filters were changed so no filtering occurs
+      Significance >= 0 
+    Export was selected
+      supporting peptides - checked
+        protein-peptides.csv name changed to protein-peptides-lfq.csv
+
+Exporting protein-peptides-id.csv
+  Quantification was selected again
+    FDR was adjusted to 1%
+    Results were applied
+      Export was selected
+        supporting peptides- checked
+        protein-peptides.csv - filename changed to protein-peptides-id.csv
+
+
+proteome_discoverer_output.xlsx
+
+* This file was produced by exporting data for an example from 
+Proteome Discoverer. A search was performed using the database 
+cooresponding to the peptides used in the MSP-MS experiment. Then data was
+exported from the Proteome discoverer export menu as a .xlsx file.  
+
+design_matrix.csv 
+
+* Design matrix for the example MSP-MS experiment in which a protease was 
+incubated with either DMSO or MZB inhibitor for 0, 60, or 240 minutes. The file
+was prepared in Excel and saved as a .csv file. 
