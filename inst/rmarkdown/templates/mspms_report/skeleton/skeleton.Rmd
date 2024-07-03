@@ -40,6 +40,17 @@ sessionInfo()
 ```{r}
 # The standard mspms data processing pipeline is used here. 
 mspms_data = mspms::mspms(prepared_data,design_matrix)
+
+mspms_data %>%
+  downloadthis::download_this(
+    output_name = "mspms_data",
+    output_extension = ".csv",
+    button_label = "Download data",
+    button_type = "warning",
+    has_icon = TRUE,
+    icon = "fa fa-save",
+    csv2 = FALSE
+  )
 ```
 
 
@@ -64,6 +75,17 @@ t1 = mspms::mspms_anova(mspms_data) %>%
   dplyr::arrange(p.adj)
 
 DT::datatable(t1)
+
+t1 %>%
+  downloadthis::download_this(
+    output_name = "mspms_anova",
+    output_extension = ".csv",
+    button_label = "Download anova",
+    button_type = "warning",
+    has_icon = TRUE,
+    icon = "fa fa-save",
+    csv2 = FALSE
+  )
 ```
 
 **Table 1. ** Here anova results are displayed for each condition (testing to see if there is an effect on time). 
@@ -74,6 +96,17 @@ t2 = log2fc_t_test(mspms_data) %>%
   dplyr::arrange(p.adj)
 
 DT::datatable(t2)
+
+t2 %>%
+  downloadthis::download_this(
+    output_name = "mspms_t-tests",
+    output_extension = ".csv",
+    button_label = "Download ttests",
+    button_type = "warning",
+    has_icon = TRUE,
+    icon = "fa fa-save",
+    csv2 = FALSE
+  )
 ```
 
 **Table 2.** Here T-test results are displayed as compared to time 0 for each condition

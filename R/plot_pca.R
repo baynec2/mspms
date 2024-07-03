@@ -43,7 +43,7 @@ plot_pca <- function(mspms_data, color = "time", shape = "condition") {
 
   time <- as.factor(md$time)
 
-  condition <- md$condition
+  condition <- as.factor(md$condition)
 
   # plotting the PCA
   plot <- PCA_df %>%
