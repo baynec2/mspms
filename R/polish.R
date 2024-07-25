@@ -28,7 +28,6 @@ polish <- function(cleavage_added_data) {
       TRUE ~ cterm_cleavage_pos
     ), .after = "cleavage_seq") %>%
     tibble::as_tibble()
-
-
+  
   return(out)
 }
