@@ -37,15 +37,23 @@ plot_heatmap <- function(mspms_data, scale = "column") {
     
     mat <- mspms_data %>%
       dplyr::select("sample", "Peptide", "cleavage_seq") %>%
-      tidyr::pivot_wider(names_from = "Peptide", values_from = "cleavage_seq") %>%
+      tidyr::pivot_wider(names_from = "Peptide",
+                         values_from = "cleavage_seq") %>%
       tibble::column_to_rownames("sample") %>%
       dplyr::select(dplyr::all_of(peptide_order)) %>%
       as.matrix()
-  
+    # Creating column labels for whether a peptide is cleaved or not
+    col_logic = grepl(".*_.*",colnames(values))
+    col_p_colors = c("cleaved","not_cleaved")
+    col_colors = data.frame(cleavage_status = ifelse(col_logic,
+                                      col_p_colors[1],
+                                      col_p_colors[2]))
     heatmaply::heatmaply(values,
       scale = scale,
       showticklabels = c(FALSE, TRUE),
       custom_hovertext = mat,
-      row_side_colors = colors
-  )
+      row_side_colors = colors,
+      col_side_colors = col_colors
+    )
+  
 }
