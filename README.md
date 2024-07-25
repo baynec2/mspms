@@ -53,7 +53,7 @@ following sections for more information.
 
 ## Overview
 
-There are 4 different types of functions in this package.
+There are 5 different types of functions in this package.
 
 1.  Pre-processing data. These functions are focused on making mspms
     more generally useful to a wider audience outside of the very
@@ -61,13 +61,16 @@ There are 4 different types of functions in this package.
     for the use of other types of upstream proteomic data processing,
     different peptide libraries, etc.
 
-2.  Data processing/ normalization. These functions allow the user to
+2.  QC checks. These functions allow the user to conduct quality control
+    checks
+
+3.  Data processing/ normalization. These functions allow the user to
     normalize and process the MSP-MS data.
 
-3.  Statistics. These methods allow the user to perform basic statistics
+4.  Statistics. These methods allow the user to perform basic statistics
     on the normalized/processed data.
 
-4.  Data visualization. These functions allow the user to visualize the
+5.  Data visualization. These functions allow the user to visualize the
     data.
 
 **Preprocessing data**.  
@@ -76,6 +79,12 @@ combines them, and prepares for processing by the mspms R package. 2.
 *prepare_pd()*: prepares exported files from proteome discoverer.  
 3. *calculate_all_cleavages()*: Calculates all possible cleavages for
 peptide library sequences.
+
+**QC checks** 1. *qc_check()*: Conducts quality control checks on the
+data. 2. *plot_qc_check()*: Plots the results of the qc_checks()
+function. 3. *find_nd_peptides()*: Finds library peptides that were not
+detected. 4. *plot_nd_peptides()*: Plots the results of the
+find_nd_peptides() function.
 
 **Data Processing/ Normalization**.  
 1. *normalyze()*: Normalizes values.  
@@ -278,6 +287,105 @@ head(all_peptide_sequences)
 #> [6] "XXXXFIVFIL"
 ```
 
+## QC Checks
+
+In theory, all of the full length peptides present in the library should
+be detected in the MSP-MS experiment. In practice, this isn’t the case
+because some peptides fly worse than others.
+
+The check_qc() function let’s us know what percentage of these full
+length peptides are missing. This function also checks to see what
+
+We can use it as follows:
+
+``` r
+qc_check <- mspms::qc_check(prepared_data = mspms::peaks_prepared_data,
+                            peptide_library = mspms::peptide_library,
+                            design_matrix = mspms::design_matrix)
+
+head(qc_check)
+#> # A tibble: 6 × 8
+#>   sample      n_undigested_library_d…¹ n_library_detected perc_undigested_libr…²
+#>   <chr>                          <int>              <int>                  <dbl>
+#> 1 DMSO_T000_1                      207                217                   90.8
+#> 2 DMSO_T000_2                      207                218                   90.8
+#> 3 DMSO_T000_3                      207                217                   90.8
+#> 4 DMSO_T000_4                      207                215                   90.8
+#> 5 DMSO_T060_1                      205                219                   89.9
+#> 6 DMSO_T060_2                      205                218                   89.9
+#> # ℹ abbreviated names: ¹​n_undigested_library_detected,
+#> #   ²​perc_undigested_library_detected
+#> # ℹ 4 more variables: perc_library_detected <dbl>, group <chr>,
+#> #   condition <chr>, time <dbl>
+```
+
+These results can then be visualized as follows using plot_qc_check()
+
+First lets look at the percent of full length peptides in the library
+detected
+
+``` r
+plot_qc_check(qc_check)[1]
+#> [[1]]
+```
+
+![](README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+We can see here that most samples have more than 90% of the full length
+peptides detected. We would expect to see ~90% of the peptides detected
+at T0. Notably less than this would suggest that something funky
+happened to the sample and it
+
+all of these samples look reasonably good.
+
+Now let’s look at all the percentage of peptides in the library
+detected, including both full length and detected fragments.
+
+``` r
+plot_qc_check(qc_check)[2]
+#> [[1]]
+```
+
+![](README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+Here we see that most samples have more than 90% of the peptides
+detected. This is as would be expected with quality data, thus Ww can
+consider these samples to have passed QC. Note that we see more peptides
+here compared to the previous qc plot, since some of the digested
+peptide fragments fly better than the parent peptides on the mass spec.
+
+It may be helpful to know what peptides from the library were not
+detected in a given experiment We can examine this as follows:
+
+``` r
+nd_peptides = mspms::find_nd_peptides(mspms::peaks_prepared_data,
+                                      mspms::peptide_library,
+                                      mspms::design_matrix)
+
+head(nd_peptides)
+#> # A tibble: 6 × 5
+#>   sample      missing_peptide_id      type_missing       library_match_sequence
+#>   <chr>       <chr>                   <chr>              <chr>                 
+#> 1 DMSO_T000_1 TDP6|TDP6|generation1   completely_missing FIVFILWRTEHHAL        
+#> 2 DMSO_T000_1 TDP24|TDP24|generation1 completely_missing LGWHALFRKYPILA        
+#> 3 DMSO_T000_1 TDP55|TDP55|generation2 completely_missing SSGLLNIHFKFDWR        
+#> 4 DMSO_T000_1 TDP66|TDP66|generation3 completely_missing PKDRWHTWLKIFNT        
+#> 5 DMSO_T000_1 TDP130|TDP130|GenScript completely_missing ERWHDINLSVSLQI        
+#> 6 DMSO_T000_1 TDP133|TDP133|GenScript completely_missing EQREVYTQIWILTV        
+#> # ℹ 1 more variable: library_real_sequence <chr>
+```
+
+we can then visualize as follows using the plot_nd_peptides() function.
+
+``` r
+plot_nd_peptides(nd_peptides)
+```
+
+![](README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- --> Here we can
+see that some of the full length peptides are not detected in 100% of
+samples. Additionally, some of these library peptides are not detected,
+even when considering possible fragment peptides.
+
 ## Data Normalization/ Processing
 
 ### Loading design matrix
@@ -325,7 +433,7 @@ normalyzed_data <- normalyze(peaks_prepared_data, design_matrix)
 #> Sample check: More than one sample group found
 #> Sample replication check: All samples have replicates
 #> RT annotation column found (2)
-#> [Step 1/5] Input verified, job directory prepared at:./2024-06-17_mspms_normalyze_output
+#> [Step 1/5] Input verified, job directory prepared at:./2024-07-25_mspms_normalyze_output
 #> [Step 2/5] Performing normalizations
 #> [Step 2/5] Done!
 #> [Step 3/5] Generating evaluation measures...
@@ -334,7 +442,7 @@ normalyzed_data <- normalyze(peaks_prepared_data, design_matrix)
 #> [Step 4/5] Matrices successfully written
 #> [Step 5/5] Generating plots...
 #> [Step 5/5] Plots successfully generated
-#> All done! Results are stored in: ./2024-06-17_mspms_normalyze_output, processing time was 0.3 minutes
+#> All done! Results are stored in: ./2024-07-25_mspms_normalyze_output, processing time was 0.3 minutes
 #> Rows: 820 Columns: 27
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: "\t"
@@ -459,7 +567,7 @@ mspms_data <- mspms::mspms(peaks_prepared_data, design_matrix)
 #> Sample check: More than one sample group found
 #> Sample replication check: All samples have replicates
 #> RT annotation column found (2)
-#> [Step 1/5] Input verified, job directory prepared at:./2024-06-17_mspms_normalyze_output
+#> [Step 1/5] Input verified, job directory prepared at:./2024-07-25_mspms_normalyze_output
 #> [Step 2/5] Performing normalizations
 #> [Step 2/5] Done!
 #> [Step 3/5] Generating evaluation measures...
@@ -468,7 +576,7 @@ mspms_data <- mspms::mspms(peaks_prepared_data, design_matrix)
 #> [Step 4/5] Matrices successfully written
 #> [Step 5/5] Generating plots...
 #> [Step 5/5] Plots successfully generated
-#> All done! Results are stored in: ./2024-06-17_mspms_normalyze_output, processing time was 0.3 minutes
+#> All done! Results are stored in: ./2024-07-25_mspms_normalyze_output, processing time was 0.2 minutes
 #> Rows: 820 Columns: 27
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: "\t"
@@ -528,14 +636,14 @@ log2fc <- mspms::mspms_log2fc(mspms_data)
 
 head(log2fc)
 #> # A tibble: 6 × 7
-#>   condition Peptide         control_mean  time reference_mean comparison  log2fc
-#>   <chr>     <chr>                  <dbl> <dbl>          <dbl> <chr>        <dbl>
-#> 1 DMSO      AETSIKVFLPYYG_H       89862.     0         89862. DMSO.T0/DM…  0    
-#> 2 DMSO      AETSIKVFLPYYG_H       89862.    60        186881. DMSO.T60/D…  1.06 
-#> 3 DMSO      AETSIKVFLPYYG_H       89862.   240         83331. DMSO.T240/… -0.109
-#> 4 DMSO      AETSIKVFL_P          144266.     0        144266. DMSO.T0/DM…  0    
-#> 5 DMSO      AETSIKVFL_P          144266.    60        292626. DMSO.T60/D…  1.02 
-#> 6 DMSO      AETSIKVFL_P          144266.   240          8760. DMSO.T240/… -4.04
+#>   condition Peptide        control_mean  time reference_mean comparison   log2fc
+#>   <chr>     <chr>                 <dbl> <dbl>          <dbl> <chr>         <dbl>
+#> 1 DMSO      AAPYHKLETNITSG   231287600.     0     231287600. DMSO.T0/DMS…  0    
+#> 2 DMSO      AAPYHKLETNITSG   231287600.    60     385450615. DMSO.T60/DM…  0.737
+#> 3 DMSO      AAPYHKLETNITSG   231287600.   240     278208500. DMSO.T240/D…  0.266
+#> 4 DMSO      ADARKYWNVHGTHQ   101113749.     0     101113749. DMSO.T0/DMS…  0    
+#> 5 DMSO      ADARKYWNVHGTHQ   101113749.    60     166235600. DMSO.T60/DM…  0.717
+#> 6 DMSO      ADARKYWNVHGTHQ   101113749.   240     119066521. DMSO.T240/D…  0.236
 ```
 
 ### log2fc_t_tests.
@@ -550,12 +658,12 @@ head(log2fc_t_test)
 #> # A tibble: 6 × 19
 #>   Peptide       control_mean time  reference_mean comparison log2fc cleavage_seq
 #>   <chr>                <dbl> <chr>          <dbl> <chr>       <dbl> <chr>       
-#> 1 AETSIKVFLPYY…       89862. 60           186881. DMSO.T60/…  1.06  PYYGHXXX    
-#> 2 AETSIKVFLPYY…       89862. 240           83331. DMSO.T240… -0.109 PYYGHXXX    
-#> 3 AETSIKVFL_P        144266. 60           292626. DMSO.T60/…  1.02  KVFnPYYG    
-#> 4 AETSIKVFL_P        144266. 240            8760. DMSO.T240… -4.04  KVFnPYYG    
-#> 5 AGSWKGVRNDF_T       69553. 60           138434. DMSO.T60/…  0.993 RNDFTEAX    
-#> 6 AGSWKGVRNDF_T       69553. 240            8274. DMSO.T240… -3.07  RNDFTEAX    
+#> 1 AAPYHKLETNIT…   231287600. 60        385450615. DMSO.T60/…  0.737 <NA>        
+#> 2 AAPYHKLETNIT…   231287600. 240       278208500. DMSO.T240…  0.266 <NA>        
+#> 3 ADARKYWNVHGT…   101113749. 60        166235600. DMSO.T60/…  0.717 <NA>        
+#> 4 ADARKYWNVHGT…   101113749. 240       119066521. DMSO.T240…  0.236 <NA>        
+#> 5 ADIVANFTGHGY…   264432528. 60        459550722. DMSO.T60/…  0.797 <NA>        
+#> 6 ADIVANFTGHGY…   264432528. 240       314130902. DMSO.T240…  0.248 <NA>        
 #> # ℹ 12 more variables: cleavage_pos <dbl>, .y. <chr>, group1 <chr>,
 #> #   group2 <fct>, n1 <int>, n2 <int>, statistic <dbl>, df <dbl>, p <dbl>,
 #> #   p.adj <dbl>, p.adj.signif <chr>, condition <chr>
@@ -577,12 +685,12 @@ head(condition_t)
 #> # A tibble: 6 × 16
 #>   Peptide         comparison_mean reference_mean log2fc comparison  cleavage_seq
 #>   <chr>                     <dbl>          <dbl>  <dbl> <chr>       <chr>       
-#> 1 AETSIKVFLPYYG_H          40956.        186881. -2.19  MZB/DMSO a… PYYGHXXX    
-#> 2 AETSIKVFL_P              72704.        292626. -2.01  MZB/DMSO a… KVFnPYYG    
-#> 3 AGSWKGVRNDF_T            99506.        138434. -0.476 MZB/DMSO a… RNDFTEAX    
-#> 4 AGSWKGVRND_F              6667.         39768. -2.58  MZB/DMSO a… VRNDFTEA    
-#> 5 AHLFNALTWPSG_H          113521.        101771.  0.158 MZB/DMSO a… WPSGHNXX    
-#> 6 AKGLGPFHIV_K             10217          98073. -3.26  MZB/DMSO a… FHIVKWAS    
+#> 1 AAPYHKLETNITSG       258249187.     385450615. -0.578 MZB/DMSO a… <NA>        
+#> 2 ADARKYWNVHGTHQ       101569889.     166235600. -0.711 MZB/DMSO a… <NA>        
+#> 3 ADIVANFTGHGYHQ       287965814.     459550722. -0.674 MZB/DMSO a… <NA>        
+#> 4 AETSIKVFLPYYGH       192650900.     276229845. -0.520 MZB/DMSO a… <NA>        
+#> 5 AETSIKVFLPYYG_H          41440.        186881. -2.17  MZB/DMSO a… PYYGHXXX    
+#> 6 AETSIKVFL_P              73014.        293626. -2.01  MZB/DMSO a… KVFnPYYG    
 #> # ℹ 10 more variables: cleavage_pos <dbl>, .y. <chr>, group1 <chr>,
 #> #   group2 <chr>, n1 <int>, n2 <int>, statistic <dbl>, df <dbl>, p <dbl>,
 #> #   p.adj <dbl>
@@ -601,14 +709,14 @@ time_t = mspms::log2fct_time(mspms_data,
 
 head(time_t)
 #> # A tibble: 6 × 15
-#>   Peptide  comparison_mean reference_mean   log2fc comparison cleavage_seq .y.  
-#>   <chr>              <dbl>          <dbl>    <dbl> <chr>      <chr>        <chr>
-#> 1 AETSIKV…         186881.         89862.  1.06    60/0 with… PYYGHXXX     value
-#> 2 AETSIKV…         292626.        144266.  1.02    60/0 with… KVFnPYYG     value
-#> 3 AGSWKGV…         138434.         69553.  0.993   60/0 with… RNDFTEAX     value
-#> 4 AGSWKGV…          39768.         22053.  0.851   60/0 with… VRNDFTEA     value
-#> 5 AHLFNAL…         101771.        102342. -0.00808 60/0 with… WPSGHNXX     value
-#> 6 AKGLGPF…          98073.          8784.  3.48    60/0 with… FHIVKWAS     value
+#>   Peptide    comparison_mean reference_mean log2fc comparison cleavage_seq .y.  
+#>   <chr>                <dbl>          <dbl>  <dbl> <chr>      <chr>        <chr>
+#> 1 AAPYHKLET…      385450615.     231287600.  0.737 60/0 with… <NA>         value
+#> 2 ADARKYWNV…      166235600.     101113749.  0.717 60/0 with… <NA>         value
+#> 3 ADIVANFTG…      459550722.     264432528.  0.797 60/0 with… <NA>         value
+#> 4 AETSIKVFL…      276229845.     213533188.  0.371 60/0 with… <NA>         value
+#> 5 AETSIKVFL…         186881.         89862.  1.06  60/0 with… PYYGHXXX     value
+#> 6 AETSIKVFL…         293626.        144989.  1.02  60/0 with… KVFnPYYG     value
 #> # ℹ 8 more variables: group1 <chr>, group2 <chr>, n1 <int>, n2 <int>,
 #> #   statistic <dbl>, df <dbl>, p <dbl>, p.adj <dbl>
 ```
@@ -625,28 +733,28 @@ for the effect of time for each peptide within DMSO or MZB.
 ``` r
 # Doing ANOVA
 anova_stats <- mspms::mspms_anova(mspms_data)
-#> Warning: There were 100 warnings in `mutate()`.
+#> Warning: There were 169 warnings in `mutate()`.
 #> The first warning was:
 #> ℹ In argument: `data = map(.data$data, .f, ...)`.
 #> Caused by warning:
 #> ! NA detected in rows: 6,12.
 #> Removing this rows before the analysis.
-#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 99 remaining warnings.
+#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 168 remaining warnings.
 ```
 
 ``` r
 
 head(anova_stats)
 #> # A tibble: 6 × 11
-#>   Peptide      cleavage_pos condition Effect   DFn   DFd       F       p `p<.05`
-#>   <chr>               <dbl> <chr>     <chr>  <dbl> <dbl>   <dbl>   <dbl> <chr>  
-#> 1 AETSIKVFLPY…           13 DMSO      time       1    10   0.322 5.83e-1 ""     
-#> 2 AETSIKVFL_P             9 DMSO      time       1    10   3.33  9.8 e-2 ""     
-#> 3 AGSWKGVRNDF…           11 DMSO      time       1    10   1.64  2.3 e-1 ""     
-#> 4 AGSWKGVRND_F           10 DMSO      time       1    10   0.479 5.05e-1 ""     
-#> 5 AHLFNALTWPS…           12 DMSO      time       1    10   3.51  9   e-2 ""     
-#> 6 AKGLGPFHIV_K           10 DMSO      time       1    10 267.    1.53e-8 "*"    
-#> # ℹ 2 more variables: ges <dbl>, p.adj <dbl>
+#>   Peptide  cleavage_pos condition Effect   DFn   DFd     F     p `p<.05`     ges
+#>   <chr>           <dbl> <chr>     <chr>  <dbl> <dbl> <dbl> <dbl> <chr>     <dbl>
+#> 1 AAPYHKL…           NA DMSO      time       1    10 0.003 0.956 ""      3.24e-4
+#> 2 ADARKYW…           NA DMSO      time       1    10 0.001 0.975 ""      1   e-4
+#> 3 ADIVANF…           NA DMSO      time       1    10 0.009 0.928 ""      8.7 e-4
+#> 4 AETSIKV…           NA DMSO      time       1    10 1.06  0.328 ""      9.5 e-2
+#> 5 AETSIKV…           13 DMSO      time       1    10 0.351 0.567 ""      3.4 e-2
+#> 6 AETSIKV…            9 DMSO      time       1    10 3.31  0.099 ""      2.49e-1
+#> # ℹ 1 more variable: p.adj <dbl>
 ```
 
 ## Common Data Visualizations
@@ -662,7 +770,7 @@ volcano_plot <- mspms::plot_volcano(log2fc_t_test)
 volcano_plot
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
 
 ### Plotting sequence specificity motif
 
@@ -688,7 +796,7 @@ mspms::plot_icelogo(cleavage_seqs, background_universe)
 #> Adding another scale for x, which will replace the existing scale.
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
 
 We could also look at the fold change instead of the percent difference.
 
@@ -698,7 +806,7 @@ mspms::plot_icelogo(cleavage_seqs, background_universe, type = "fold_change")
 #> Adding another scale for x, which will replace the existing scale.
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
 
 We also provide a convenience function for looking at all icelogos
 relative to time 0 within the experiment.
@@ -713,7 +821,7 @@ plot_all_icelogos(mspms_data)
 #> Adding another scale for x, which will replace the existing scale.
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
 
 ``` r
 
@@ -722,7 +830,7 @@ plot_all_icelogos(mspms_data, type = "fold_change")
 #> Adding another scale for x, which will replace the existing scale.
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-26-2.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-31-2.png)<!-- -->
 
 ### Extracting regular expressions from icelogos
 
@@ -749,7 +857,7 @@ mspms::plot_icelogo(cleavage_seqs, background_universe)
 #> Adding another scale for x, which will replace the existing scale.
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->
 
 ``` r
 
@@ -760,7 +868,7 @@ icelogo_matrix = mspms::prepare_icelogo_data(cleavage_seqs, background_universe)
 RE_pos = mspms::extract_re(icelogo_matrix)
 
 RE_pos
-#> [1] "(F|L|P)(L|R|V)(K|T)(A|F|R)(A)(L|n)(F|G)(P)"
+#> [1] "(F|L|P)(L|R|V)(K|T)(A|F|R)(A)(L|n|R)(F|G)(P)"
 ```
 
 We can also do this for amino acids that are negatively enriched.
@@ -769,7 +877,7 @@ We can also do this for amino acids that are negatively enriched.
 RE_neg = mspms::extract_re(icelogo_matrix,type = "negative")
 
 RE_neg
-#> [1] "(X)(X)(X)(.)(.)(X)(.)(.)"
+#> [1] "(X)(X)(X)(.)(.)(X)(X)(.)"
 ```
 
 Once we have these regular expressions, we can use it to filter our data
@@ -810,7 +918,7 @@ f = mspms_data %>%
 plot_time_course(f)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
 
 Here we see that these peptides were cleaved over time in DMSO, as would
 be expected based on the icelogo plot.
@@ -825,7 +933,7 @@ conditions.
 mspms::plot_pca(mspms_data)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-36-1.png)<!-- -->
 
 ### Hierchical clustering
 
@@ -866,7 +974,7 @@ p1 <- mspms_data %>%
 p1
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-33-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-38-1.png)<!-- -->
 
 ## Calculating the number of cleavages at each position in the library
 
@@ -887,4 +995,4 @@ p1 = mspms:::plot_cleavages_per_pos(count)
 p1
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-39-1.png)<!-- -->

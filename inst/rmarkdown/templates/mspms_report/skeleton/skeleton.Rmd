@@ -53,20 +53,78 @@ mspms_data %>%
   )
 ```
 
+# QC Checks 
+
+```{r}
+qc_checks = mspms::qc_check(prepared_data,peptide_library,design_matrix)
+
+DT::datatable(qc_checks)
+
+qc_checks %>%
+  downloadthis::download_this(
+    output_name = "qc_checks",
+    output_extension = ".csv",
+    button_label = "Download qc_check",
+    button_type = "warning",
+    has_icon = TRUE,
+    icon = "fa fa-save",
+    csv2 = FALSE
+  )
+```
+
+**Table 1.** Here the percentage of the peptide library that is detected in 
+each sample is displayed.
+
+
+```{r}
+mspms::plot_qc_check(qc_checks)
+
+```
+
+**Figure 1.** Here the results of the qc checks are displayed. 
+
+
+```{r}
+nd_peptides = mspms::find_nd_peptides(prepared_data,
+                                      peptide_library,
+                                      design_matrix)
+
+DT::datatable(nd_peptides)
+
+nd_peptides %>%
+  downloadthis::download_this(
+    output_name = "nd_peptides",
+    output_extension = ".csv",
+    button_label = "Download nd_peptides",
+    button_type = "warning",
+    has_icon = TRUE,
+    icon = "fa fa-save",
+    csv2 = FALSE
+  )
+```
+
+**Table 2.** Here the peptides missing from each sample are shown
+
+
+```{r}
+plot_nd_peptides(nd_peptides)
+```
+
+**Figure 2.** Here the library peptides not detected in each samples are shown. 
 
 # Overview 
 ```{r}
 mspms::plot_pca(mspms_data)
 ```
 
-**Figure 1.** Here a PCA of the experiment is displayed. The color represents time, while shape and linetype of eclipse (if there are enough points to calculate) represents condition. 
+**Figure 3.** Here a PCA of the experiment is displayed. The color represents time, while shape and linetype of eclipse (if there are enough points to calculate) represents condition. 
 
 
 ```{r,fig.height = 8, fig.width = 10}
 mspms::plot_heatmap(mspms_data)
 ```
 
-**Figure 2.** Here an interactive heatmap of the experiment is displayed. Mouse over to see more information on each cell. Column side colors represent condition and time. 
+**Figure 4.** Here an interactive heatmap of the experiment is displayed. Mouse over to see more information on each cell. Column side colors represent condition and time. 
 
 # Statistics 
 
@@ -88,11 +146,11 @@ t1 %>%
   )
 ```
 
-**Table 1. ** Here anova results are displayed for each condition (testing to see if there is an effect on time). 
+**Table 3. ** Here anova results are displayed for each condition (testing to see if there is an effect on time). 
 
 
 ```{r}
-t2 = log2fc_t_test(mspms_data) %>% 
+t2 = mspms::log2fc_t_test(mspms_data) %>% 
   dplyr::arrange(p.adj)
 
 DT::datatable(t2)
@@ -109,24 +167,29 @@ t2 %>%
   )
 ```
 
-**Table 2.** Here T-test results are displayed as compared to time 0 for each condition
+**Table 4.** Here T-test results are displayed as compared to time 0 for each condition
 
 
 ```{r}
-plot_volcano(t2)
+mspms::plot_volcano(t2)
 ```
 
-**Figure 3.** Here the Log2fc and T tests are displayed as volcano plots relative to T0 for each condition. 
+**Figure 5.** Here the Log2fc and T tests are displayed as volcano plots relative to T0 for each condition. 
 
 # Cleavage Motifs
 
 ```{r,fig.height = 10, fig.width = 6}
-print(mspms::plot_all_icelogos(mspms_data))
+
+tryCatch({
+  print(mspms::plot_all_icelogos(mspms_data))
+}, error = function(e) {
+  print(e)
+})
 ```
 
 
 
-**Figure 4.** Here the cleavage motifs enriched in each condition are shown. 
+**Figure 6.** Here the cleavage motifs enriched in each condition are shown. 
 Enriched cleavage motifs are defined as having a p.adj <= 0.05 and a log2fc >3
 relative to time 0. 
 
@@ -137,12 +200,16 @@ relative to time 0.
 sig = t2 %>% 
   filter(p.adj <= 0.05, log2fc >3)
 
-d = count_cleavages_per_pos(sig)
+d = mspms::count_cleavages_per_pos(sig)
 
-plot_cleavages_per_pos(d)
+tryCatch({
+  print(mspms::plot_cleavages_per_pos(d))
+}, error = function(e) {
+  print(e)
+})
 ```
 
-**Figure 5.** Here the count of significant cleavages at each position of the 
+**Figure 7.** Here the count of significant cleavages at each position of the 
 peptide library are shown for each condition (facet) per time point (color). 
 Significant cleavages are defined as having a p.adj <= 0.05 and a log2fc > 3 
 relative to time 0.  

@@ -71,20 +71,22 @@ sections for more information.
 
 ## Overview
 
-There are 4 different types of functions in this package.
+There are 5 different types of functions in this package.
 
 1. Pre-processing data. These functions are focused on making mspms 
 more generally useful to a wider audience outside of the very specific workflow
 traditionally used in the O’Donoghue lab. Allows for the use of other types of
-upstream proteomic data processing, different peptide libraries, etc.    
+upstream proteomic data processing, different peptide libraries, etc.  
 
-2. Data processing/ normalization. These functions allow the user to normalize
+2. QC checks. These functions allow the user to conduct quality control checks
+
+3. Data processing/ normalization. These functions allow the user to normalize
 and process the MSP-MS data.    
 
-3. Statistics. These methods allow the user to perform basic statistics on the 
+4. Statistics. These methods allow the user to perform basic statistics on the 
 normalized/processed data.   
 
-4. Data visualization. These functions allow the user to visualize the data.
+5. Data visualization. These functions allow the user to visualize the data.
 
 
 **Preprocessing data**.   
@@ -93,6 +95,12 @@ combines them, and prepares for processing by the mspms R package.
 2. *prepare_pd()*: prepares exported files from proteome discoverer.  
 3. *calculate_all_cleavages()*: Calculates all possible cleavages for peptide
 library sequences. 
+
+**QC checks**
+1. *qc_check()*: Conducts quality control checks on the data.
+2. *plot_qc_check()*: Plots the results of the qc_checks() function.
+3. *find_nd_peptides()*: Finds library peptides that were not detected.
+4. *plot_nd_peptides()*: Plots the results of the find_nd_peptides() function.
 
 **Data Processing/ Normalization**.  
 1. *normalyze()*: Normalizes values.     
@@ -138,7 +146,8 @@ position in a vector of motifs.
 each position from the output of calc_AA_count_of_motif().  
 3. *calc_AA_motif_zscore()*: calculates z scores for each amino acid at each 
 position in a vector of motifs.  
-4. *calc_sig_zscore()*: given a matrix of zscores, determines which are significant given a user defined p value. 
+4. *calc_sig_zscore()*: given a matrix of zscores, determines which are
+significant given a user defined p value. 
 5. *calc_AA_percent_difference()*: calculates the percentage difference of 
 6. *calc_AA_fold_change()*: calculates the fold change of a matrix containing 
 the proportions of amino acids at each position relative to a background matrix. 
@@ -258,6 +267,73 @@ all_peptide_sequences <- mspms::calculate_all_cleavages(
 )
 head(all_peptide_sequences)
 ```
+
+## QC Checks
+
+In theory, all of the full length peptides present in the library 
+should be detected in the MSP-MS experiment. In practice, this isn't the case
+because some peptides fly worse than others. 
+
+The check_qc() function let's us know what percentage of these full length
+peptides are missing. This function also checks to see what 
+
+We can use it as follows:
+
+```{r}
+qc_check <- mspms::qc_check(prepared_data = mspms::peaks_prepared_data,
+                            peptide_library = mspms::peptide_library,
+                            design_matrix = mspms::design_matrix)
+
+head(qc_check)
+```
+
+These results can then be visualized as follows using plot_qc_check()
+
+First lets look at the percent of full length peptides in the library detected
+
+```{r}
+plot_qc_check(qc_check)[1]
+```
+
+We can see here that most samples have more than 90% of the full length peptides
+detected. We would expect to see ~90% of the peptides detected at T0. Notably 
+less than this would suggest that something funky happened to the sample and it
+
+all of these samples look reasonably good.
+
+Now let's look at all the percentage of peptides in the library detected, 
+including both full length and detected fragments. 
+
+```{r}
+plot_qc_check(qc_check)[2]
+```
+
+Here we see that most samples have more than 90% of the peptides detected. 
+This is as would be expected with quality data, thus Ww can consider these 
+samples to have passed QC. Note that we see more peptides here compared to the 
+previous qc plot, since some of the digested peptide fragments fly better than
+the parent peptides on the mass spec. 
+
+
+It may be helpful to know what peptides from the library were not detected in a 
+given experiment We can examine this as follows:
+
+```{r}
+nd_peptides = mspms::find_nd_peptides(mspms::peaks_prepared_data,
+                                      mspms::peptide_library,
+                                      mspms::design_matrix)
+
+head(nd_peptides)
+```
+
+we can then visualize as follows using the plot_nd_peptides() function. 
+
+```{r}
+plot_nd_peptides(nd_peptides)
+```
+Here we can see that some of the full length peptides are not detected in 100% 
+of samples. Additionally, some of these library peptides are not detected, even
+when considering possible fragment peptides.
 
 ## Data Normalization/ Processing 
 
