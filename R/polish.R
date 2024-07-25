@@ -15,12 +15,14 @@
 #' polished <- polish(mspms::cleavage_added_data)
 polish <- function(cleavage_added_data) {
   out <- cleavage_added_data %>%
+    # consolidating cleavage sequence
     dplyr::mutate(cleavage_seq = dplyr::case_when(
       !is.na(nterm) & is.na(cterm) ~ nterm,
       !is.na(cterm) & is.na(nterm) ~ cterm,
       TRUE ~ NA
     ), .after = "cterm_cleavage_pos") %>%
-    dplyr::filter(!is.na(.data$cleavage_seq)) %>%
+    # Removing peptides with double cleavages
+    dplyr::filter(!(!is.na(.data$cterm) & !is.na(.data$nterm))) %>%
     dplyr::mutate(cleavage_pos = dplyr::case_when(
       is.na(cterm_cleavage_pos) ~ nterm_cleavage_pos,
       TRUE ~ cterm_cleavage_pos
