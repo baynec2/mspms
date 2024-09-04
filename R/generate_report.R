@@ -9,6 +9,7 @@
 #'  cleavage sequences for left and right of the cut site.
 #' @param outdir = this is the output directory you would like to render the
 #' report to.
+#' @param output_file = this is the file name to export. 
 #'
 #' @return a knited .html report of the mspms analysis.
 #' @export
@@ -24,7 +25,11 @@ generate_report <- function(prepared_data,
                             design_matrix,
                             peptide_library = mspms::peptide_library,
                             n_residues = 4,
-                            outdir = getwd()) {
+                            outdir = getwd(),
+                            output_file = paste0(Sys.Date(),
+                                                 "_mspms_report.html")
+                            ) {
+
   rmarkdown::render(
     system.file("rmarkdown/templates/mspms_report/skeleton/skeleton.RMD",
       package = "mspms"
@@ -37,6 +42,7 @@ generate_report <- function(prepared_data,
     ),
     clean = TRUE,
     output_dir = outdir,
-    output_file = paste0(Sys.Date(), "_mspms_report.html")
+    output_file = output_file
   )
+
 }

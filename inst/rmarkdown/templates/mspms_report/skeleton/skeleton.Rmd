@@ -112,19 +112,27 @@ plot_nd_peptides(nd_peptides)
 
 **Figure 2.** Here the library peptides not detected in each samples are shown. 
 
+```{r}
+plot_rt_qc(prepared_data,design_matrix)
+```
+
+
+**Figure 3.** Here the distribution of peptides detected per retention time are 
+shown for each group.
+
 # Overview 
 ```{r}
 mspms::plot_pca(mspms_data)
 ```
 
-**Figure 3.** Here a PCA of the experiment is displayed. The color represents time, while shape and linetype of eclipse (if there are enough points to calculate) represents condition. 
+**Figure 4.** Here a PCA of the experiment is displayed. The color represents time, while shape and linetype of eclipse (if there are enough points to calculate) represents condition. 
 
 
 ```{r,fig.height = 8, fig.width = 10}
 mspms::plot_heatmap(mspms_data)
 ```
 
-**Figure 4.** Here an interactive heatmap of the experiment is displayed. Mouse over to see more information on each cell. Column side colors represent condition and time. 
+**Figure 5.** Here an interactive heatmap of the experiment is displayed. Mouse over to see more information on each cell. Column side colors represent condition and time. 
 
 # Statistics 
 
@@ -198,7 +206,7 @@ relative to time 0.
 
 ```{r}
 sig = t2 %>% 
-  filter(p.adj <= 0.05, log2fc >3)
+  dplyr::filter(p.adj <= 0.05, log2fc >3)
 
 d = mspms::count_cleavages_per_pos(sig)
 

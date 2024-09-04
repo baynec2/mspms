@@ -4,7 +4,7 @@
 \alias{plot_cleavages_per_pos}
 \title{plot_cleavages_per_pos}
 \usage{
-plot_cleavages_per_pos(count_of_cleavages, facets = "condition")
+plot_cleavages_per_pos(count_of_cleavages, facets = "condition", ncol = 1)
 }
 \arguments{
 \item{count_of_cleavages}{= tibble with number of cleavages per position, for
@@ -14,6 +14,8 @@ each condition and time point}
 time are shown even if data does not exist. 
 Wrap on the other hand is condensed. None shows plots overlayed by time with
 different colors.}
+
+\item{ncol}{= number of columns to plot}
 }
 \value{
 a ggplot2 object

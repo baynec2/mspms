@@ -31,11 +31,29 @@ plot_icelogo <- function(cleavage_seqs,
   
  nchar_cleav <- ncol(icelogo_data)
  
+ # Creating color scheme for mspms data
+ col_scheme <- ggseqlogo::make_col_scheme(
+   chars = c(
+     "G", "S", "T", "Y", "C", "N", "Q", "K", "R", "H", "D", "E", "P", "A", "W",
+     "F", "L", "I", "M", "V", "n", "X"
+   ),
+   group = c(
+     rep("Polar", 5), rep("Neutral", 2), rep("Basic", 3), rep("Acidic", 2),
+     rep("Hydrophobic", 9),
+     "Past Terminus"
+   ),
+   col = c(
+     rep("#058644", 5), rep("#720091", 2), rep("#0046C5", 3), rep("#C5003E", 2),
+     rep("#2E2E2E", 9), "#808080"
+   ),
+   name = "mspms"
+ )
  # Plotting the motif
  p1 <- ggseqlogo::ggseqlogo(icelogo_data,
                             font = "helvetica_light",
                             method = "custom",
-                            seq_type = "AA") +
+                            seq_type = "AA",
+                            col_scheme = col_scheme) +
    ggplot2::scale_x_continuous(
      labels = paste0("P", c(
        (nchar_cleav / 2):1,

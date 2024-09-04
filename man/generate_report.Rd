@@ -9,7 +9,9 @@ generate_report(
   design_matrix,
   peptide_library = mspms::peptide_library,
   n_residues = 4,
-  outdir = getwd()
+  shiny = FALSE,
+  outdir = getwd(),
+  output_file = paste0(Sys.Date(), "_mspms_report.html")
 )
 }
 \arguments{
@@ -22,8 +24,12 @@ generate_report(
 \item{n_residues}{= this is the number of residues that you want to show
 cleavage sequences for left and right of the cut site.}
 
+\item{shiny}{= TRUE or FALSE, whether to use with Shiny or not.}
+
 \item{outdir}{= this is the output directory you would like to render the
 report to.}
+
+\item{output_file}{= this is the file name to export.}
 }
 \value{
 a knited .html report of the mspms analysis.

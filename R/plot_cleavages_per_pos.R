@@ -8,6 +8,7 @@
 #' time are shown even if data does not exist. 
 #' Wrap on the other hand is condensed. None shows plots overlayed by time with
 #' different colors.
+#' @param ncol = number of columns to plot
 #' 
 #'
 #' @return a ggplot2 object
@@ -20,7 +21,8 @@
 #'                   n = 1:13)
 #' plot_cleavages_per_pos(c)
 plot_cleavages_per_pos = function(count_of_cleavages,
-                                  facets = "condition"){
+                                  facets = "condition",
+                                  ncol = 1){
   p1 = ggplot2::ggplot(count_of_cleavages,
                        ggplot2::aes_string(x = "cleavage_pos",
                                            y = "n")) +
@@ -30,7 +32,8 @@ plot_cleavages_per_pos = function(count_of_cleavages,
 
   if(facets == "grid"){
     p2 = p1 + ggplot2::facet_grid(rows = dplyr::vars(condition),
-                                  cols = dplyr::vars(time)) 
+                                  cols = dplyr::vars(time),
+                                  ) 
   } else if (facets == "wrap"){
     p2 = p1 + ggplot2::facet_wrap(~condition + time,
                                   ncol = ncol,
@@ -43,7 +46,7 @@ plot_cleavages_per_pos = function(count_of_cleavages,
       ggplot2::geom_point()+
       ggplot2::geom_line()+
       ggplot2::scale_x_continuous(breaks = seq(0, 13))+
-      ggplot2::facet_wrap(~condition)
+      ggplot2::facet_wrap(~condition,ncol = ncol)
   } else {
     stop("facets must be either condition,grid or wrap")
   }

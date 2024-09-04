@@ -4,7 +4,7 @@
 \alias{plot_heatmap}
 \title{plot_heatmap}
 \usage{
-plot_heatmap(mspms_data, scale = "column")
+plot_heatmap(mspms_data, scale = "column", plot_method = "plotly")
 }
 \arguments{
 \item{mspms_data}{= this is the data that has been processed by the
@@ -12,6 +12,8 @@ mspms pipeline.}
 
 \item{scale}{= how would you like the data scaled? default is none,
 but can be done by "row", "column", or "none"}
+
+\item{plot_method}{= interactive plotly heatmap or static ggplot2 heatmap}
 }
 \value{
 a heatmaply interactive heatmap

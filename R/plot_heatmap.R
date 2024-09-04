@@ -7,6 +7,7 @@
 #' mspms pipeline.
 #' @param scale = how would you like the data scaled? default is none,
 #'  but can be done by "row", "column", or "none"
+#' @param plot_method = interactive plotly heatmap or static ggplot2 heatmap
 #'
 #' @return a heatmaply interactive heatmap
 #' @export
@@ -15,7 +16,7 @@
 #'
 #' plot_heatmap(mspms::mspms_data, scale = "column")
 #'
-plot_heatmap <- function(mspms_data, scale = "column") {
+plot_heatmap <- function(mspms_data, scale = "column",plot_method = "plotly") {
   
   heatmap_data <- mspms_data %>%
     dplyr::select("sample","condition","time","Peptide", "value") %>%
@@ -53,7 +54,7 @@ plot_heatmap <- function(mspms_data, scale = "column") {
       showticklabels = c(FALSE, TRUE),
       custom_hovertext = mat,
       row_side_colors = colors,
-      col_side_colors = col_colors
-    )
+      col_side_colors = col_colors,
+      plot_method = plot_method)
   
 }
