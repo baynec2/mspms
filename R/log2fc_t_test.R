@@ -1,7 +1,7 @@
 #' log2fc_t_test
 #'
 #' Gives log2fc and statistics from t tests across conditions.
-#'  Gives differences relative to time 0 within each condition.
+#' Gives differences relative to time 0 within each condition.
 #'
 #' @param mspms_data = this is data that has been run in the mspms pipeline.
 #'

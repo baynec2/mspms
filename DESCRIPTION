@@ -40,8 +40,7 @@ Imports:
     forcats (>= 1.0.0),
     ggpubr (>= 0.6.0),
     rmarkdown (>= 2.26),
-    DT (>= 0.33),
-    downloadthis (>= 0.3.3)
+    DT (>= 0.33)
 Suggests: 
     knitr,
     testthat (>= 3.0.0)
