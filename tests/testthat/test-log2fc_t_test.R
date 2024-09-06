@@ -2,7 +2,7 @@ test_that("log2fc_t_test gives expected means", {
   # Had an instance where the means didn't match what was expected
   # Testing here. 
   mspms_data <- mspms::mspms_data %>% 
-    mutate(time = as.character(time))
+    dplyr::mutate(time = as.character(time))
   
   stats <- mspms::log2fc_t_test(mspms_data)
   
