@@ -2,7 +2,7 @@
 #'
 #' wrapper function for plotting icelogos for each condition in an experiment.
 #'  Here we will plot all icelogos for all peptides that were found to be
-#'  signficant by t test at any timepoint.
+#'  significant by t test at any timepoint.
 #'
 #' @param mspms_data = this is the data that has been polished
 #' (via mspms::polish()) and is ready for plotting

@@ -14,7 +14,7 @@ a tibble containing log2fc and t test statistics across conditions
 }
 \description{
 Gives log2fc and statistics from t tests across conditions.
- Gives differences relative to time 0 within each condition.
+Gives differences relative to time 0 within each condition.
 }
 \examples{
 
