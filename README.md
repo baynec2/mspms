@@ -425,10 +425,10 @@ of interest.
 We can do this as follows:
 
 ``` r
-filtered_data = log2fc_t_test_data %>% 
+sig_cleavage_data = log2fc_t_test_data %>% 
   dplyr::filter(p.adj <= 0.05,log2fc > 3)
 
-p1 = mspms::plot_cleavages_per_pos(filtered_data )
+p1 = mspms::plot_cleavages_per_pos(sig_cleavage_data )
 
 p1
 ```
@@ -462,8 +462,7 @@ We also need to know all of the possible cleavages we could see among
 our peptide library. We can generate that as below:
 
 ``` r
-all_possible_8mers_from_228_library = calculate_all_cleavages(mspms::peptide_library$library_real_sequence,
-                                                              n_AA_after_cleavage = 4)
+all_possible_8mers_from_228_library = calculate_all_cleavages(mspms::peptide_library$library_real_sequence,n_AA_after_cleavage = 4)
 
 usethis::use_data(all_possible_8mers_from_228_library,overwrite = TRUE)
 #> ✔ Saving "all_possible_8mers_from_228_library" to
@@ -490,10 +489,10 @@ We also provide a function that conveniently plots all icelogos from all
 conditions from the experiment all together.
 
 ``` r
-sig_cleavages = log2fc_t_test_data %>% 
+sig_cleavage_data = log2fc_t_test_data %>% 
   dplyr::filter(p.adj <= 0.05,log2fc > 3) 
 
-plot_all_icelogos(sig_cleavages)
+plot_all_icelogos(sig_cleavage_data)
 #> Warning: Expected 9 pieces. Additional pieces discarded in 2052 rows [913, 914, 915,
 #> 916, 917, 918, 919, 920, 921, 922, 923, 924, 925, 926, 927, 928, 929, 930, 931,
 #> 932, ...].
@@ -550,13 +549,6 @@ And then plot as follows:
 ``` r
 plot_time_course(sel,summarize_by_mean = FALSE)
 #> Joining with `by = join_by(quantCols)`
-#> Warning: The `fun.y` argument of `stat_summary()` is deprecated as of ggplot2 3.3.0.
-#> ℹ Please use the `fun` argument instead.
-#> ℹ The deprecated feature was likely used in the mspms package.
-#>   Please report the issue at <https://github.com/baynec2/mspms/issues>.
-#> This warning is displayed once every 8 hours.
-#> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-#> generated.
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
