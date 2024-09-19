@@ -7,14 +7,13 @@
 plot_volcano(log2fc_t_test_data, log2fc_threshold = 3, facets = "grid")
 }
 \arguments{
-\item{log2fc_t_test_data}{= this is the data frame that contains the log2fc
+\item{log2fc_t_test_data}{a tibble containing the log2fc
 and adjusted p values}
 
-\item{log2fc_threshold}{= this is the threshold that you want displayed
-on plot}
+\item{log2fc_threshold}{the log2fc threshold that you want displayed on plot}
 
-\item{facets}{= grid or wrap. If grid facets for each condition and time are
-shown even if data does not exist. Wrap on the other hand is condensed.}
+\item{facets}{how facets should be displayed. Accepted values are grid and
+wrap}
 }
 \value{
 a ggplot2 object
@@ -25,7 +24,8 @@ experimental conditions
 }
 \examples{
 # Generating log2fc t test data
-log2fc_t_test_data <- mspms::log2fc_t_test(mspms::mspms_data)
+log2fc_t_test_data <- mspms::log2fc_t_test(mspms::log2fc_t_test_data)
+
 # plotting data.
 p1 <- mspms::plot_volcano(log2fc_t_test_data, log2fc_threshold = 3)
 p1

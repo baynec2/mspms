@@ -4,29 +4,25 @@
 \alias{plot_cleavages_per_pos}
 \title{plot_cleavages_per_pos}
 \usage{
-plot_cleavages_per_pos(count_of_cleavages, facets = "condition", ncol = 1)
+plot_cleavages_per_pos(sig_cleavage_data, ncol = 1)
 }
 \arguments{
-\item{count_of_cleavages}{= tibble with number of cleavages per position, for
-each condition and time point}
+\item{sig_cleavage_data}{a tibble of data of interest containing a column
+labeled peptide, cleavage_seq, condition, and cleavage_pos.}
 
-\item{facets}{= condition, grid, or wrap If grid facets for each condition and 
-time are shown even if data does not exist. 
-Wrap on the other hand is condensed. None shows plots overlayed by time with
-different colors.}
-
-\item{ncol}{= number of columns to plot}
+\item{ncol}{the number of columns to plot.}
 }
 \value{
 a ggplot2 object
 }
 \description{
-make a plot of the count of cleavages per position.
+plot the number of cleavages at each
 }
 \examples{
-c = data.frame(time = rep(60,13),
-                  condition = rep("DMSO",13),
-                  cleavage_pos = 1:13,
-                  n = 1:13)
-plot_cleavages_per_pos(c)
+# Defining the significant peptides
+sig_cleavage_data = log2fc_t_test_data \%>\% 
+dplyr::filter(p.adj <= 0.05,log2fc > 3)
+# Plotting
+p1 = mspms::plot_cleavages_per_pos(sig_cleavage_data )
+p1
 }

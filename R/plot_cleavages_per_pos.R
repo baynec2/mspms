@@ -1,56 +1,34 @@
 #' plot_cleavages_per_pos
 #'
-#' make a plot of the count of cleavages per position.
+#' plot the number of cleavages at each 
 #'
-#' @param count_of_cleavages = tibble with number of cleavages per position, for
-#' each condition and time point
-#' @param facets = condition, grid, or wrap If grid facets for each condition and 
-#' time are shown even if data does not exist. 
-#' Wrap on the other hand is condensed. None shows plots overlayed by time with
-#' different colors.
-#' @param ncol = number of columns to plot
-#' 
-#'
+#' @param sig_cleavage_data a tibble of data of interest containing a column
+#' labeled peptide, cleavage_seq, condition, and cleavage_pos.
+#' @param ncol the number of columns to plot.
 #' @return a ggplot2 object
 #' @export
 #'
 #' @examples
-#'c = data.frame(time = rep(60,13),
-#'                   condition = rep("DMSO",13),
-#'                   cleavage_pos = 1:13,
-#'                   n = 1:13)
-#' plot_cleavages_per_pos(c)
-plot_cleavages_per_pos = function(count_of_cleavages,
-                                  facets = "condition",
+#' # Defining the significant peptides
+#' sig_cleavage_data = log2fc_t_test_data %>% 
+#'dplyr::filter(p.adj <= 0.05,log2fc > 3)
+#'# Plotting
+#'p1 = mspms::plot_cleavages_per_pos(sig_cleavage_data )
+#'p1
+plot_cleavages_per_pos = function(sig_cleavage_data,
                                   ncol = 1){
-  p1 = ggplot2::ggplot(count_of_cleavages,
-                       ggplot2::aes_string(x = "cleavage_pos",
-                                           y = "n")) +
-    ggplot2::geom_point() +
-    ggplot2::geom_line()+
-    ggplot2::scale_x_continuous(breaks = seq(0, 13))
-
-  if(facets == "grid"){
-    p2 = p1 + ggplot2::facet_grid(rows = dplyr::vars(condition),
-                                  cols = dplyr::vars(time),
-                                  ) 
-  } else if (facets == "wrap"){
-    p2 = p1 + ggplot2::facet_wrap(~condition + time,
-                                  ncol = ncol,
-                                  scales = "free_y") 
-  } else if(facets == "condition"){
-    p2 = ggplot2::ggplot(count_of_cleavages,
-                         ggplot2::aes_string(x = "cleavage_pos",
-                                             y = "n",
-                                             color = "time"))+
-      ggplot2::geom_point()+
-      ggplot2::geom_line()+
-      ggplot2::scale_x_continuous(breaks = seq(0, 13))+
-      ggplot2::facet_wrap(~condition,ncol = ncol)
-  } else {
-    stop("facets must be either condition,grid or wrap")
-  }
-  return(p2)
+  
+  count_cleavages_per_pos = count_cleavages_per_pos(sig_cleavage_data)
+  
+  p1 = count_cleavages_per_pos %>% 
+    ggplot2::ggplot(ggplot2::aes(x = .data$cleavage_pos,
+                                    y = .data$n,
+                                    color = .data$time))+
+    ggplot2::facet_wrap(~.data$condition,scales = "free_y")+
+    ggplot2::geom_point()+
+    ggplot2::geom_line()
+  
+  return(p1)
 }
 
 

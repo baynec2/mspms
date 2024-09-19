@@ -4,23 +4,25 @@
 \alias{plot_nd_peptides}
 \title{plot_nd_peptides}
 \usage{
-plot_nd_peptides(nd_peptides)
+plot_nd_peptides(
+  processed_qf,
+  peptide_library_ids = mspms::peptide_library$library_id
+)
 }
 \arguments{
-\item{nd_peptides}{a tibble containing info on peptides not detected by the 
-find_nd_peptides function.}
+\item{processed_qf}{a QFeatures object containing a SummarizedExperiment
+named "peptides"}
+
+\item{peptide_library_ids}{a vector of all peptide library ids in the 
+experiment.}
 }
 \value{
 a ggplot2 object
 }
 \description{
-plot peptides from libray that were not detected in the data
+plot the percentage of samples each peptide from library was undetected in
+(if the percentage is > 0).
 }
 \examples{
-nd_peptides <- find_nd_peptides(
-  mspms::peaks_prepared_data,
-  mspms::peptide_library,
-  mspms::design_matrix
-)
-plot_nd_peptides(nd_peptides)
+plot_nd_peptides(mspms::processed_qf)
 }

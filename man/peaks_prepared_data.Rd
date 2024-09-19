@@ -4,8 +4,7 @@
 \name{peaks_prepared_data}
 \alias{peaks_prepared_data}
 \title{peaks_prepared_data
-this is an example dataset from peaksthat has been processed by mspms and is
- ready for normalyzation.}
+this is an example dataset from peaks that has been processed by mspms.}
 \format{
 ## `peaks_prepared_data`
 A tibble with 820 rows and 27 columns:
@@ -24,7 +23,6 @@ peaks_prepared_data
 }
 \description{
 peaks_prepared_data
-this is an example dataset from peaksthat has been processed by mspms and is
- ready for normalyzation.
+this is an example dataset from peaks that has been processed by mspms.
 }
 \keyword{datasets}

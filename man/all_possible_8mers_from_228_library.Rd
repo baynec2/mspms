@@ -3,8 +3,7 @@
 \docType{data}
 \name{all_possible_8mers_from_228_library}
 \alias{all_possible_8mers_from_228_library}
-\title{all possible 8mers from the 228 peptide library used by the O’Donoghue
- lab as of 26April2024.}
+\title{all possible 8mers from the standard 228 peptide library that can}
 \format{
 ## `all_possible_8mers_from_228_library`
 A vector with 2964 entries

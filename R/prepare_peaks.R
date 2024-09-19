@@ -1,115 +1,56 @@
 #' prepare_peaks
-#' This function prepares the data out from peaks for downstream normalization
-#' via normalyzer.
-#' Briefly, it combines the two files by peptide IDs and filters out peptides
-#' that have quality scores <= 0.3. 0s are also replaced with NAs
-#'
-#' @param lfq_filepath = this is the filepath to the first PEAKS output table
-#' @param id_filepath = this is the filepath to the second PEAKS output table
-#'
-#' @return a tibble containing the combined columns from the lfq and id files,
-#'  with quality scores > 0.3 and 0s replaced with NAs.
+#' Prepare a label free quantification file exported from PEAKS
+#' for subsequent mspms analysis.
+#' @param lfq_filepath  this is the file path to a .csv file exported from
+#' PEAKS
+#' @param colData tibble containing colData (sample metadata). Must have
+#' columns named "quantCols","group","condition",and "time". 
+#' @param quality_threshold only consider peptides with quality scores > than 
+#' this threshold.
+#' @param peptide_library peptide library used in the experiment. 
+#' @param n_residues the number of amino acid residues before and after the
+#' cleavage site to generate a cleavage seq for.
+#' @return a QFeatures object containing a summarizedExperiment named "peptides"
 #' @export
-#'
-#' @examplesIf isTRUE(FALSE)
-#'
-#' prepare_peaks(
-#'   "tests/testdata/protein-peptides-lfq.csv",
-#'   "tests/testdata/protein-peptides-id.csv"
-#' )
-#'
-prepare_peaks <- function(lfq_filepath,
-                          id_filepath) {
+#' @examples
+#' colData = readr::read_csv("inst/extdata/colData.csv")
+#' lfq_filepath = "inst/extdata/peaks_protein-peptides-lfq.csv"
+#' prepared_peaks_data = prepare_peaks(lfq_filepath)
+prepare_peaks = function(lfq_filepath,
+                         colData,
+                         quality_threshold = 0.3,
+                         peptide_library = mspms::peptide_library,
+                         n_residues = 4){
+  
   # Reading in the label free quantification data
-  lfq <- readr::read_csv(lfq_filepath, guess_max = 10, na = c("-", ""))
+  lfq <- readr::read_csv(lfq_filepath,na = c("-",0,"","NA")) 
+  # Check that this file appears to be a proper peaks file
+  check_file_is_valid_peaks(lfq)
+   # Filtering out low quality peptides 
+  quality = lfq %>% 
+    dplyr::filter(.data$Quality > quality_threshold) 
+  
+  # Letting the user know how many peptides were filtered out with threshold 
+  n_peptides_rm = sum(lfq$Quality < quality_threshold,na.rm = TRUE)
+  message = " peptides were removed because they had a quality score < "
+  percentage = round(n_peptides_rm/length(lfq$Peptide) * 100,0)
+  # Printing how many peptides are filtered out
+  print(paste0(n_peptides_rm,message,quality_threshold," (",percentage,"%)"))
 
-  `%!in%` <- Negate(`%in%`)
-
-  # Making sure the lfq file has the correct headers
-  if (sum(c(
-    "Protein Group",
-    "Protein ID",
-    "Protein Accession",
-    "Peptide",
-    "Used",
-    "Candidate",
-    "Quality",
-    "Significance",
-    "Avg. ppm",
-    "Avg. Area"
-  ) %!in% names(lfq)) > 0) {
-    stop(
-      "The lfq file does not have the correct headers.
-       The headers should contain:", "Protein Group", "Protein ID",
-      "Protein Accession", "Peptide",
-      "Used", "Candidate", "Quality", "Significance", "Avg.ppm", "Avg.Area"
-    )
-  }
-
-  # Reading in the ids
-  id <- readr::read_csv(id_filepath, na = c("-", ""))
-
-  # Making sure id file has the correct headers
-  if (sum(c(
-    "Protein Group",
-    "Protein ID",
-    "Protein Accession",
-    "Peptide",
-    "Unique",
-    "-10lgP",
-    "Mass",
-    "Length",
-    "ppm",
-    "m/z",
-    "z",
-    "RT"
-  ) %!in%
-    names(id)) > 0) {
-    stop(
-      "The id file does not have the correct headers.
-       The headers should contain: Protein Group, Protein ID,
-       Protein Accession, Peptide, Unique, -10lgP, Mass, Length, ppm, m/z, z, RT,
-       and columns corresponding to your sample names"
-    )
-  }
-
-  id <- id %>%
-    # only keep the Peptide ID with the highest score in case > one.
-    dplyr::group_by(.data$Peptide) %>%
-    dplyr::filter(.data$`-10lgP` == max(.data$`-10lgP`)) %>%
-    dplyr::ungroup() %>%
-    dplyr::select("Peptide", "RT", 6:12)
-
-  # Combining data frame and filtering to only contain quality scores > 0.3
-  output <- lfq %>%
-    # Sometimes a peptide is detected more than once at different RTs.
-    # We will only keep the one with the highest quality score.
-    dplyr::group_by(.data$Peptide) %>%
-    dplyr::filter(.data$Quality == max(.data$Quality)) %>%
-    dplyr::ungroup() %>%
-    dplyr::inner_join(id, by = c("Peptide"), multiple = "first") %>%
-    dplyr::filter(.data$Quality > 0.3) %>%
-    tibble::as_tibble()
-
-
-  # finding the columns with our samples
-
-  start <- which(names(output) == "Avg. Area") + 1
-  end <- which(names(output) == "Sample Profile (Ratio)") - 1
-
-  # Selecting only the columns that we care about
-  output <- output %>%
+  # Selecting columns containing data
+  start <- which(names(lfq) == "Avg. Area") + 1
+  end <- which(names(lfq) == "Sample Profile (Ratio)") - 1
+  
+  # Only reporting relevant columns
+  selected <- lfq %>%
     dplyr::mutate(Peptide = gsub("\\.", "_", .data$Peptide)) %>%
     dplyr::select(
-      "Peptide", "RT", "Protein Accession",
+      "peptide" = "Peptide","library_id" = "Protein Accession",
       dplyr::any_of(start:end)
-    ) %>%
-    # Dealing with the case where there are PTMs, removing the mod
-    dplyr::mutate(Peptide = gsub("\\(.*\\)", "", .data$Peptide))
-
-  # Replacing 0 with NA
-  output[output == 0] <- NA_real_
-
-
-  return(output)
+    ) 
+  # converting into QF object
+  peaks_prepared_qf = prepared_to_qf(selected,colData,
+                                     peptide_library,n_residues)
+  return(peaks_prepared_qf)
 }
+

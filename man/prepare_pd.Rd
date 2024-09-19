@@ -14,7 +14,8 @@ formatted file.}
 a tibble with the data formatted for use with normalyze
 }
 \description{
-prepare proteome discoverer output for mspms analysis.
+Prepare a label free quantification file exported from Proteome Discoverer
+for subsequent mspms analysis.
 }
 \examples{
 \dontshow{if (isTRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

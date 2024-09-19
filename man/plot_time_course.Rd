@@ -4,24 +4,33 @@
 \alias{plot_time_course}
 \title{plot_time_course}
 \usage{
-plot_time_course(mspms_data)
+plot_time_course(processed_qf, summarize_by_mean = FALSE)
 }
 \arguments{
-\item{mspms_data}{this is data from the mspms pipeline.
-It should have the following columns: time, value, condition, and Peptide. It is in long format.
-Can be filtered to only include the peptides you want to plot.}
+\item{processed_qf}{a QFeatures object containing a SummarizedExperiment
+named "peptides_norm".}
+
+\item{summarize_by_mean}{whether to summarise by mean (TRUE- show error bars 
++- 1 standard deviation) or not (FALSE)}
 }
 \value{
 a ggplot2 object
 }
 \description{
-this function plots the time course of each peptide in the data set.
+Easily plot a time course of all peptides in a QFeatures object by
+peptide.
 }
 \examples{
+# Determining peptide of interest
+max_log2fc_pep = mspms::log2fc_t_test_data \%>\% 
+dplyr::filter(p.adj <= 0.05,log2fc > 3) \%>\% 
+dplyr::filter(log2fc ==max(log2fc)) \%>\% 
+dplyr::pull(peptide)
 
-p1 <- mspms::mspms_data \%>\%
-  dplyr::filter(Peptide == "A_GLFNYNQLRGF") \%>\%
-  mspms::plot_time_course()
+# Defining QFeatures filter
+filter = QFeatures::VariableFilter(field = "peptide",value = max_log2fc_pep,
+condition = "==")
 
-p1
+# ploting time course
+plot_time_course(sel,summarize_by_mean = FALSE)
 }

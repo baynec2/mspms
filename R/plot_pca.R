@@ -1,24 +1,27 @@
 #' plot_pca
 #'
-#' this creates a pca plot of the data where the points are colored by time and shaped by condition. elipses are drawn around the points at a 95% confidence interval.
+#' Easily create a PCA plot from a QFeatures object containing mspms data. 
+#' Ellipses are drawn around the points at a 95% confidence interval.
+#' Shape and colors are user specified.
 #'
-#' @param mspms_data = this is the data that has been run through the mspms pipeline.
-#' @param color = this is the string name of the variable you would like to color by.
-#' @param shape = this is the string name of the vairable that you would like to determine shape by.
+#' @param processed_qf  a QFeatures object containing a SummarizedExperiment
+#' named "peptides_norm"
+#' @param color the name of the variable you would like to color by.
+#' @param shape the name of the variable that you would like to determine 
+#' shape by.
 #'
 #' @return a ggplot2 object
 #' @export
 #'
 #' @examples
-#'
-#' plot_pca(mspms::mspms_data)
-#'
-plot_pca <- function(mspms_data, color = "time", shape = "condition") {
+#' plot_pca(mspms::processed_qf)
+plot_pca <- function(processed_qf, color = "time", shape = "condition") {
+  mspms_data = mspms_tidy(processed_qf,"peptides_norm")
   # dealing with no visible binding for global variable ‘.’ NOTE
   . <- NULL
   PCA_data <- mspms_data %>%
-    dplyr::select("sample", "Peptide", "group", "condition", "time", "value") %>%
-    tidyr::pivot_wider(names_from = "Peptide", values_from = "value", values_fn = NULL) %>%
+    dplyr::select("quantCols", "peptide", "group", "condition", "time", "peptides_norm") %>%
+    tidyr::pivot_wider(names_from = "peptide", values_from = "peptides_norm", values_fn = NULL) %>%
     # if a peptide has an na remove it
     dplyr::select_if(~ !any(is.na(.)))
 

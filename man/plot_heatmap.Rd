@@ -4,27 +4,29 @@
 \alias{plot_heatmap}
 \title{plot_heatmap}
 \usage{
-plot_heatmap(mspms_data, scale = "column", plot_method = "plotly")
+plot_heatmap(processed_qf, scale = "column", plot_method = "plotly")
 }
 \arguments{
-\item{mspms_data}{= this is the data that has been processed by the
-mspms pipeline.}
+\item{processed_qf}{a QFeatures object containing a SummarizedExperiment
+named "peptides_norm"}
 
-\item{scale}{= how would you like the data scaled? default is none,
-but can be done by "row", "column", or "none"}
+\item{scale}{how would you like the data scaled? default is none,
+but can also be "row", "column", or "none"}
 
-\item{plot_method}{= interactive plotly heatmap or static ggplot2 heatmap}
+\item{plot_method}{what plot method would you like to use, can use
+plotly or ggplot2.}
 }
 \value{
 a heatmaply interactive heatmap
 }
 \description{
-This produces a heatmaply interactive heatmap of the data with color bars
- representing the condition and time for each sample.
+This produces a heatmaply interactive heatmap of the QFeatures object with 
+color bars representing the condition and time for each sample in each row.
+}
+\details{
+Each column has a colored bar representing whether the peptide is a 
+cleavage product or a full length member of the peptide library.
 }
 \examples{
-\dontshow{if (isTRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-
-plot_heatmap(mspms::mspms_data, scale = "column")
-\dontshow{\}) # examplesIf}
+plot_heatmap(mspms::processed_qf)
 }

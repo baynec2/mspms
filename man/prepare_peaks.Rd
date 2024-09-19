@@ -3,35 +3,42 @@
 \name{prepare_peaks}
 \alias{prepare_peaks}
 \title{prepare_peaks
-This function prepares the data out from peaks for downstream normalization
-via normalyzer.
-Briefly, it combines the two files by peptide IDs and filters out peptides
-that have quality scores <= 0.3. 0s are also replaced with NAs}
+Prepare a label free quantification file exported from PEAKS
+for subsequent mspms analysis.}
 \usage{
-prepare_peaks(lfq_filepath, id_filepath)
+prepare_peaks(
+  lfq_filepath,
+  colData,
+  quality_threshold = 0.3,
+  peptide_library = mspms::peptide_library,
+  n_residues = 4
+)
 }
 \arguments{
-\item{lfq_filepath}{= this is the filepath to the first PEAKS output table}
+\item{lfq_filepath}{this is the file path to a .csv file exported from
+PEAKS}
 
-\item{id_filepath}{= this is the filepath to the second PEAKS output table}
+\item{colData}{tibble containing colData (sample metadata). Must have
+columns named "quantCols","group","condition",and "time".}
+
+\item{quality_threshold}{only consider peptides with quality scores > than 
+this threshold.}
+
+\item{peptide_library}{peptide library used in the experiment.}
+
+\item{n_residues}{the number of amino acid residues before and after the
+cleavage site to generate a cleavage seq for.}
 }
 \value{
-a tibble containing the combined columns from the lfq and id files,
- with quality scores > 0.3 and 0s replaced with NAs.
+a QFeatures object containing a summarizedExperiment named "peptides"
 }
 \description{
 prepare_peaks
-This function prepares the data out from peaks for downstream normalization
-via normalyzer.
-Briefly, it combines the two files by peptide IDs and filters out peptides
-that have quality scores <= 0.3. 0s are also replaced with NAs
+Prepare a label free quantification file exported from PEAKS
+for subsequent mspms analysis.
 }
 \examples{
-\dontshow{if (isTRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-
-prepare_peaks(
-  "tests/testdata/protein-peptides-lfq.csv",
-  "tests/testdata/protein-peptides-id.csv"
-)
-\dontshow{\}) # examplesIf}
+colData = readr::read_csv("inst/extdata/colData.csv")
+lfq_filepath = "inst/extdata/peaks_protein-peptides-lfq.csv"
+prepared_peaks_data = prepare_peaks(lfq_filepath)
 }

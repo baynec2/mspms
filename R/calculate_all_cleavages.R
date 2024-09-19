@@ -1,15 +1,17 @@
 #' calculate_all_cleavages
 #'
 #' calculate all possible cleavages for a defined peptide library containing
-#'  peptides of the same length.
+#' peptides of the same length.
 #'
-#' @param peptide_library_seqs = these are the sequences from the peptide
-#'  library. Should be the same length
-#' @param n_AA_after_cleavage = this is the number of AA after cleavage sites
-#'  you want to produce peptides for.
+#' @param peptide_library_seqs The sequences of each peptide in the peptide 
+#' library. They should all be the same length.
+#'  
+#' @param n_AA_after_cleavage  The number of AA after (and before) the cleavage 
+#' site to consider. 
 #'
-#' @return a vector of all the possible cleavages for the peptide
-#'  library sequences
+#' @return a vector of all the possible cleavages for the peptide library 
+#' sequences
+#'  
 #' @export
 #'
 #' @examples
