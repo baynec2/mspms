@@ -290,6 +290,7 @@ the indicated name.
 4. Data is then reverse log2 transformed ("peptides_norm"). 
 
 ```{r}
+set.seed(2)
 processed_qf <- process_qf(peaks_prepared_data)
 processed_qf
 ```
