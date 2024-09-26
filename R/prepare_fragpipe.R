@@ -54,7 +54,7 @@ prepare_fragpipe <- function(combined_peptide_filepath,
       dplyr::contains("MaxLFQ Intensity")
     ) %>%
     dplyr::rename_with(
-      ~ stringr::str_replace_all(., "MaxLFQ Intensity", "")
+      ~ stringr::str_replace_all(., " MaxLFQ Intensity", "")
     )
   # Converting 0 to NA
   lfq_mod[lfq_mod == 0] <- NA
