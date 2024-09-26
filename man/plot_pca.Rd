@@ -4,23 +4,32 @@
 \alias{plot_pca}
 \title{plot_pca}
 \usage{
-plot_pca(mspms_data, color = "time", shape = "condition")
+plot_pca(
+  mspms_tidy_data,
+  value_colname = "peptides_norm",
+  color = "time",
+  shape = "condition"
+)
 }
 \arguments{
-\item{mspms_data}{= this is the data that has been run through the mspms pipeline.}
+\item{mspms_tidy_data}{tidy mspms data (prepared from QFeatures object
+by mspms_tidy)}
 
-\item{color}{= this is the string name of the variable you would like to color by.}
+\item{value_colname}{the name of the column containing values.}
 
-\item{shape}{= this is the string name of the vairable that you would like to determine shape by.}
+\item{color}{the name of the variable you would like to color by.}
+
+\item{shape}{the name of the variable that you would like to determine
+shape by.}
 }
 \value{
 a ggplot2 object
 }
 \description{
-this creates a pca plot of the data where the points are colored by time and shaped by condition. elipses are drawn around the points at a 95% confidence interval.
+Easily create a PCA plot from a QFeatures object containing mspms data.
+Ellipses are drawn around the points at a 95% confidence interval.
+Shape and colors are user specified.
 }
 \examples{
-
-plot_pca(mspms::mspms_data)
-
+plot_pca(mspms::mspms_tidy_data)
 }

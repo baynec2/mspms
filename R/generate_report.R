@@ -1,42 +1,41 @@
 #' generate_report
 #'
-#' wrapper function to generate an automatic .html report of a basic mspms analysis.
+#' wrapper function to generate an automatic .html report of a basic mspms
+#' analysis.
 #'
-#' @param prepared_data = this is the prepared data.
-#' @param design_matrix = this is the design matrix.
-#' @param peptide_library = this is the peptide library used in the experiment.
-#' @param n_residues = this is the number of residues that you want to show
-#'  cleavage sequences for left and right of the cut site.
-#' @param outdir = this is the output directory you would like to render the
+#' @param prepared_data a QFeatures object containing a SummarizedExperiment
+#' named "peptides".
+#' @param peptide_library peptide library used with experiment. Contains
+#' columns "library_id", "library_match_sequence", and "library_real_sequence".
+#' @param n_residues the number of amino acid residues before and after the
+#' cleavage site to generate a cleavage seq for.
+#' @param outdir the output directory you would like to render the
 #' report to.
+#' @param output_file the file name to export.
 #'
 #' @return a knited .html report of the mspms analysis.
 #' @export
-#'
 #' @examplesIf isTRUE(FALSE)
-#'
-#' generate_report(
-#'   prepared_data = mspms::peaks_prepared_data,
-#'   design_matrix = mspms::design_matrix,
-#'   outdir = "../Desktop/test_report"
-#' )
+#' generate_report(mspms::peaks_prepared_data)
 generate_report <- function(prepared_data,
-                            design_matrix,
                             peptide_library = mspms::peptide_library,
                             n_residues = 4,
-                            outdir = getwd()) {
+                            outdir = getwd(),
+                            output_file = paste0(
+                              Sys.Date(),
+                              "_mspms_report.html"
+                            )) {
   rmarkdown::render(
     system.file("rmarkdown/templates/mspms_report/skeleton/skeleton.RMD",
       package = "mspms"
     ),
     params = list(
       prepared_data = prepared_data,
-      design_matrix = design_matrix,
       peptide_library = peptide_library,
       n_residues = n_residues
     ),
     clean = TRUE,
     output_dir = outdir,
-    output_file = paste0(Sys.Date(), "_mspms_report.html")
+    output_file = output_file
   )
 }

@@ -1,7 +1,10 @@
 # Testing for case where there is no cleavage site
 testthat::test_that("works with no cleavage site", {
   testthat::expect_equal(
-    mspms::nterm_cleavage("ABCDEFGHIJKLMN", "ABCDEFGHIJKLMN", "ABCDEFGHIJKLMN", 4),
+    mspms:::nterm_cleavage(
+      "ABCDEFGHIJKLMN", "ABCDEFGHIJKLMN",
+      "ABCDEFGHIJKLMN", 4
+    ),
     tibble::tibble(
       peptide = "ABCDEFGHIJKLMN",
       nterm = NA,
@@ -14,7 +17,10 @@ testthat::test_that("works with no cleavage site", {
 # Testing for case where there is no cleavage site
 testthat::test_that("works with one clevage site", {
   testthat::expect_equal(
-    mspms::nterm_cleavage("A_BCDEFGHIJKLM_N", "ABCDEFGHIJKLMN", "ABCDEFGHIJKLMN", 4),
+    mspms:::nterm_cleavage(
+      "A_BCDEFGHIJKLM_N", "ABCDEFGHIJKLMN",
+      "ABCDEFGHIJKLMN", 4
+    ),
     tibble::tibble(
       peptide = "A_BCDEFGHIJKLM_N",
       nterm = "XXXABCDE",
@@ -27,7 +33,10 @@ testthat::test_that("works with one clevage site", {
 # Testing for case where there are two cleavage sites
 testthat::test_that("works with two clevage site", {
   testthat::expect_equal(
-    mspms::nterm_cleavage("A_BCDEFGHIJKLM_N", "ABCDEFGHIJKLMN", "ABCDEFGHIJKLMN", 4),
+    mspms:::nterm_cleavage(
+      "A_BCDEFGHIJKLM_N", "ABCDEFGHIJKLMN",
+      "ABCDEFGHIJKLMN", 4
+    ),
     tibble::tibble(
       peptide = "A_BCDEFGHIJKLM_N",
       nterm = "XXXABCDE",
@@ -40,7 +49,10 @@ testthat::test_that("works with two clevage site", {
 # Testing for case where we look for 6 AAs past the cleavage site
 testthat::test_that("works with 6 AA past", {
   testthat::expect_equal(
-    mspms::nterm_cleavage("A_BCDEFGHIJKLM_N", "ABCDEFGHIJKLMN", "ABCDEFGHIJKLMN", 6),
+    mspms:::nterm_cleavage(
+      "A_BCDEFGHIJKLM_N", "ABCDEFGHIJKLMN",
+      "ABCDEFGHIJKLMN", 6
+    ),
     tibble::tibble(
       peptide = "A_BCDEFGHIJKLM_N",
       nterm = "XXXXXABCDEFG",
@@ -53,7 +65,10 @@ testthat::test_that("works with 6 AA past", {
 # Testing for extreme case
 testthat::test_that("works with 10 AA past", {
   testthat::expect_equal(
-    mspms::nterm_cleavage("A_BCDEFGHIJKLM_N", "ABCDEFGHIJKLMN", "ABCDEFGHIJKLMN", 10),
+    mspms:::nterm_cleavage(
+      "A_BCDEFGHIJKLM_N", "ABCDEFGHIJKLMN",
+      "ABCDEFGHIJKLMN", 10
+    ),
     tibble::tibble(
       peptide = "A_BCDEFGHIJKLM_N",
       nterm = "XXXXXXXXXABCDEFGHIJK",

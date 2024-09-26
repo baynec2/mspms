@@ -1,3 +1,5 @@
-# mspms 0.99.0
+# mspms 0.99
+
+## mspms 0.99.0
 
 * Initial Bioconductor submission.

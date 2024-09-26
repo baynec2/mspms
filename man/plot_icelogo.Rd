@@ -12,25 +12,36 @@ plot_icelogo(
 )
 }
 \arguments{
-\item{cleavage_seqs}{= these are the cleavage sequences that are observed in the experiment}
+\item{cleavage_seqs}{these are the cleavage sequences of interest}
 
-\item{background_universe}{= this is a list of all the possible cleavage sequences in the peptide library used.}
+\item{background_universe}{this is a list of cleavage sequences
+to use as the background in building the iceLogo.}
 
-\item{pval}{= this is the pvalue threshold that you would like to use.}
+\item{pval}{this is the pvalue threshold (<=) to consider significant when
+determining the significance of the sig_cleavages relative to the background
+at each position of the iceLogo.}
 
-\item{type}{= this is the type of visualization you would like to perform, can be either "percent_difference" or "fold_change".}
+\item{type}{this is the type of visualization you would like to perform,
+accepted values are  either "percent_difference" or "fold_change".}
 }
 \value{
-a ggplot object that shows the motif of the cleavage sequences
+a ggplot2 object
 }
 \description{
-This function plots the cleavage motifs that were enriched relative to background in a manner similar to IceLogo.
+This function plots the cleavage motifs that were enriched relative to
+background as implemented in the iceLogo method.
 https://iomics.ugent.be/icelogoserver/resources/manual.pdf
 }
 \examples{
-cleavage_seqs <- mspms::mspms_data \%>\%
-  dplyr::filter(condition == "DMSO", time == 240) \%>\%
-  dplyr::pull(cleavage_seq)
+# Determining significant cleavages for catA
+catA_sig_cleavages <- mspms::log2fc_t_test_data \%>\%
+  dplyr::filter(p.adj <= 0.05, log2fc > 3) \%>\%
+  dplyr::filter(condition == "CatA") \%>\%
+  dplyr::pull(cleavage_seq) \%>\%
+  unique()
 
-plot_icelogo(cleavage_seqs)
+# Plotting icelogo
+plot_icelogo(catA_sig_cleavages,
+  background_universe = all_possible_8mers_from_228_library
+)
 }

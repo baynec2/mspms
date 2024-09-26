@@ -5,36 +5,37 @@
 \title{plot_all_icelogos}
 \usage{
 plot_all_icelogos(
-  mspms_data,
-  pval = 0.05,
-  log2fc_threshold = 3,
+  sig_cleavage_data,
   type = "percent_difference",
+  pval = 0.05,
   background_universe = mspms::all_possible_8mers_from_228_library
 )
 }
 \arguments{
-\item{mspms_data}{= this is the data that has been polished
-(via mspms::polish()) and is ready for plotting}
+\item{sig_cleavage_data}{a tibble of data of interest containing a column
+labeled peptide, cleavage_seq, and condition}
 
-\item{pval}{= this is the pvalue threshold that you would like to use.}
-
-\item{log2fc_threshold}{= this is the log2 fold change threshold that you 
-would like to use. Can be positive or negative if desired.}
-
-\item{type}{= this is the type of visualization you would like to perform,
+\item{type}{this is the type of iceLogo you would like to generate,
 can be either "percent_difference" or "fold_change".}
 
-\item{background_universe}{= this is a list of all the possible cleavage
-sequences in the peptide library used.}
+\item{pval}{this is the pvalue threshold (<=) to consider significant when
+determining the significance of the sig_cleavages relative to the background
+at each position of the iceLogo.}
+
+\item{background_universe}{this is a list cleavages you would like to compare
+to as background of the iceLogo}
 }
 \value{
 a ggplot object that shows the motif of the cleavage sequences
 }
 \description{
-wrapper function for plotting icelogos for each condition in an experiment.
- Here we will plot all icelogos for all peptides that were found to be
- signficant by t test at any timepoint.
+Easily plot a iceLogo corresponding to peptides of interest across each
+condition of an experiment.
 }
 \examples{
-plot_all_icelogos(mspms::mspms_data)
+# Determining cleavages of interest
+sig_cleavage_data <- mspms::log2fc_t_test_data \%>\%
+  dplyr::filter(p.adj <= 0.05, log2fc > 3)
+# Plotting a iceLogo for each condition.
+plot_all_icelogos(sig_cleavage_data)
 }
