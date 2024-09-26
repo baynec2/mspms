@@ -8,7 +8,7 @@ for subsequent mspms analysis.}
 \usage{
 prepare_peaks(
   lfq_filepath,
-  colData,
+  colData_filepath,
   quality_threshold = 0.3,
   peptide_library = mspms::peptide_library,
   n_residues = 4
@@ -18,10 +18,10 @@ prepare_peaks(
 \item{lfq_filepath}{this is the file path to a .csv file exported from
 PEAKS}
 
-\item{colData}{tibble containing colData (sample metadata). Must have
-columns named "quantCols","group","condition",and "time".}
+\item{colData_filepath}{file path to .csv file containing colData.
+Must have columns named "quantCols","group","condition",and "time".}
 
-\item{quality_threshold}{only consider peptides with quality scores > than 
+\item{quality_threshold}{only consider peptides with quality scores > than
 this threshold.}
 
 \item{peptide_library}{peptide library used in the experiment.}
@@ -38,7 +38,8 @@ Prepare a label free quantification file exported from PEAKS
 for subsequent mspms analysis.
 }
 \examples{
-colData = readr::read_csv("inst/extdata/colData.csv")
-lfq_filepath = "inst/extdata/peaks_protein-peptides-lfq.csv"
-prepared_peaks_data = prepare_peaks(lfq_filepath)
+lfq_filepath <- system.file("extdata/peaks_protein-peptides-lfq.csv", package = "mspms")
+colData_filepath <- system.file("extdata/colData.csv", package = "mspms")
+# Prepare the data
+peaks_prepared_data <- mspms::prepare_peaks(lfq_filepath, colData_filepath)
 }

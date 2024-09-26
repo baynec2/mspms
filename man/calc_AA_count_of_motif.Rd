@@ -7,17 +7,13 @@
 calc_AA_count_of_motif(cleavage_motif)
 }
 \arguments{
-\item{cleavage_motif}{this is a vector of cleavage motifs that you would
-like to count the amino acids for.}
+\item{cleavage_motif}{a vector of cleavage motifs}
 }
 \value{
 a matrix of counts
 }
 \description{
-calculate the counts of ammino acids at each position of a motif.
-}
-\examples{
-cleavage_motifs <- c("XXXXXXXX", "XXXXXXXX")
-calc_AA_count_of_motif(cleavage_motifs)
+Calculate the counts of amino acids at each position of a motif for all the
+sequences in a vector.
 }
 \keyword{internal}

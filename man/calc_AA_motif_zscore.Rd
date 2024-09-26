@@ -12,46 +12,22 @@ calc_AA_motif_zscore(
 )
 }
 \arguments{
-\item{background_count_matrix}{= this is the count matrix from the
+\item{background_count_matrix}{the count matrix from the
 background sequences}
 
-\item{background_prop_matrix}{= this is the proportion matrix from the
+\item{background_prop_matrix}{the proportion matrix from the
 background sequences}
 
-\item{experimental_count_matrix}{= this is the count matrix from the
+\item{experimental_count_matrix}{the count matrix from the
 experimental sequences}
 
-\item{experimental_prop_matrix}{= this is the proportion matrix from the
+\item{experimental_prop_matrix}{the proportion matrix from the
 experimental sequences}
 }
 \value{
-a data frame of zscores for each AA at each position.
+a data frame of Zscores for each amino acid at each position.
 }
 \description{
-calculate the z score for AAs at each position
-}
-\examples{
-background_count_matrix <- matrix(c(10, 10, 10, 10),
-  nrow = 1,
-  dimnames = list("A")
-)
-background_prop_matrix <- matrix(c(0.4, 0.4, 0.4, 0.4),
-  nrow = 1,
-  dimnames = list("A")
-)
-experimental_count_matrix <- matrix(c(5, 5, 5, 5),
-  nrow = 1,
-  dimnames = list("A")
-)
-experimental_prop_matrix <- matrix(c(0.2, 0.2, 0.2, 0.2),
-  nrow = 1,
-  dimnames = list("A")
-)
-calc_AA_motif_zscore(
-  background_count_matrix,
-  background_prop_matrix,
-  experimental_count_matrix,
-  experimental_prop_matrix
-)
+Calculate the Z score for the amino acids at each position
 }
 \keyword{internal}

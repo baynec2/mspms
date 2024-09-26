@@ -12,13 +12,16 @@ prepared_to_qf(
 )
 }
 \arguments{
-\item{prepared_data}{= data prepared by one of the prepare functions}
+\item{prepared_data}{data prepared within one of the prepare functions}
 
-\item{colData}{= metadata}
+\item{colData}{sample metadata}
 
-\item{peptide_library}{= the peptide library used.}
+\item{peptide_library}{the peptide library used.}
 
-\item{n_residues}{= the number of residues reported in the cleavage site}
+\item{n_residues}{the number of residues reported in the cleavage site}
+}
+\value{
+a QFeatures object
 }
 \description{
 convert prepared data to a QFeatures object

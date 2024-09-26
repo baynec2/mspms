@@ -7,7 +7,7 @@
 consolidate_cleavages(cleavage_added_data)
 }
 \arguments{
-\item{cleavage_added_data}{= this is a tibble where cleavage information has
+\item{cleavage_added_data}{a tibble where cleavage information has
 been added by add_cleavages()}
 }
 \value{
@@ -15,11 +15,7 @@ a tibble with the cleavage information combined into a single column
  and rows with no cleavage information or double information removed.
 }
 \description{
-This function is used to consolidatae the cleavage data. It combines the 
-nterm and cterm cleavage information into a single column and removes rows 
-that don't have any cleavage information or have both nterm and cterm
-cleavage information.
+Consolidate the n term and c term cleavage data. The nterm and cterm
+cleavage information  are consolidated into a single column and rows
 }
-\examples{
-polished <- polish(mspms::cleavage_added_data)
-}
+\keyword{internal}

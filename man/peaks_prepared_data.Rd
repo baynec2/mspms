@@ -4,12 +4,13 @@
 \name{peaks_prepared_data}
 \alias{peaks_prepared_data}
 \title{peaks_prepared_data
-this is an example dataset from peaks that has been processed by mspms.}
+A QFeatures object prepared from PEAKS data of cathepsin data/.}
 \format{
 ## `peaks_prepared_data`
-A tibble with 820 rows and 27 columns:
+An instance of class QFeatures containing 1 assays:
+[1] peptides: SummarizedExperiment with 2071 rows and 42 columns
 \describe{
-  \item{Peptide}{Peptide Sequence Detected}
+  \item{peptides}{Peptide Sequence Detected}
   ...
 }
 }
@@ -23,6 +24,6 @@ peaks_prepared_data
 }
 \description{
 peaks_prepared_data
-this is an example dataset from peaks that has been processed by mspms.
+A QFeatures object prepared from PEAKS data of cathepsin data/.
 }
 \keyword{datasets}

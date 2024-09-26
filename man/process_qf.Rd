@@ -7,11 +7,11 @@
 process_qf(prepared_qf)
 }
 \arguments{
-\item{prepared_qf}{this is a QFeatures object containing a 
+\item{prepared_qf}{this is a QFeatures object containing a
 SummarizedExperiment named "peptides"}
 }
 \value{
-a QFeatures object containing a 
+a QFeatures object containing a
 SummarizedExperiments named "peptides","peptides_log","peptides_log_norm",
 "peptides_log_impute_norm",and "peptides_norm"
 }
@@ -19,5 +19,5 @@ SummarizedExperiments named "peptides","peptides_log","peptides_log_norm",
 process_qf
 }
 \examples{
-processed_qf = process_qf(mspms::peaks_prepared_data)
+processed_qf <- process_qf(mspms::peaks_prepared_data)
 }

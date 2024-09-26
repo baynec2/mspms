@@ -7,18 +7,18 @@
 calc_AA_fc(experimental_prop_matrix, background_prop_matrix, sig_zscores)
 }
 \arguments{
-\item{experimental_prop_matrix}{this is a matrix of the experimental
+\item{experimental_prop_matrix}{a matrix of the experimental
 proportions (from your vector of cleavage sequences) at each position.}
 
-\item{background_prop_matrix}{this is a matrix of the background proportions
+\item{background_prop_matrix}{a matrix of the background proportions
 of AAs at each position}
 
-\item{sig_zscores}{this is a tibble of the significant zscores.}
+\item{sig_zscores}{a tibble of the significant zscores.}
 }
 \value{
 a matrix
 }
 \description{
-calculate the fold change of each AA by position.
+Calculate the fold change of each amino acid by position.
 }
 \keyword{internal}

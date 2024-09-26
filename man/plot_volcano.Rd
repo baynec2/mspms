@@ -4,7 +4,12 @@
 \alias{plot_volcano}
 \title{plot_volcano}
 \usage{
-plot_volcano(log2fc_t_test_data, log2fc_threshold = 3, facets = "grid")
+plot_volcano(
+  log2fc_t_test_data,
+  log2fc_threshold = 3,
+  facets = "grid",
+  ncol = 1
+)
 }
 \arguments{
 \item{log2fc_t_test_data}{a tibble containing the log2fc
@@ -14,6 +19,8 @@ and adjusted p values}
 
 \item{facets}{how facets should be displayed. Accepted values are grid and
 wrap}
+
+\item{ncol}{ncol to include if facets = "wrap"}
 }
 \value{
 a ggplot2 object
@@ -23,10 +30,6 @@ create a volcano plot to generate log2fc and adjusted p values for
 experimental conditions
 }
 \examples{
-# Generating log2fc t test data
-log2fc_t_test_data <- mspms::log2fc_t_test(mspms::log2fc_t_test_data)
-
-# plotting data.
-p1 <- mspms::plot_volcano(log2fc_t_test_data, log2fc_threshold = 3)
+p1 <- mspms::plot_volcano(mspms::log2fc_t_test_data, log2fc_threshold = 3)
 p1
 }

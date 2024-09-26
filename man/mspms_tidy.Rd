@@ -3,7 +3,7 @@
 \name{mspms_tidy}
 \alias{mspms_tidy}
 \title{mspms_tidy
-Convert a SummarizedExperiment object within a QFeatures object 
+Convert a SummarizedExperiment object within a QFeatures object
 into a tidy tibble.}
 \usage{
 mspms_tidy(processed_qf, se_name = "peptides_norm")
@@ -11,7 +11,7 @@ mspms_tidy(processed_qf, se_name = "peptides_norm")
 \arguments{
 \item{processed_qf}{a QFeature object containing rowData and colData.}
 
-\item{se_name}{the name of the SummarizedExperiment you would like to 
+\item{se_name}{the name of the SummarizedExperiment you would like to
 extract}
 }
 \value{
@@ -20,9 +20,9 @@ specified SummarizedExperiment.
 }
 \description{
 mspms_tidy
-Convert a SummarizedExperiment object within a QFeatures object 
+Convert a SummarizedExperiment object within a QFeatures object
 into a tidy tibble.
 }
 \examples{
-mspms_data = mspms_tidy(mspms::processed_qf)
+mspms_data <- mspms_tidy(mspms::processed_qf)
 }

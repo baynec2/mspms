@@ -3,12 +3,12 @@
 \name{plot_qc_check}
 \alias{plot_qc_check}
 \title{plot_qc_check
-plot the the percentage of the peptide library undetected in each sample per 
+plot the the percentage of the peptide library undetected in each sample per
 each sample group.}
 \usage{
 plot_qc_check(
   processed_qf,
-  peptide_library = mspms::peptide_library,
+  peptide_library = mspms::peptide_library$library_id,
   full_length_threshold = 10,
   cleavage_product_threshold = 5,
   ncol = 2
@@ -18,13 +18,13 @@ plot_qc_check(
 \item{processed_qf}{QFeatures object containing a SummarizedExperiment
 named "peptides"}
 
-\item{peptide_library}{a vector of all peptide library ids in the 
+\item{peptide_library}{a vector of all peptide library ids in the
 experiment.}
 
-\item{full_length_threshold}{percent to use as threshold visualized as a 
+\item{full_length_threshold}{percent to use as threshold visualized as a
 vertical blue dashed line}
 
-\item{cleavage_product_threshold}{percent to use as a threshold visualized as 
+\item{cleavage_product_threshold}{percent to use as a threshold visualized as
 a red dashed line}
 
 \item{ncol}{n columns.}
@@ -34,7 +34,7 @@ a ggplot2 object.
 }
 \description{
 plot_qc_check
-plot the the percentage of the peptide library undetected in each sample per 
+plot the the percentage of the peptide library undetected in each sample per
 each sample group.
 }
 \examples{

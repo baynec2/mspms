@@ -7,19 +7,21 @@
 mspms_log2fc(processed_qf, reference_variable = "time", reference_value = 0)
 }
 \arguments{
-\item{mspms_data}{= this is the data that has been run through the mspms
-pipeline}
+\item{processed_qf}{a QFeatures object with a SummarizedExperiment named
+"peptides_norm".}
+
+\item{reference_variable}{the variable to used as a reference (denominator
+of log2 fold change).}
+
+\item{reference_value}{the value of the reference variable to use as
+the reference}
 }
 \value{
-a data frame with the log2fc for each timepoint within each condition
-relative to time 0
+a tibble with the t test statistics for each peptide within each
+group with the supplied value at the supplied variable as reference.
 }
 \description{
-Calculates the log2fc for each timepoint within each condition relative to
-time 0.
-}
-\examples{
-
-log2fc <- mspms_log2fc(mspms::prepared_for_stats)
+calculates the log2fc for each time point within each condition relative to
+a specified value for a specified reference variable.
 }
 \keyword{internal}

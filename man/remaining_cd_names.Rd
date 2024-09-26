@@ -7,11 +7,15 @@
 remaining_cd_names(processed_qf, reference_variable)
 }
 \arguments{
-\item{processed_qf}{}
+\item{processed_qf}{a QFeatures object}
 
-\item{col_name}{}
+\item{reference_variable}{name of reference variable}
+}
+\value{
+a vector of the remaining names in the colData
 }
 \description{
-remaining_cd_names
+determine what the remaining colData names are when removing the reference
+variable.
 }
 \keyword{internal}

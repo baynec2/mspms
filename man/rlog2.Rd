@@ -2,14 +2,19 @@
 % Please edit documentation in R/processing_helper_functions.R
 \name{rlog2}
 \alias{rlog2}
-\title{rlog2}
+\title{rlog2
+Reverse log2 transformation}
 \usage{
 rlog2(x)
 }
 \arguments{
-\item{x}{}
+\item{x}{a numeric value}
+}
+\value{
+a reverse log2 transformed value
 }
 \description{
 rlog2
+Reverse log2 transformation
 }
 \keyword{internal}

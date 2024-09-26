@@ -7,18 +7,20 @@
 mspms_t_tests(processed_qf, reference_variable = "time", reference_value = "0")
 }
 \arguments{
-\item{mspms_data}{= this is the data that has been run through the mspms
-workflow.}
+\item{processed_qf}{a QFeatures object with a SummarizedExperiment named
+"peptides_norm".}
+
+\item{reference_variable}{the variable to used as a reference.}
+
+\item{reference_value}{the value of the reference variable to use as
+the reference}
 }
 \value{
 a tibble with the t test statistics for each peptide within each
-group with t0 as reference
+group with the supplied value at the supplied variable as reference.
 }
 \description{
-Performs ttests for each peptide within each group with t0 as reference.
-P value adjustment performed using FDR correction
-}
-\examples{
-t_tests <- mspms_t_tests(mspms::mspms_data)
+performs t-tests for each peptide within each group for the user specified.
+FDR adjustment is performed.
 }
 \keyword{internal}

@@ -1,12 +1,10 @@
 #' rlog2
+#' Reverse log2 transformation
+#' @param x a numeric value
 #'
-#' @param x 
-#'
-#' @return
+#' @return a reverse log2 transformed value
 #' @keywords internal
-#'
-#' @examples
-rlog2 = function(x){
-  rlog2 = 2^x
+rlog2 <- function(x) {
+  rlog2 <- 2^x
   return(rlog2)
 }

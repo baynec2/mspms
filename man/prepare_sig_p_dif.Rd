@@ -2,24 +2,20 @@
 % Please edit documentation in R/iceLogo_helper_fuctions.R
 \name{prepare_sig_p_dif}
 \alias{prepare_sig_p_dif}
-\title{prepare_sig_pdif}
+\title{prepare_sig_p_dif}
 \usage{
 prepare_sig_p_dif(percent_difference, sig_zscores)
 }
 \arguments{
-\item{percent_difference}{= data frame containing the percent differences}
+\item{percent_difference}{a data frame containing the percent differences}
 
-\item{sig_zscores}{= matrix of significant AAs at each position based on
-z-scores}
+\item{sig_zscores}{a matrix of significant amino acids at each position
+based on z-scores}
 }
 \value{
 a tibble
 }
 \description{
-prepare significant percent difference data frame for ice logo
-}
-\examples{
-\dontshow{if (isTRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontshow{\}) # examplesIf}
+Prepare significant percent difference data frame for iceLogo
 }
 \keyword{internal}

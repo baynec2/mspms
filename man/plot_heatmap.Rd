@@ -4,11 +4,18 @@
 \alias{plot_heatmap}
 \title{plot_heatmap}
 \usage{
-plot_heatmap(processed_qf, scale = "column", plot_method = "plotly")
+plot_heatmap(
+  mspms_tidy_data,
+  value_colname = "peptides_norm",
+  scale = "column",
+  plot_method = "plotly"
+)
 }
 \arguments{
-\item{processed_qf}{a QFeatures object containing a SummarizedExperiment
-named "peptides_norm"}
+\item{mspms_tidy_data}{tidy mspms data (prepared from QFeatures object
+by mspms_tidy())}
+
+\item{value_colname}{the name of the column containing values.}
 
 \item{scale}{how would you like the data scaled? default is none,
 but can also be "row", "column", or "none"}
@@ -20,13 +27,13 @@ plotly or ggplot2.}
 a heatmaply interactive heatmap
 }
 \description{
-This produces a heatmaply interactive heatmap of the QFeatures object with 
+This produces a heatmaply interactive heatmap of the QFeatures object with
 color bars representing the condition and time for each sample in each row.
 }
 \details{
-Each column has a colored bar representing whether the peptide is a 
+Each column has a colored bar representing whether the peptide is a
 cleavage product or a full length member of the peptide library.
 }
 \examples{
-plot_heatmap(mspms::processed_qf)
+plot_heatmap(mspms::mspms_tidy_data)
 }

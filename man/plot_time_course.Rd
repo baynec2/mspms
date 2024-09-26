@@ -4,13 +4,19 @@
 \alias{plot_time_course}
 \title{plot_time_course}
 \usage{
-plot_time_course(processed_qf, summarize_by_mean = FALSE)
+plot_time_course(
+  mspms_tidy_data,
+  value_colname = "peptides_norm",
+  summarize_by_mean = FALSE
+)
 }
 \arguments{
-\item{processed_qf}{a QFeatures object containing a SummarizedExperiment
-named "peptides_norm".}
+\item{mspms_tidy_data}{tidy mspms data (prepared from QFeatures object
+by mspms_tidy())}
 
-\item{summarize_by_mean}{whether to summarise by mean (TRUE- show error bars 
+\item{value_colname}{the name of the column containing values.}
+
+\item{summarize_by_mean}{whether to summarise by mean (TRUE- show error bars
 +- 1 standard deviation) or not (FALSE)}
 }
 \value{
@@ -22,15 +28,13 @@ peptide.
 }
 \examples{
 # Determining peptide of interest
-max_log2fc_pep = mspms::log2fc_t_test_data \%>\% 
-dplyr::filter(p.adj <= 0.05,log2fc > 3) \%>\% 
-dplyr::filter(log2fc ==max(log2fc)) \%>\% 
-dplyr::pull(peptide)
+max_log2fc_pep <- mspms::log2fc_t_test_data \%>\%
+  dplyr::filter(p.adj <= 0.05, log2fc > 3) \%>\%
+  dplyr::filter(log2fc == max(log2fc)) \%>\%
+  dplyr::pull(peptide)
 
 # Defining QFeatures filter
-filter = QFeatures::VariableFilter(field = "peptide",value = max_log2fc_pep,
-condition = "==")
-
-# ploting time course
-plot_time_course(sel,summarize_by_mean = FALSE)
+filtered <- mspms::mspms_tidy_data \%>\%
+  dplyr::filter(peptide == max_log2fc_pep) \%>\%
+  plot_time_course()
 }

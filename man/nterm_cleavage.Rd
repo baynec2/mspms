@@ -12,18 +12,23 @@ nterm_cleavage(
 )
 }
 \arguments{
-\item{peptide_sequence}{= this is the peptide sequence in single leter AA
-code. _ denotes cleavage site..}
+\item{peptide_sequence}{the peptide sequence represented in single letter
+code. "_" denotes cleavage site.}
 
-\item{library_match_sequence}{= this is the sequence of the corresponding
-peptide in the library to the peptide_sequence.}
+\item{library_match_sequence}{the sequence the peptide matches to with the
+proteomics search software used. Note, this may not be the true sequence of
+the peptide depending on how the library was constructed. For example, in
+the standard MSP-MS 228 member library, methionine has been replaced with
+norleucine (n). This was done because norleucine looks like methionine to a
+protease, but it cannot be oxidized. Norleucine's (n) mass is the same as
+leucine (L), so it is recognized by the proteomics software as L.}
 
-\item{library_real_sequence}{= this is the library match sequence with the
-Ls transformed to Ms (This is what the legacy code did so it is kept this way
- in case there was a good reason for it)}
+\item{library_real_sequence}{the sequence the peptide truly is. In the
+standard MSP_MS 228 member library, some of the amino acids recognize as
+leucine (L) are truly Norleucine (n).}
 
-\item{n_residues}{= this is the number of residues to the left and right of
-the cleavage site that you want to extract.}
+\item{n_residues}{the number of residues to the left and right of
+the cleavage event to return.}
 }
 \value{
 a tibble with the peptide sequence, cleavage sequences n specified
@@ -33,14 +38,5 @@ a tibble with the peptide sequence, cleavage sequences n specified
 \description{
 Finding the cleavage sequences on the N terminus of a given peptide in
 reference to the peptide library it was derived from.
-}
-\examples{
-
-peptide_sequence <- "F_LAHWVGI"
-library_real_sequence <- "GMYYKRFMAHWVGI"
-library_match_sequence <- "GLYYKRFLAHWVGI"
-
-
-nterm_cleavage(peptide_sequence, library_real_sequence, library_match_sequence)
 }
 \keyword{internal}

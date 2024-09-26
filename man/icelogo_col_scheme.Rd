@@ -2,11 +2,16 @@
 % Please edit documentation in R/plotting_helper_functions.R
 \name{icelogo_col_scheme}
 \alias{icelogo_col_scheme}
-\title{icelogo_col_scheme}
+\title{icelogo_col_scheme
+Defining a color scheme for our iceLogos}
 \usage{
 icelogo_col_scheme()
 }
+\value{
+a ggseqlogo color scheme function
+}
 \description{
 icelogo_col_scheme
+Defining a color scheme for our iceLogos
 }
 \keyword{internal}

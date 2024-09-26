@@ -6,7 +6,6 @@
 \usage{
 generate_report(
   prepared_data,
-  design_matrix,
   peptide_library = mspms::peptide_library,
   n_residues = 4,
   outdir = getwd(),
@@ -14,33 +13,29 @@ generate_report(
 )
 }
 \arguments{
-\item{prepared_data}{= this is the prepared data.}
+\item{prepared_data}{a QFeatures object containing a SummarizedExperiment
+named "peptides".}
 
-\item{design_matrix}{= this is the design matrix.}
+\item{peptide_library}{peptide library used with experiment. Contains
+columns "library_id", "library_match_sequence", and "library_real_sequence".}
 
-\item{peptide_library}{= this is the peptide library used in the experiment.}
+\item{n_residues}{the number of amino acid residues before and after the
+cleavage site to generate a cleavage seq for.}
 
-\item{n_residues}{= this is the number of residues that you want to show
-cleavage sequences for left and right of the cut site.}
-
-\item{outdir}{= this is the output directory you would like to render the
+\item{outdir}{the output directory you would like to render the
 report to.}
 
-\item{output_file}{= this is the file name to export.}
+\item{output_file}{the file name to export.}
 }
 \value{
 a knited .html report of the mspms analysis.
 }
 \description{
-wrapper function to generate an automatic .html report of a basic mspms analysis.
+wrapper function to generate an automatic .html report of a basic mspms
+analysis.
 }
 \examples{
 \dontshow{if (isTRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-
-generate_report(
-  prepared_data = mspms::peaks_prepared_data,
-  design_matrix = mspms::design_matrix,
-  outdir = "../Desktop/test_report"
-)
+generate_report(mspms::peaks_prepared_data)
 \dontshow{\}) # examplesIf}
 }

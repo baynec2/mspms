@@ -3,8 +3,8 @@
 \name{calc_sig_zscores}
 \alias{calc_sig_zscores}
 \title{calc_sig_zscores
-determine which zscores are significant at the given alpha for a
-matrix of zscores}
+Determine which Zscores are significant at the given alpha for a
+matrix of scores}
 \usage{
 calc_sig_zscores(zscores, pval = 0.05)
 }
@@ -18,15 +18,7 @@ a tibble of significant zscores
 }
 \description{
 calc_sig_zscores
-determine which zscores are significant at the given alpha for a
-matrix of zscores
-}
-\examples{
-zscores <- data.frame(
-  p1 = c(0, 1, 2, 3, 4, 5),
-  p2 = c(0, -1, -2, -3, -4, -5)
-)
-rownames(zscores) <- c("A", "B", "C", "D", "E", "F")
-calc_sig_zscores(zscores)
+Determine which Zscores are significant at the given alpha for a
+matrix of scores
 }
 \keyword{internal}

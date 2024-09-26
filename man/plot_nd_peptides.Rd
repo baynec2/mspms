@@ -13,7 +13,7 @@ plot_nd_peptides(
 \item{processed_qf}{a QFeatures object containing a SummarizedExperiment
 named "peptides"}
 
-\item{peptide_library_ids}{a vector of all peptide library ids in the 
+\item{peptide_library_ids}{a vector of all peptide library ids in the
 experiment.}
 }
 \value{
