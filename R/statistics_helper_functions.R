@@ -56,8 +56,10 @@ mspms_log2fc <- function(processed_qf,
   # Extracting just the reference data
   reference_data <- mspms_data %>%
     dplyr::group_by(.data$peptide, !!filter_reference_by, !!group_by_cols) %>%
-    dplyr::summarise(sample_mean = mean(.data$peptides_norm, na.rm = TRUE),
-                     sample_sd = stats::sd(.data$peptides_norm, na.rm = TRUE))
+    dplyr::summarise(
+      sample_mean = mean(.data$peptides_norm, na.rm = TRUE),
+      sample_sd = stats::sd(.data$peptides_norm, na.rm = TRUE)
+    )
   # Calculating the log2fc
   log2fc <- dplyr::inner_join(control_data, reference_data, by = c(
     "peptide",

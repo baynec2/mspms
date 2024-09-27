@@ -74,6 +74,7 @@ mspms::plot_qc_check(processed_qf)
 ```{r}
 mspms::plot_nd_peptides(processed_qf)
 ```
+  
 **Figure 2.** Here the library peptides not detected in each samples are shown. 
 
 # Overview 
@@ -138,6 +139,7 @@ tryCatch({
   print(e)
 })
 ```
+  
 **Figure 6.** Here the cleavage motifs enriched in each condition are shown. 
 Enriched cleavage motifs are defined as having a p.adj <= 0.05 and a log2fc >3
 relative to time 0. 

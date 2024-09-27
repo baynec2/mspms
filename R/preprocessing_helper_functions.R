@@ -67,15 +67,17 @@ check_file_is_valid_fragpipe <- function(fragpipe_data) {
 #'
 #' @return a stop command with a informative message if file looks unexpected.
 #' otherwise, nothing.
-check_file_is_valid_pd <- function(pd_data){
+check_file_is_valid_pd <- function(pd_data) {
   # These are the names of the columns expected to be in every PEAKS file
-  expected_names <- c("Peptide Groups Peptide Group ID", "Checked", "Confidence", 
-                      "Annotated Sequence", "Modifications", "Qvality PEP",
-                      "Qvality q-value", "# Protein Groups", "# Proteins",
-                      "# PSMs","Master Protein Accessions", 
-                      "Positions in Master Proteins", 
-                      "Modifications in Master Proteins", 
-                      "# Missed Cleavages")
+  expected_names <- c(
+    "Peptide Groups Peptide Group ID", "Checked", "Confidence",
+    "Annotated Sequence", "Modifications", "Qvality PEP",
+    "Qvality q-value", "# Protein Groups", "# Proteins",
+    "# PSMs", "Master Protein Accessions",
+    "Positions in Master Proteins",
+    "Modifications in Master Proteins",
+    "# Missed Cleavages"
+  )
   names_in_data <- names(pd_data)
   # What names are missing
   missing_names <- expected_names[expected_names %!in% names_in_data]
@@ -345,30 +347,35 @@ consolidate_cleavages <- function(cleavage_added_data) {
 prepared_to_qf <- function(prepared_data,
                            colData,
                            peptide_library = mspms::peptide_library,
-                           n_residues = 4){
+                           n_residues = 4) {
   # combining peptide sequences
   combined <- dplyr::inner_join(peptide_library, prepared_data,
     by = "library_id"
   ) %>%
     add_cleavages(n_residues = n_residues) %>%
     consolidate_cleavages()
-  # if colData quantCol names 
-  name_in_prepared_data = names(prepared_data)[3:length(prepared_data)]
+  # if colData quantCol names
+  name_in_prepared_data <- names(prepared_data)[3:length(prepared_data)]
 
-  n_coldata_nin_prepared_data <- sum(colData$quantCols %!in% 
-                                       name_in_prepared_data)
-  
-  missing_name = paste0(name_in_prepared_data[
-    colData$quantCols %!in% name_in_prepared_data],
-    collapse = " ")
-  
-  if(n_coldata_nin_prepared_data > 0){
-    stop(paste0("the quantCol names in your colData do not match those in your",
-                " proteomics data. Specifically the column(s) ", missing_name,
-                " are present in your proteomics data but not in your",
-                " colData"))
+  n_coldata_nin_prepared_data <- sum(colData$quantCols %!in%
+    name_in_prepared_data)
+
+  missing_name <- paste0(
+    name_in_prepared_data[
+      colData$quantCols %!in% name_in_prepared_data
+    ],
+    collapse = " "
+  )
+
+  if (n_coldata_nin_prepared_data > 0) {
+    stop(paste0(
+      "the quantCol names in your colData do not match those in your",
+      " proteomics data. Specifically the column(s) ", missing_name,
+      " are present in your proteomics data but not in your",
+      " colData"
+    ))
   }
-  
+
   # Creating a QFeatures object
   QF <- QFeatures::readQFeatures(combined,
     quantCols = 8:length(combined),
@@ -403,4 +410,3 @@ load_colData <- function(colData_filepath) {
   }
   return(colData)
 }
-

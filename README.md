@@ -370,9 +370,10 @@ peptide_groups_filepath <- system.file(
 )
 
 colData_filepath <- system.file("extdata/proteome_discover_colData.csv",
-                                package = "mspms")
+  package = "mspms"
+)
 
-prepared_pd_data = prepare_pd(peptide_groups_filepath,colData_filepath)
+prepared_pd_data <- prepare_pd(peptide_groups_filepath, colData_filepath)
 #> Rows: 1207 Columns: 189
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: "\t"

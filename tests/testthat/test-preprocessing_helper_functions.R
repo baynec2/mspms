@@ -40,28 +40,24 @@ test_that("prepared_to_qf() generates an error when supplied a QFeatures
 
 
 test_that("prepared_to_qf() fails with unexpected colData", {
-  
-  prepared_data = mspms::processed_qf %>% 
-    mspms_tidy("peptides") %>% 
-    dplyr::select(peptide,library_id,quantCols,peptides) %>% 
+  prepared_data <- mspms::processed_qf %>%
+    mspms_tidy("peptides") %>%
+    dplyr::select(peptide, library_id, quantCols, peptides) %>%
     tidyr::pivot_wider(names_from = "quantCols", values_from = "peptides")
- 
-   wrong_col_data = mspms::colData %>% 
+
+  wrong_col_data <- mspms::colData %>%
     mutate(quantCols = 1:length(quantCols))
-   
-   expect_error(mspms:::prepared_to_qf(prepared_data,wrong_col_data))
-    
+
+  expect_error(mspms:::prepared_to_qf(prepared_data, wrong_col_data))
 })
 
 test_that("prepared_to_qf() works with expected colData", {
-  
-  prepared_data = mspms::processed_qf %>% 
-    mspms_tidy("peptides") %>% 
-    dplyr::select(peptide,library_id,quantCols,peptides) %>% 
+  prepared_data <- mspms::processed_qf %>%
+    mspms_tidy("peptides") %>%
+    dplyr::select(peptide, library_id, quantCols, peptides) %>%
     tidyr::pivot_wider(names_from = "quantCols", values_from = "peptides")
 
-  expect_no_error(mspms:::prepared_to_qf(prepared_data,mspms::colData))
-  
+  expect_no_error(mspms:::prepared_to_qf(prepared_data, mspms::colData))
 })
 
 ### load_colData() ###
