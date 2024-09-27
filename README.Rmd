@@ -237,16 +237,6 @@ peaks_prepared_data <- mspms::prepare_peaks(lfq_filepath,
 peaks_prepared_data
 ```
 
-#### Proteome Discoverer
-
-Analysis using a .csv file exported from [proteome
-discoverer](https://www.thermofisher.com/us/en/home/industrial/mass-spectrometry/liquid-chromatography-mass-spectrometry-lc-ms/lc-ms-software/multi-omics-data-analysis/proteome-discoverer-software.html)
-is supported.
-
-To generate this .csv file:
-
-```{r}
-```
 
 #### Fragpipe
 
@@ -267,6 +257,8 @@ combined_peptide_filepath <- system.file("extdata/fragpipe_combined_peptide.tsv"
   package = "mspms"
 )
 
+colData_filepath <- system.file("extdata/colData.csv", package = "mspms")
+
 
 fragpipe_prepared_data <- prepare_fragpipe(
   combined_peptide_filepath,
@@ -275,7 +267,34 @@ fragpipe_prepared_data <- prepare_fragpipe(
 
 fragpipe_prepared_data
 ```
+#### Proteome Discoverer
 
+Analysis of a PeptideGroups.txt file exported from [proteome
+discoverer](https://www.thermofisher.com/us/en/home/industrial/mass-spectrometry/liquid-chromatography-mass-spectrometry-lc-ms/lc-ms-software/multi-omics-data-analysis/proteome-discoverer-software.html) is supported.
+
+To generate this .txt file:
+1. Ensure that non-normalized/ non-scaled abundances are included in your 
+PeptideGroup table.   
+2. File > export > To Text (tab delimited) > Items to be exported - check 
+the Peptide Groups box > Export.   
+
+Note that the fileIDs of each sample in proteome discoverer (By default 
+F1 - Fn) must match the quantCols in colData.   
+
+```{r}
+peptide_groups_filepath <- system.file(
+  "extdata/proteome_discoverer_PeptideGroups.txt",
+  package = "mspms"
+)
+
+colData_filepath <- system.file("extdata/proteome_discover_colData.csv",
+                                package = "mspms")
+
+prepared_pd_data = prepare_pd(peptide_groups_filepath,colData_filepath)
+
+prepared_pd_data
+```
+  
 ## Data Processing
 
 Data processing includes imputation and normalization of the proteomics data.

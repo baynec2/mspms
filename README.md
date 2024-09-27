@@ -292,14 +292,6 @@ peaks_prepared_data
 #>  [1] peptides: SummarizedExperiment with 2071 rows and 42 columns
 ```
 
-#### Proteome Discoverer
-
-Analysis using a .csv file exported from [proteome
-discoverer](https://www.thermofisher.com/us/en/home/industrial/mass-spectrometry/liquid-chromatography-mass-spectrometry-lc-ms/lc-ms-software/multi-omics-data-analysis/proteome-discoverer-software.html)
-is supported.
-
-To generate this .csv file:
-
 #### Fragpipe
 
 Data exported from [Fragpipe](https://github.com/Nesvilab/FragPipe) as a
@@ -318,6 +310,8 @@ This can be loaded into mspms as follows:
 combined_peptide_filepath <- system.file("extdata/fragpipe_combined_peptide.tsv",
   package = "mspms"
 )
+
+colData_filepath <- system.file("extdata/colData.csv", package = "mspms")
 
 
 fragpipe_prepared_data <- prepare_fragpipe(
@@ -353,6 +347,60 @@ fragpipe_prepared_data <- prepare_fragpipe(
 fragpipe_prepared_data
 #> An instance of class QFeatures containing 1 assays:
 #>  [1] peptides: SummarizedExperiment with 1694 rows and 42 columns
+```
+
+#### Proteome Discoverer
+
+Analysis of a PeptideGroups.txt file exported from [proteome
+discoverer](https://www.thermofisher.com/us/en/home/industrial/mass-spectrometry/liquid-chromatography-mass-spectrometry-lc-ms/lc-ms-software/multi-omics-data-analysis/proteome-discoverer-software.html)
+is supported.
+
+To generate this .txt file: 1. Ensure that non-normalized/ non-scaled
+abundances are included in your PeptideGroup table.  
+2. File \> export \> To Text (tab delimited) \> Items to be exported -
+check the Peptide Groups box \> Export.
+
+Note that the fileIDs of each sample in proteome discoverer (By default
+F1 - Fn) must match the quantCols in colData.
+
+``` r
+peptide_groups_filepath <- system.file(
+  "extdata/proteome_discoverer_PeptideGroups.txt",
+  package = "mspms"
+)
+
+colData_filepath <- system.file("extdata/proteome_discover_colData.csv",
+                                package = "mspms")
+
+prepared_pd_data = prepare_pd(peptide_groups_filepath,colData_filepath)
+#> Rows: 1207 Columns: 189
+#> ── Column specification ────────────────────────────────────────────────────────
+#> Delimiter: "\t"
+#> chr  (48): Confidence, Annotated Sequence, Master Protein Accessions, Positi...
+#> dbl (138): Peptide Groups Peptide Group ID, Qvality PEP, Qvality q-value, # ...
+#> lgl   (3): Checked, Modifications, Modifications in Master Proteins
+#> 
+#> ℹ Use `spec()` to retrieve the full column specification for this data.
+#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+#> Rows: 42 Columns: 4
+#> ── Column specification ────────────────────────────────────────────────────────
+#> Delimiter: ","
+#> chr (3): quantCols, group, condition
+#> dbl (1): time
+#> 
+#> ℹ Use `spec()` to retrieve the full column specification for this data.
+#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+#> Checking arguments.
+#> 
+#> Loading data as a 'SummarizedExperiment' object.
+#> 
+#> Formatting sample annotations (colData).
+#> 
+#> Formatting data as a 'QFeatures' object.
+
+prepared_pd_data
+#> An instance of class QFeatures containing 1 assays:
+#>  [1] peptides: SummarizedExperiment with 1161 rows and 42 columns
 ```
 
 ## Data Processing
