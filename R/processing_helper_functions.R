@@ -5,6 +5,6 @@
 #' @return a reverse log2 transformed value
 #' @keywords internal
 rlog2 <- function(x) {
-  rlog2 <- 2^x
-  return(rlog2)
+    rlog2 <- 2^x
+    return(rlog2)
 }

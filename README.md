@@ -81,7 +81,7 @@ Alternatively, you can install the development version from github.
 
 ``` r
 devtools::install_github("baynec2/mspms",
-  ref = "develop"
+    ref = "develop"
 )
 ```
 
@@ -94,8 +94,8 @@ subsequent sections.
 
 ``` r
 mspms::generate_report(
-  prepared_data = mspms::peaks_prepared_data,
-  outdir = "../Desktop/mspms_report"
+    prepared_data = mspms::peaks_prepared_data,
+    outdir = "../Desktop/mspms_report"
 )
 ```
 
@@ -250,16 +250,16 @@ library(mspms)
 
 # File path of peaks lfq file
 lfq_filepath <- system.file("extdata/peaks_protein-peptides-lfq.csv",
-  package = "mspms"
+    package = "mspms"
 )
 
 colData_filepath <- system.file("extdata/colData.csv", package = "mspms")
 
 # Prepare the data
 peaks_prepared_data <- mspms::prepare_peaks(lfq_filepath,
-  colData_filepath,
-  0.3,
-  n_residues = 4
+    colData_filepath,
+    0.3,
+    n_residues = 4
 )
 #> Rows: 2444 Columns: 70
 #> ── Column specification ────────────────────────────────────────────────────────
@@ -308,15 +308,15 @@ This can be loaded into mspms as follows:
 
 ``` r
 combined_peptide_filepath <- system.file("extdata/fragpipe_combined_peptide.tsv",
-  package = "mspms"
+    package = "mspms"
 )
 
 colData_filepath <- system.file("extdata/colData.csv", package = "mspms")
 
 
 fragpipe_prepared_data <- prepare_fragpipe(
-  combined_peptide_filepath,
-  colData_filepath
+    combined_peptide_filepath,
+    colData_filepath
 )
 #> Rows: 1911 Columns: 182
 #> ── Column specification ────────────────────────────────────────────────────────
@@ -365,12 +365,12 @@ F1 - Fn) must match the quantCols in colData.
 
 ``` r
 peptide_groups_filepath <- system.file(
-  "extdata/proteome_discoverer_PeptideGroups.txt",
-  package = "mspms"
+    "extdata/proteome_discoverer_PeptideGroups.txt",
+    package = "mspms"
 )
 
 colData_filepath <- system.file("extdata/proteome_discover_colData.csv",
-  package = "mspms"
+    package = "mspms"
 )
 
 prepared_pd_data <- prepare_pd(peptide_groups_filepath, colData_filepath)
@@ -484,8 +484,8 @@ threshold ~\< 5 is good):
 
 ``` r
 plot_qc_check(processed_qf,
-  full_length_threshold = 10,
-  cleavage_product_threshold = 5
+    full_length_threshold = 10,
+    cleavage_product_threshold = 5
 )
 #> Joining with `by = join_by(quantCols)`
 ```
@@ -559,7 +559,7 @@ We can do this as follows:
 
 ``` r
 sig_cleavage_data <- log2fc_t_test_data %>%
-  dplyr::filter(p.adj <= 0.05, log2fc > 3)
+    dplyr::filter(p.adj <= 0.05, log2fc > 3)
 
 p1 <- mspms::plot_cleavages_per_pos(sig_cleavage_data)
 
@@ -585,10 +585,10 @@ below.
 
 ``` r
 catA_sig_cleavages <- log2fc_t_test_data %>%
-  dplyr::filter(p.adj <= 0.05, log2fc > 3) %>%
-  dplyr::filter(condition == "CatA") %>%
-  dplyr::pull(cleavage_seq) %>%
-  unique()
+    dplyr::filter(p.adj <= 0.05, log2fc > 3) %>%
+    dplyr::filter(condition == "CatA") %>%
+    dplyr::pull(cleavage_seq) %>%
+    unique()
 ```
 
 We also need to know all of the possible cleavages we could see among
@@ -596,8 +596,8 @@ our peptide library. We can generate that as below:
 
 ``` r
 all_possible_8mers_from_228_library <- calculate_all_cleavages(
-  mspms::peptide_library$library_real_sequence,
-  n_AA_after_cleavage = 4
+    mspms::peptide_library$library_real_sequence,
+    n_AA_after_cleavage = 4
 )
 ```
 
@@ -606,7 +606,7 @@ possible cleavages in our peptide library like so:
 
 ``` r
 plot_icelogo(catA_sig_cleavages,
-  background_universe = all_possible_8mers_from_228_library
+    background_universe = all_possible_8mers_from_228_library
 )
 #> Scale for x is already present.
 #> Adding another scale for x, which will replace the existing scale.
@@ -619,7 +619,7 @@ conditions from the experiment all together.
 
 ``` r
 sig_cleavage_data <- log2fc_t_test_data %>%
-  dplyr::filter(p.adj <= 0.05, log2fc > 3)
+    dplyr::filter(p.adj <= 0.05, log2fc > 3)
 
 plot_all_icelogos(sig_cleavage_data)
 #> Scale for x is already present.
@@ -644,9 +644,9 @@ log2fc.
 
 ``` r
 max_log2fc_pep <- log2fc_t_test_data %>%
-  dplyr::filter(p.adj <= 0.05, log2fc > 3) %>%
-  dplyr::filter(log2fc == max(log2fc)) %>%
-  pull(peptide)
+    dplyr::filter(p.adj <= 0.05, log2fc > 3) %>%
+    dplyr::filter(log2fc == max(log2fc)) %>%
+    pull(peptide)
 ```
 
 We can then filter our tidy mspms data to only include this peptide and
@@ -654,8 +654,8 @@ plot
 
 ``` r
 p1 <- mspms_tidy_data %>%
-  dplyr::filter(peptide == max_log2fc_pep) %>%
-  plot_time_course()
+    dplyr::filter(peptide == max_log2fc_pep) %>%
+    plot_time_course()
 
 p1
 ```

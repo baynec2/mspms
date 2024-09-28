@@ -15,27 +15,27 @@
 log2fc_t_test <- function(processed_qf,
                           reference_variable = "time",
                           reference_value = 0) {
-  # Calculating the log2fc
-  log2fc <- mspms_log2fc(
-    processed_qf,
-    reference_variable,
-    reference_value
-  )
+    # Calculating the log2fc
+    log2fc <- mspms_log2fc(
+        processed_qf,
+        reference_variable,
+        reference_value
+    )
 
-  # Calculating the stats
-  stat <- mspms_t_tests(processed_qf,
-    reference_variable,
-    reference_value = as.character(reference_value)
-  )
+    # Calculating the stats
+    stat <- mspms_t_tests(processed_qf,
+        reference_variable,
+        reference_value = as.character(reference_value)
+    )
 
-  # Combining them together
-  log2fc_stats <- dplyr::inner_join(log2fc, stat, by = c(
-    "peptide",
-    "comparison"
-  )) %>%
-    tibble::as_tibble() %>%
-    dplyr::rename("condition" = "condition.x") %>%
-    dplyr::select(-"condition.y")
+    # Combining them together
+    log2fc_stats <- dplyr::inner_join(log2fc, stat, by = c(
+        "peptide",
+        "comparison"
+    )) %>%
+        tibble::as_tibble() %>%
+        dplyr::rename("condition" = "condition.x") %>%
+        dplyr::select(-"condition.y")
 
-  return(log2fc_stats)
+    return(log2fc_stats)
 }

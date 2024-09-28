@@ -20,34 +20,34 @@ plot_qc_check <- function(processed_qf,
                           full_length_threshold = 10,
                           cleavage_product_threshold = 5,
                           ncol = 2) {
-  if (!is.character(peptide_library)) {
-    stop("peptide library musyt be a charachter vector")
-  }
-  qc_check_data <- prepare_qc_check_data(
-    processed_qf,
-    peptide_library
-  )
-  # Plotting per
-  p1 <- qc_check_data %>%
-    ggplot2::ggplot(ggplot2::aes(
-      color = .data$peptide_type,
-      fill = .data$peptide_type
-    )) +
-    ggplot2::geom_histogram(ggplot2::aes(.data$per_library_id_undetected),
-      binwidth = 0.1,
-      alpha = 0.5
-    ) +
-    ggplot2::geom_density(ggplot2::aes(.data$per_library_id_undetected), alpha = 0.5) +
-    ggplot2::geom_vline(
-      xintercept = full_length_threshold, linetype = "dashed",
-      color = "#00BFC4"
-    ) +
-    ggplot2::geom_vline(
-      xintercept = cleavage_product_threshold, linetype = "dashed",
-      color = "#F8766D"
-    ) +
-    ggplot2::facet_wrap(~ .data$group, scales = "free_y", ncol = ncol) +
-    ggplot2::ggtitle("Percentage of Library ID Undetected In Each Sample") +
-    ggplot2::ylab("count")
-  return(p1)
+    if (!is.character(peptide_library)) {
+        stop("peptide library musyt be a charachter vector")
+    }
+    qc_check_data <- prepare_qc_check_data(
+        processed_qf,
+        peptide_library
+    )
+    # Plotting per
+    p1 <- qc_check_data %>%
+        ggplot2::ggplot(ggplot2::aes(
+            color = .data$peptide_type,
+            fill = .data$peptide_type
+        )) +
+        ggplot2::geom_histogram(ggplot2::aes(.data$per_library_id_undetected),
+            binwidth = 0.1,
+            alpha = 0.5
+        ) +
+        ggplot2::geom_density(ggplot2::aes(.data$per_library_id_undetected), alpha = 0.5) +
+        ggplot2::geom_vline(
+            xintercept = full_length_threshold, linetype = "dashed",
+            color = "#00BFC4"
+        ) +
+        ggplot2::geom_vline(
+            xintercept = cleavage_product_threshold, linetype = "dashed",
+            color = "#F8766D"
+        ) +
+        ggplot2::facet_wrap(~ .data$group, scales = "free_y", ncol = ncol) +
+        ggplot2::ggtitle("Percentage of Library ID Undetected In Each Sample") +
+        ggplot2::ylab("count")
+    return(p1)
 }

@@ -11,21 +11,21 @@
 #' @examples
 #' # Defining the significant peptides
 #' sig_cleavage_data <- log2fc_t_test_data %>%
-#'   dplyr::filter(p.adj <= 0.05, log2fc > 3)
+#'     dplyr::filter(p.adj <= 0.05, log2fc > 3)
 #' # Plotting
 #' p1 <- mspms::plot_cleavages_per_pos(sig_cleavage_data)
 #' p1
 plot_cleavages_per_pos <- function(sig_cleavage_data,
                                    ncol = 1) {
-  count_cleavages_per_pos <- count_cleavages_per_pos(sig_cleavage_data)
-  p1 <- count_cleavages_per_pos %>%
-    ggplot2::ggplot(ggplot2::aes(
-      x = .data$cleavage_pos,
-      y = .data$n,
-      color = .data$time
-    )) +
-    ggplot2::facet_wrap(~ .data$condition, scales = "free_y") +
-    ggplot2::geom_point() +
-    ggplot2::geom_line()
-  return(p1)
+    count_cleavages_per_pos <- count_cleavages_per_pos(sig_cleavage_data)
+    p1 <- count_cleavages_per_pos %>%
+        ggplot2::ggplot(ggplot2::aes(
+            x = .data$cleavage_pos,
+            y = .data$n,
+            color = .data$time
+        )) +
+        ggplot2::facet_wrap(~ .data$condition, scales = "free_y") +
+        ggplot2::geom_point() +
+        ggplot2::geom_line()
+    return(p1)
 }

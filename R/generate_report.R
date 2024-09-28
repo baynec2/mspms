@@ -22,20 +22,20 @@ generate_report <- function(prepared_data,
                             n_residues = 4,
                             outdir = getwd(),
                             output_file = paste0(
-                              Sys.Date(),
-                              "_mspms_report.html"
+                                Sys.Date(),
+                                "_mspms_report.html"
                             )) {
-  rmarkdown::render(
-    system.file("rmarkdown/templates/mspms_report/skeleton/skeleton.RMD",
-      package = "mspms"
-    ),
-    params = list(
-      prepared_data = prepared_data,
-      peptide_library = peptide_library,
-      n_residues = n_residues
-    ),
-    clean = TRUE,
-    output_dir = outdir,
-    output_file = output_file
-  )
+    rmarkdown::render(
+        system.file("rmarkdown/templates/mspms_report/skeleton/skeleton.RMD",
+            package = "mspms"
+        ),
+        params = list(
+            prepared_data = prepared_data,
+            peptide_library = peptide_library,
+            n_residues = n_residues
+        ),
+        clean = TRUE,
+        output_dir = outdir,
+        output_file = output_file
+    )
 }

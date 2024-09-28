@@ -9,27 +9,27 @@
 #' otherwise, nothing.
 #' @keywords internal
 check_file_is_valid_peaks <- function(peaks_data) {
-  # These are the names of the columns expected to be in every PEAKS file
-  expected_names <- c(
-    "Protein Group", "Protein ID", "Protein Accession", "Peptide",
-    "Used", "Candidate", "Quality", "Significance", "Avg. ppm", "Avg. Area",
-    "Sample Profile (Ratio)", "Group Profile (Ratio)", "Max Ratio", "#Vector",
-    "Start", "End", "PTM"
-  )
-  names_in_data <- names(peaks_data)
-  # What names are missing
-  missing_names <- expected_names[expected_names %!in% names_in_data]
-  if (length(missing_names) > 1) {
-    stop(
-      paste(c("This doesn't look like the expected PEAKS file. The following
-          columns are missing:", missing_names), collapse = "")
+    # These are the names of the columns expected to be in every PEAKS file
+    expected_names <- c(
+        "Protein Group", "Protein ID", "Protein Accession", "Peptide",
+        "Used", "Candidate", "Quality", "Significance", "Avg. ppm", "Avg. Area",
+        "Sample Profile (Ratio)", "Group Profile (Ratio)", "Max Ratio", "#Vector",
+        "Start", "End", "PTM"
     )
-  }
-  # PEAKS files with PTMS are not supported
-  if (sum(!is.na(peaks_data$PTM)) > 1) {
-    stop("There are PTMS in your file, redo PEAKS search without
+    names_in_data <- names(peaks_data)
+    # What names are missing
+    missing_names <- expected_names[expected_names %!in% names_in_data]
+    if (length(missing_names) > 1) {
+        stop(
+            paste(c("This doesn't look like the expected PEAKS file. The following
+          columns are missing:", missing_names), collapse = "")
+        )
+    }
+    # PEAKS files with PTMS are not supported
+    if (sum(!is.na(peaks_data$PTM)) > 1) {
+        stop("There are PTMS in your file, redo PEAKS search without
     PTMs. PTM analyis is not currently supported")
-  }
+    }
 }
 
 #' check_file_is_valid_fragpipe
@@ -40,23 +40,23 @@ check_file_is_valid_peaks <- function(peaks_data) {
 #' @return a stop command with a informative message if file looks unexpected.
 #' otherwise, nothing.
 check_file_is_valid_fragpipe <- function(fragpipe_data) {
-  # These are the names of the columns expected to be in every fragpipe file
-  expected_names <- c(
-    "Peptide Sequence", "Prev AA", "Next AA", "Start", "End", "Peptide Length",
-    "Charges", "Protein", "Protein ID", "Entry Name", "Gene",
-    "Protein Description", "Mapped Genes", "Mapped Proteins"
-  )
-
-  names_in_data <- names(fragpipe_data)
-
-  # What names are missing
-  missing_names <- expected_names[expected_names %!in% names_in_data]
-  if (length(missing_names) > 1) {
-    stop(
-      paste(c("This doesn't look like the expected fragpipe file. The following
-          columns are missing:", missing_names), collapse = " ")
+    # These are the names of the columns expected to be in every fragpipe file
+    expected_names <- c(
+        "Peptide Sequence", "Prev AA", "Next AA", "Start", "End", "Peptide Length",
+        "Charges", "Protein", "Protein ID", "Entry Name", "Gene",
+        "Protein Description", "Mapped Genes", "Mapped Proteins"
     )
-  }
+
+    names_in_data <- names(fragpipe_data)
+
+    # What names are missing
+    missing_names <- expected_names[expected_names %!in% names_in_data]
+    if (length(missing_names) > 1) {
+        stop(
+            paste(c("This doesn't look like the expected fragpipe file. The following
+          columns are missing:", missing_names), collapse = " ")
+        )
+    }
 }
 
 #' check_file_is_valid_pd
@@ -68,25 +68,25 @@ check_file_is_valid_fragpipe <- function(fragpipe_data) {
 #' @return a stop command with a informative message if file looks unexpected.
 #' otherwise, nothing.
 check_file_is_valid_pd <- function(pd_data) {
-  # These are the names of the columns expected to be in every PEAKS file
-  expected_names <- c(
-    "Peptide Groups Peptide Group ID", "Checked", "Confidence",
-    "Annotated Sequence", "Modifications", "Qvality PEP",
-    "Qvality q-value", "# Protein Groups", "# Proteins",
-    "# PSMs", "Master Protein Accessions",
-    "Positions in Master Proteins",
-    "Modifications in Master Proteins",
-    "# Missed Cleavages"
-  )
-  names_in_data <- names(pd_data)
-  # What names are missing
-  missing_names <- expected_names[expected_names %!in% names_in_data]
-  if (length(missing_names) > 1) {
-    stop(
-      paste(c("This doesn't look like the expected PEAKS file. The following
-          columns are missing:", missing_names), collapse = "")
+    # These are the names of the columns expected to be in every PEAKS file
+    expected_names <- c(
+        "Peptide Groups Peptide Group ID", "Checked", "Confidence",
+        "Annotated Sequence", "Modifications", "Qvality PEP",
+        "Qvality q-value", "# Protein Groups", "# Proteins",
+        "# PSMs", "Master Protein Accessions",
+        "Positions in Master Proteins",
+        "Modifications in Master Proteins",
+        "# Missed Cleavages"
     )
-  }
+    names_in_data <- names(pd_data)
+    # What names are missing
+    missing_names <- expected_names[expected_names %!in% names_in_data]
+    if (length(missing_names) > 1) {
+        stop(
+            paste(c("This doesn't look like the expected PEAKS file. The following
+          columns are missing:", missing_names), collapse = "")
+        )
+    }
 }
 
 #' cterm_cleavage
@@ -120,58 +120,58 @@ cterm_cleavage <- function(peptide_sequence,
                            library_match_sequence,
                            library_real_sequence,
                            n_residues = 4) {
-  n_of_match <- length(gregexpr("_", peptide_sequence)[[1]])
-  if ((grepl("_", peptide_sequence) == TRUE) &&
-    (gregexpr("_", peptide_sequence)[[1]][n_of_match] ==
-      nchar(peptide_sequence) - 1)) {
-    # if there is a c term cleavage, it is the last position - 1 e
-    pos <- nchar(peptide_sequence) - 1
-    # Defining the sequence on the left side of the cleavage
-    temp <- substr(peptide_sequence, pos - n_residues, pos - 1)
-    # Checking to see what part of the reference sequence this matches.
-    left_reference_beginning <- regexpr(temp, library_match_sequence)[[1]][1]
-    left_reference_end <- left_reference_beginning + (n_residues - 1)
-    right_reference_beginning <- left_reference_end + 1
+    n_of_match <- length(gregexpr("_", peptide_sequence)[[1]])
+    if ((grepl("_", peptide_sequence) == TRUE) &&
+        (gregexpr("_", peptide_sequence)[[1]][n_of_match] ==
+            nchar(peptide_sequence) - 1)) {
+        # if there is a c term cleavage, it is the last position - 1 e
+        pos <- nchar(peptide_sequence) - 1
+        # Defining the sequence on the left side of the cleavage
+        temp <- substr(peptide_sequence, pos - n_residues, pos - 1)
+        # Checking to see what part of the reference sequence this matches.
+        left_reference_beginning <- regexpr(temp, library_match_sequence)[[1]][1]
+        left_reference_end <- left_reference_beginning + (n_residues - 1)
+        right_reference_beginning <- left_reference_end + 1
 
-    # the cterm cleavage position is the right reference beginning minus 1
-    cterm_cleavage_pos <- right_reference_beginning - 1
+        # the cterm cleavage position is the right reference beginning minus 1
+        cterm_cleavage_pos <- right_reference_beginning - 1
 
-    right_reference_end <- right_reference_beginning + (n_residues - 1)
+        right_reference_end <- right_reference_beginning + (n_residues - 1)
 
-    # Extracting the sequences from the reference sequence
-    right_sequence <- substr(
-      library_real_sequence,
-      right_reference_beginning,
-      right_reference_end
+        # Extracting the sequences from the reference sequence
+        right_sequence <- substr(
+            library_real_sequence,
+            right_reference_beginning,
+            right_reference_end
+        )
+        # Adding X to represent cases where there was no more sequences
+        right_sequence <- paste0(
+            right_sequence,
+            paste0(
+                rep("X", n_residues - nchar(right_sequence)),
+                collapse = ""
+            )
+        )
+        left_sequence <- substr(
+            library_real_sequence,
+            left_reference_beginning,
+            left_reference_end
+        )
+        # Adding X where there are no more sequences in the library peptide
+        left_sequence <- paste0(paste0(rep("X", n_residues - nchar(left_sequence)),
+            collapse = ""
+        ), left_sequence)
+        cterm <- paste(c(left_sequence, right_sequence), collapse = "")
+    } else {
+        cterm <- NA
+        cterm_cleavage_pos <- NA
+    }
+    output <- tibble::tibble(
+        peptide = peptide_sequence,
+        cterm = cterm,
+        cterm_cleavage_pos = cterm_cleavage_pos
     )
-    # Adding X to represent cases where there was no more sequences
-    right_sequence <- paste0(
-      right_sequence,
-      paste0(
-        rep("X", n_residues - nchar(right_sequence)),
-        collapse = ""
-      )
-    )
-    left_sequence <- substr(
-      library_real_sequence,
-      left_reference_beginning,
-      left_reference_end
-    )
-    # Adding X where there are no more sequences in the library peptide
-    left_sequence <- paste0(paste0(rep("X", n_residues - nchar(left_sequence)),
-      collapse = ""
-    ), left_sequence)
-    cterm <- paste(c(left_sequence, right_sequence), collapse = "")
-  } else {
-    cterm <- NA
-    cterm_cleavage_pos <- NA
-  }
-  output <- tibble::tibble(
-    peptide = peptide_sequence,
-    cterm = cterm,
-    cterm_cleavage_pos = cterm_cleavage_pos
-  )
-  return(output)
+    return(output)
 }
 
 #' nterm_cleavage
@@ -203,56 +203,56 @@ nterm_cleavage <- function(peptide_sequence,
                            library_match_sequence,
                            library_real_sequence,
                            n_residues = 4) {
-  # _ denotes a cleavage, and if it is the second position, it is on the n term!
-  if ((grepl("_", peptide_sequence) == TRUE) &&
-    (regexpr("_", peptide_sequence)[[1]][1] == 2)) {
-    # The first letter of the right side is the third letter our sequence
-    pos <- 2 + 1
-    # taking the sequence from right after the _ to .
-    temp <- substr(peptide_sequence, pos, pos + (n_residues - 1))
-    # Checking to see what part of the reference sequence this matches.
-    right_reference_start <- regexpr(temp, library_match_sequence)[[1]][1]
-    right_reference_end <- right_reference_start + (n_residues - 1)
-    # the position of the n term cleavage is right reference start - 1
-    nterm_cleavage_pos <- right_reference_start - 1
-    # Now determining the left side of the cleavage event.
-    left_reference_end <- right_reference_start - 1
-    left_reference_start <- left_reference_end - (n_residues - 1)
-    # Extracting the sequences from the reference sequence
-    right_sequence <- substr(
-      library_real_sequence,
-      right_reference_start,
-      right_reference_end
+    # _ denotes a cleavage, and if it is the second position, it is on the n term!
+    if ((grepl("_", peptide_sequence) == TRUE) &&
+        (regexpr("_", peptide_sequence)[[1]][1] == 2)) {
+        # The first letter of the right side is the third letter our sequence
+        pos <- 2 + 1
+        # taking the sequence from right after the _ to .
+        temp <- substr(peptide_sequence, pos, pos + (n_residues - 1))
+        # Checking to see what part of the reference sequence this matches.
+        right_reference_start <- regexpr(temp, library_match_sequence)[[1]][1]
+        right_reference_end <- right_reference_start + (n_residues - 1)
+        # the position of the n term cleavage is right reference start - 1
+        nterm_cleavage_pos <- right_reference_start - 1
+        # Now determining the left side of the cleavage event.
+        left_reference_end <- right_reference_start - 1
+        left_reference_start <- left_reference_end - (n_residues - 1)
+        # Extracting the sequences from the reference sequence
+        right_sequence <- substr(
+            library_real_sequence,
+            right_reference_start,
+            right_reference_end
+        )
+        # Adding X to represent cases where there was no more sequences
+        right_sequence <- paste0(
+            right_sequence,
+            paste0(rep("X", n_residues - nchar(right_sequence),
+                collapse = ""
+            ))
+        )
+        left_sequence <- substr(
+            library_real_sequence,
+            left_reference_start,
+            left_reference_end
+        )
+        left_sequence <- paste0(
+            paste0(rep("X", n_residues - nchar(left_sequence)),
+                collapse = ""
+            ),
+            left_sequence
+        )
+        nterm <- paste(c(left_sequence, right_sequence), collapse = "")
+    } else {
+        nterm <- NA
+        nterm_cleavage_pos <- NA
+    }
+    output <- tibble::tibble(
+        peptide = peptide_sequence,
+        nterm = nterm,
+        nterm_cleavage_pos = nterm_cleavage_pos
     )
-    # Adding X to represent cases where there was no more sequences
-    right_sequence <- paste0(
-      right_sequence,
-      paste0(rep("X", n_residues - nchar(right_sequence),
-        collapse = ""
-      ))
-    )
-    left_sequence <- substr(
-      library_real_sequence,
-      left_reference_start,
-      left_reference_end
-    )
-    left_sequence <- paste0(
-      paste0(rep("X", n_residues - nchar(left_sequence)),
-        collapse = ""
-      ),
-      left_sequence
-    )
-    nterm <- paste(c(left_sequence, right_sequence), collapse = "")
-  } else {
-    nterm <- NA
-    nterm_cleavage_pos <- NA
-  }
-  output <- tibble::tibble(
-    peptide = peptide_sequence,
-    nterm = nterm,
-    nterm_cleavage_pos = nterm_cleavage_pos
-  )
-  return(output)
+    return(output)
 }
 
 #' add_cleavages
@@ -267,32 +267,32 @@ nterm_cleavage <- function(peptide_sequence,
 #' @return a tibble with cleavage information added.
 #' @keywords internal
 add_cleavages <- function(joined_with_library, n_residues = 4) {
-  # Iterating through and applying nterm_clevage
-  nterm <- purrr::pmap_df(
-    list(
-      joined_with_library$peptide,
-      joined_with_library$library_match_sequence,
-      joined_with_library$library_real_sequence,
-      n_residues
-    ),
-    nterm_cleavage
-  )
-  # Iterating though and applying cterm_cleavage
-  cterm <- purrr::pmap_df(
-    list(
-      joined_with_library$peptide,
-      joined_with_library$library_match_sequence,
-      joined_with_library$library_real_sequence,
-      n_residues
-    ),
-    cterm_cleavage
-  )
-  # Combining nterm and cterm
-  cleavages <- dplyr::bind_cols(nterm, cterm[, 2:3])
-  joined_with_library <- dplyr::select(joined_with_library, -"peptide")
-  # Building final data frame.
-  output <- dplyr::bind_cols(cleavages, joined_with_library)
-  return(output)
+    # Iterating through and applying nterm_clevage
+    nterm <- purrr::pmap_df(
+        list(
+            joined_with_library$peptide,
+            joined_with_library$library_match_sequence,
+            joined_with_library$library_real_sequence,
+            n_residues
+        ),
+        nterm_cleavage
+    )
+    # Iterating though and applying cterm_cleavage
+    cterm <- purrr::pmap_df(
+        list(
+            joined_with_library$peptide,
+            joined_with_library$library_match_sequence,
+            joined_with_library$library_real_sequence,
+            n_residues
+        ),
+        cterm_cleavage
+    )
+    # Combining nterm and cterm
+    cleavages <- dplyr::bind_cols(nterm, cterm[, 2:3])
+    joined_with_library <- dplyr::select(joined_with_library, -"peptide")
+    # Building final data frame.
+    output <- dplyr::bind_cols(cleavages, joined_with_library)
+    return(output)
 }
 
 #' consolidate_cleavages
@@ -308,32 +308,32 @@ add_cleavages <- function(joined_with_library, n_residues = 4) {
 #'  and rows with no cleavage information or double information removed.
 #' @keywords internal
 consolidate_cleavages <- function(cleavage_added_data) {
-  out <- cleavage_added_data %>%
-    # consolidating cleavage sequence
-    dplyr::mutate(cleavage_seq = dplyr::case_when(
-      !is.na(.data$nterm) & is.na(.data$cterm) ~ .data$nterm,
-      !is.na(.data$cterm) & is.na(.data$nterm) ~ .data$cterm,
-      TRUE ~ NA
-    ), .after = "cterm_cleavage_pos") %>%
-    # Removing peptides with double cleavages
-    dplyr::filter(!(!is.na(.data$cterm) & !is.na(.data$nterm))) %>%
-    dplyr::mutate(cleavage_pos = dplyr::case_when(
-      is.na(.data$cterm_cleavage_pos) ~ .data$nterm_cleavage_pos,
-      TRUE ~ .data$cterm_cleavage_pos
-    ), .after = "cleavage_seq") %>%
-    # Adding character specifying what are cleaved vs not
-    dplyr::mutate(
-      peptide_type = dplyr::case_when(
-        is.na(.data$cleavage_pos) ~ "full_length",
-        TRUE ~ "cleavage_product"
-      ),
-      .after = "cleavage_pos"
-    ) %>%
-    dplyr::select(
-      -"nterm", -"cterm", -"nterm_cleavage_pos",
-      -"cterm_cleavage_pos"
-    )
-  return(out)
+    out <- cleavage_added_data %>%
+        # consolidating cleavage sequence
+        dplyr::mutate(cleavage_seq = dplyr::case_when(
+            !is.na(.data$nterm) & is.na(.data$cterm) ~ .data$nterm,
+            !is.na(.data$cterm) & is.na(.data$nterm) ~ .data$cterm,
+            TRUE ~ NA
+        ), .after = "cterm_cleavage_pos") %>%
+        # Removing peptides with double cleavages
+        dplyr::filter(!(!is.na(.data$cterm) & !is.na(.data$nterm))) %>%
+        dplyr::mutate(cleavage_pos = dplyr::case_when(
+            is.na(.data$cterm_cleavage_pos) ~ .data$nterm_cleavage_pos,
+            TRUE ~ .data$cterm_cleavage_pos
+        ), .after = "cleavage_seq") %>%
+        # Adding character specifying what are cleaved vs not
+        dplyr::mutate(
+            peptide_type = dplyr::case_when(
+                is.na(.data$cleavage_pos) ~ "full_length",
+                TRUE ~ "cleavage_product"
+            ),
+            .after = "cleavage_pos"
+        ) %>%
+        dplyr::select(
+            -"nterm", -"cterm", -"nterm_cleavage_pos",
+            -"cterm_cleavage_pos"
+        )
+    return(out)
 }
 #' convert prepared data to a QFeatures object
 #'
@@ -348,42 +348,42 @@ prepared_to_qf <- function(prepared_data,
                            colData,
                            peptide_library = mspms::peptide_library,
                            n_residues = 4) {
-  # combining peptide sequences
-  combined <- dplyr::inner_join(peptide_library, prepared_data,
-    by = "library_id"
-  ) %>%
-    add_cleavages(n_residues = n_residues) %>%
-    consolidate_cleavages()
-  # if colData quantCol names
-  name_in_prepared_data <- names(prepared_data)[3:length(prepared_data)]
+    # combining peptide sequences
+    combined <- dplyr::inner_join(peptide_library, prepared_data,
+        by = "library_id"
+    ) %>%
+        add_cleavages(n_residues = n_residues) %>%
+        consolidate_cleavages()
+    # if colData quantCol names
+    name_in_prepared_data <- names(prepared_data)[3:length(prepared_data)]
 
-  n_coldata_nin_prepared_data <- sum(colData$quantCols %!in%
-    name_in_prepared_data)
+    n_coldata_nin_prepared_data <- sum(colData$quantCols %!in%
+        name_in_prepared_data)
 
-  missing_name <- paste0(
-    name_in_prepared_data[
-      colData$quantCols %!in% name_in_prepared_data
-    ],
-    collapse = " "
-  )
+    missing_name <- paste0(
+        name_in_prepared_data[
+            colData$quantCols %!in% name_in_prepared_data
+        ],
+        collapse = " "
+    )
 
-  if (n_coldata_nin_prepared_data > 0) {
-    stop(paste0(
-      "the quantCol names in your colData do not match those in your",
-      " proteomics data. Specifically the column(s) ", missing_name,
-      " are present in your proteomics data but not in your",
-      " colData"
-    ))
-  }
+    if (n_coldata_nin_prepared_data > 0) {
+        stop(paste0(
+            "the quantCol names in your colData do not match those in your",
+            " proteomics data. Specifically the column(s) ", missing_name,
+            " are present in your proteomics data but not in your",
+            " colData"
+        ))
+    }
 
-  # Creating a QFeatures object
-  QF <- QFeatures::readQFeatures(combined,
-    quantCols = 8:length(combined),
-    fnames = "peptide",
-    colData = colData,
-    name = "peptides"
-  )
-  return(QF)
+    # Creating a QFeatures object
+    QF <- QFeatures::readQFeatures(combined,
+        quantCols = 8:length(combined),
+        fnames = "peptide",
+        colData = colData,
+        name = "peptides"
+    )
+    return(QF)
 }
 
 #' load_colData
@@ -396,17 +396,17 @@ prepared_to_qf <- function(prepared_data,
 #' @keywords internal
 
 load_colData <- function(colData_filepath) {
-  colData <- readr::read_csv(colData_filepath)
-  colData_names <- names(colData)
-  expected_names <- c("quantCols", "group", "condition", "time")
-  unexpected_names <- expected_names %!in% colData_names
-  n_unexpected_names <- sum(unexpected_names)
-  if (n_unexpected_names > 0) {
-    missing_names <- expected_names[unexpected_names]
-    stop(paste0(c("colData must have columns named \"quantCols\",\"group\",
+    colData <- readr::read_csv(colData_filepath)
+    colData_names <- names(colData)
+    expected_names <- c("quantCols", "group", "condition", "time")
+    unexpected_names <- expected_names %!in% colData_names
+    n_unexpected_names <- sum(unexpected_names)
+    if (n_unexpected_names > 0) {
+        missing_names <- expected_names[unexpected_names]
+        stop(paste0(c("colData must have columns named \"quantCols\",\"group\",
     \"condition\", and \"time\" ", "you are missing ", missing_names)),
-      collapse = ""
-    )
-  }
-  return(colData)
+            collapse = ""
+        )
+    }
+    return(colData)
 }
