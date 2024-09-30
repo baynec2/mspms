@@ -46,7 +46,7 @@ test_that("prepared_to_qf() fails with unexpected colData", {
         tidyr::pivot_wider(names_from = "quantCols", values_from = "peptides")
 
     wrong_col_data <- mspms::colData %>%
-        mutate(quantCols = 1:length(quantCols))
+        dplyr::mutate(quantCols = 1:length(quantCols))
 
     expect_error(mspms:::prepared_to_qf(prepared_data, wrong_col_data))
 })
