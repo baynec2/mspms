@@ -261,9 +261,8 @@ Fragpipe.
 This can be loaded into mspms as follows:
 
 ```{r}
-combined_peptide_filepath <- system.file("extdata/
-                                         fragpipe_combined_peptide.tsv",
-    package = "mspms"
+combined_peptide_filepath <- system.file("extdata/fragpipe_combined_peptide.tsv",
+                                         package = "mspms"
 )
 
 colData_filepath <- system.file("extdata/colData.csv", package = "mspms")
