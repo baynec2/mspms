@@ -29,7 +29,7 @@ ggplot2::theme_set(
 
 [![R-CMD-check](https://github.com/baynec2/mspms/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/baynec2/mspms/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/baynec2/mspms/branch/main/graph/badge.svg)](https://app.codecov.io/gh/baynec2/mspms?branch=bioconductor)
+coverage](https://codecov.io/gh/baynec2/mspms/branch/main/graph/badge.svg)](https://app.codecov.io/gh/baynec2/mspms?branch=main)
 
 <!-- badges: end -->
 
@@ -186,7 +186,9 @@ with the peptide library for each sample.
 An example of a valid colData file is shown below.
 
 ```{r}
-colData <- readr::read_csv(system.file("extdata/colData.csv", package = "mspms"))
+colData <- readr::read_csv(system.file("extdata/colData.csv",
+    package = "mspms"
+))
 
 head(colData)
 ```
@@ -243,16 +245,6 @@ peaks_prepared_data <- mspms::prepare_peaks(lfq_filepath,
 peaks_prepared_data
 ```
 
-#### Proteome Discoverer
-
-Analysis using a .csv file exported from [proteome
-discoverer](https://www.thermofisher.com/us/en/home/industrial/mass-spectrometry/liquid-chromatography-mass-spectrometry-lc-ms/lc-ms-software/multi-omics-data-analysis/proteome-discoverer-software.html)
-is supported.
-
-To generate this .csv file:
-
-```{r}
-```
 
 #### Fragpipe
 
@@ -269,9 +261,12 @@ Fragpipe.
 This can be loaded into mspms as follows:
 
 ```{r}
-combined_peptide_filepath <- system.file("extdata/fragpipe_combined_peptide.tsv",
+combined_peptide_filepath <- system.file("extdata/
+                                         fragpipe_combined_peptide.tsv",
     package = "mspms"
 )
+
+colData_filepath <- system.file("extdata/colData.csv", package = "mspms")
 
 
 fragpipe_prepared_data <- prepare_fragpipe(
@@ -281,7 +276,36 @@ fragpipe_prepared_data <- prepare_fragpipe(
 
 fragpipe_prepared_data
 ```
+#### Proteome Discoverer
 
+Analysis of a PeptideGroups.txt file exported from [proteome
+discoverer](https://www.thermofisher.com/us/en/home/industrial/mass-spectrometry/liquid-chromatography-mass-spectrometry-lc-ms/lc-ms-software/multi-omics-data-analysis/proteome-discoverer-software.html) 
+is supported.
+
+To generate this .txt file:
+1. Ensure that non-normalized/ non-scaled abundances are included in your 
+PeptideGroup table.   
+2. File > export > To Text (tab delimited) > Items to be exported - check 
+the Peptide Groups box > Export.   
+
+Note that the fileIDs of each sample in proteome discoverer (By default 
+F1 - Fn) must match the quantCols in colData.   
+
+```{r}
+peptide_groups_filepath <- system.file(
+    "extdata/proteome_discoverer_PeptideGroups.txt",
+    package = "mspms"
+)
+
+colData_filepath <- system.file("extdata/proteome_discover_colData.csv",
+    package = "mspms"
+)
+
+prepared_pd_data <- prepare_pd(peptide_groups_filepath, colData_filepath)
+
+prepared_pd_data
+```
+  
 ## Data Processing
 
 Data processing includes imputation and normalization of the proteomics data.
@@ -296,6 +320,7 @@ the indicated name.
 4. Data is then reverse log2 transformed ("peptides_norm"). 
 
 ```{r}
+set.seed(2)
 processed_qf <- process_qf(peaks_prepared_data)
 processed_qf
 ```

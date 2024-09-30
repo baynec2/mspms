@@ -34,7 +34,7 @@ prepare_peaks <- function(lfq_filepath,
     message <- " peptides were removed because they had a quality score < "
     percentage <- round(n_peptides_rm / length(lfq$Peptide) * 100, 0)
     # Printing how many peptides are filtered out
-    print(paste0(n_peptides_rm, message, quality_threshold, " (", percentage, "%)"))
+    message(n_peptides_rm, message, quality_threshold, " (", percentage, "%)")
     # Selecting columns containing data
     start <- which(names(lfq) == "Avg. Area") + 1
     end <- which(names(lfq) == "Sample Profile (Ratio)") - 1

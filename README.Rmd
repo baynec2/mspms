@@ -180,7 +180,9 @@ with the peptide library for each sample.
 An example of a valid colData file is shown below.
 
 ```{r}
-colData <- readr::read_csv(system.file("extdata/colData.csv", package = "mspms"))
+colData <- readr::read_csv(system.file("extdata/colData.csv",
+    package = "mspms"
+))
 
 head(colData)
 ```
@@ -254,8 +256,7 @@ This can be loaded into mspms as follows:
 
 ```{r}
 combined_peptide_filepath <- system.file("extdata/fragpipe_combined_peptide.tsv",
-    package = "mspms"
-)
+                                        package = "mspms")
 
 colData_filepath <- system.file("extdata/colData.csv", package = "mspms")
 
@@ -270,7 +271,8 @@ fragpipe_prepared_data
 #### Proteome Discoverer
 
 Analysis of a PeptideGroups.txt file exported from [proteome
-discoverer](https://www.thermofisher.com/us/en/home/industrial/mass-spectrometry/liquid-chromatography-mass-spectrometry-lc-ms/lc-ms-software/multi-omics-data-analysis/proteome-discoverer-software.html) is supported.
+discoverer](https://www.thermofisher.com/us/en/home/industrial/mass-spectrometry/liquid-chromatography-mass-spectrometry-lc-ms/lc-ms-software/multi-omics-data-analysis/proteome-discoverer-software.html) 
+is supported.
 
 To generate this .txt file:
 1. Ensure that non-normalized/ non-scaled abundances are included in your 

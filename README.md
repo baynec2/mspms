@@ -175,7 +175,9 @@ interest with the peptide library for each sample.
 An example of a valid colData file is shown below.
 
 ``` r
-colData <- readr::read_csv(system.file("extdata/colData.csv", package = "mspms"))
+colData <- readr::read_csv(system.file("extdata/colData.csv",
+    package = "mspms"
+))
 #> Rows: 42 Columns: 4
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: ","
@@ -308,8 +310,7 @@ This can be loaded into mspms as follows:
 
 ``` r
 combined_peptide_filepath <- system.file("extdata/fragpipe_combined_peptide.tsv",
-    package = "mspms"
-)
+                                        package = "mspms")
 
 colData_filepath <- system.file("extdata/colData.csv", package = "mspms")
 

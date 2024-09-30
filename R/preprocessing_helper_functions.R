@@ -115,7 +115,6 @@ check_file_is_valid_pd <- function(pd_data) {
 #' of amino acids to the left and right of the c term cleavage, and the
 #' position of the c-term cleavage in the library sequence
 #' @keywords internal
-
 cterm_cleavage <- function(peptide_sequence,
                            library_match_sequence,
                            library_real_sequence,
@@ -132,17 +131,12 @@ cterm_cleavage <- function(peptide_sequence,
         left_reference_beginning <- regexpr(temp, library_match_sequence)[[1]][1]
         left_reference_end <- left_reference_beginning + (n_residues - 1)
         right_reference_beginning <- left_reference_end + 1
-
         # the cterm cleavage position is the right reference beginning minus 1
         cterm_cleavage_pos <- right_reference_beginning - 1
-
         right_reference_end <- right_reference_beginning + (n_residues - 1)
-
         # Extracting the sequences from the reference sequence
         right_sequence <- substr(
-            library_real_sequence,
-            right_reference_beginning,
-            right_reference_end
+            library_real_sequence, right_reference_beginning, right_reference_end
         )
         # Adding X to represent cases where there was no more sequences
         right_sequence <- paste0(
@@ -153,9 +147,7 @@ cterm_cleavage <- function(peptide_sequence,
             )
         )
         left_sequence <- substr(
-            library_real_sequence,
-            left_reference_beginning,
-            left_reference_end
+            library_real_sequence, left_reference_beginning, left_reference_end
         )
         # Adding X where there are no more sequences in the library peptide
         left_sequence <- paste0(paste0(rep("X", n_residues - nchar(left_sequence)),
@@ -168,8 +160,7 @@ cterm_cleavage <- function(peptide_sequence,
     }
     output <- tibble::tibble(
         peptide = peptide_sequence,
-        cterm = cterm,
-        cterm_cleavage_pos = cterm_cleavage_pos
+        cterm = cterm, cterm_cleavage_pos = cterm_cleavage_pos
     )
     return(output)
 }
@@ -220,9 +211,7 @@ nterm_cleavage <- function(peptide_sequence,
         left_reference_start <- left_reference_end - (n_residues - 1)
         # Extracting the sequences from the reference sequence
         right_sequence <- substr(
-            library_real_sequence,
-            right_reference_start,
-            right_reference_end
+            library_real_sequence, right_reference_start, right_reference_end
         )
         # Adding X to represent cases where there was no more sequences
         right_sequence <- paste0(
@@ -232,15 +221,12 @@ nterm_cleavage <- function(peptide_sequence,
             ))
         )
         left_sequence <- substr(
-            library_real_sequence,
-            left_reference_start,
-            left_reference_end
+            library_real_sequence, left_reference_start, left_reference_end
         )
         left_sequence <- paste0(
             paste0(rep("X", n_residues - nchar(left_sequence)),
                 collapse = ""
-            ),
-            left_sequence
+            ), left_sequence
         )
         nterm <- paste(c(left_sequence, right_sequence), collapse = "")
     } else {
@@ -368,12 +354,12 @@ prepared_to_qf <- function(prepared_data,
     )
 
     if (n_coldata_nin_prepared_data > 0) {
-        stop(paste0(
+        stop(
             "the quantCol names in your colData do not match those in your",
             " proteomics data. Specifically the column(s) ", missing_name,
             " are present in your proteomics data but not in your",
             " colData"
-        ))
+        )
     }
 
     # Creating a QFeatures object

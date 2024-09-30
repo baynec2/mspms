@@ -37,7 +37,9 @@ plot_qc_check <- function(processed_qf,
             binwidth = 0.1,
             alpha = 0.5
         ) +
-        ggplot2::geom_density(ggplot2::aes(.data$per_library_id_undetected), alpha = 0.5) +
+        ggplot2::geom_density(ggplot2::aes(.data$per_library_id_undetected),
+            alpha = 0.5
+        ) +
         ggplot2::geom_vline(
             xintercept = full_length_threshold, linetype = "dashed",
             color = "#00BFC4"

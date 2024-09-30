@@ -9,10 +9,8 @@
 calc_AA_count_of_motif <- function(cleavage_motif) {
     # calculating number of characters
     nchar <- nchar(cleavage_motif[1])
-
     # do this for the background first.
     sequences <- tibble::tibble(cleavage_motif = cleavage_motif)
-
     # separate the sequences into individual amino acids
     AAs <- tidyr::separate(
         sequences,
@@ -22,39 +20,31 @@ calc_AA_count_of_motif <- function(cleavage_motif) {
         remove = TRUE
     ) %>%
         dplyr::select(-"exclude")
-
     # Define the desired order.
     # This ensures that the amino acids will always be in the same order.
     desired_order <- c(
         "A", "D", "E", "F", "G", "H", "I", "K", "L", "n",
         "N", "P", "Q", "R", "S", "T", "V", "W", "X", "Y"
     )
-
     # Counting the number in each position
     count <- AAs %>%
         purrr::map_df(table)
-
     # Are any columns missing?
     `%!in%` <- Negate(`%in%`)
     missing_cols <- desired_order[desired_order %!in% names(count)]
-
     # building a df with missing columns
     missing_matrix <- matrix(nrow = nchar, ncol = length(missing_cols))
     colnames(missing_matrix) <- missing_cols
     missing_df <- tibble::as_tibble(missing_matrix)
-
     count_matrix <- dplyr::bind_cols(count, missing_df) %>%
         dplyr::relocate(dplyr::all_of(desired_order)) %>%
         t()
-
     # replacing NA with 0
     count_matrix[is.na(count_matrix)] <- 0
-
     colnames(count_matrix) <- paste0("P", c(
         seq(from = (nchar / 2), to = 1),
         paste0(seq_len(nchar / 2), "'")
     ))
-
     return(count_matrix)
 }
 
@@ -112,12 +102,18 @@ calc_AA_motif_zscore <- function(background_count_matrix,
     ### Calculating Z score ###
 
     # Defining function per icelogo manual
-    zscore <- function(experimental_prop_matrix, background_prop_matrix, bg_sd) {
+    zscore <- function(experimental_prop_matrix,
+                       background_prop_matrix,
+                       bg_sd) {
         (experimental_prop_matrix - background_prop_matrix) / bg_sd
     }
 
     # applying to our data
-    zscores <- zscore(experimental_prop_matrix, background_prop_matrix, bg_sd) %>%
+    zscores <- zscore(
+        experimental_prop_matrix,
+        background_prop_matrix,
+        bg_sd
+    ) %>%
         as.data.frame()
 
     return(zscores)
@@ -135,7 +131,7 @@ calc_AA_motif_zscore <- function(background_count_matrix,
 calc_sig_zscores <- function(zscores, pval = 0.05) {
     # no visible binding for global variable .
     . <- NULL
-    # converting p value to zscore threshold. Divide by two since it is two tailed
+    # converting p value to zscore threshold. Divide by two since two tailed
     threshold <- stats::qnorm(p = pval / 2, lower.tail = FALSE)
 
     sig_zscores <- zscores %>%
@@ -197,7 +193,11 @@ calc_AA_fc <- function(experimental_prop_matrix,
     # Here we run into a problem with infinite values.
     # If a value is 0 in the count, but greater than that in the background
     # Icelogo shows infinite value as taking up the entire scale.
-    max_sum <- max(purrr::map_df(as.data.frame(converted_fc), sum, na.rm = TRUE),
+    max_sum <- max(
+        purrr::map_df(as.data.frame(converted_fc),
+            sum,
+            na.rm = TRUE
+        ),
         na.rm = TRUE
     )
     final_converted_fc <- data.frame(row.names = rownames(converted_fc))

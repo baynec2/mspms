@@ -35,16 +35,12 @@ plot_heatmap <- function(mspms_tidy_data,
             values_fn = NULL,
         ) %>%
         tibble::column_to_rownames("quantCols")
-
     values <- heatmap_data %>%
         dplyr::select(-"condition", -"time") %>%
         as.matrix()
-
     colors <- heatmap_data %>%
         dplyr::select("condition", "time")
-
     peptide_order <- colnames(values)
-
     mat <- mspms_tidy_data %>%
         dplyr::select("quantCols", "peptide", "cleavage_seq") %>%
         tidyr::pivot_wider(

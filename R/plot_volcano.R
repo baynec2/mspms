@@ -23,7 +23,10 @@ plot_volcano <- function(log2fc_t_test_data,
     ncol <- length(unique(log2fc_t_test_data$time))
     p1 <- log2fc_t_test_data %>%
         dplyr::mutate(`log_10_p.adj` = -log10(.data$p.adj)) %>%
-        ggplot2::ggplot(ggplot2::aes(x = .data$log2fc, y = .data$log_10_p.adj)) +
+        ggplot2::ggplot(ggplot2::aes(
+            x = .data$log2fc,
+            y = .data$log_10_p.adj
+        )) +
         ggplot2::geom_point(size = 0.5) +
         ggplot2::geom_hline(
             yintercept = -log10(0.05),

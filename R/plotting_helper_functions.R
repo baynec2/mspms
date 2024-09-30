@@ -9,63 +9,40 @@
 #' @return a tibble containing percentage of samples each library id was
 #' detected in,  both as full length, and as cleavage products.
 #' @keywords internal
-
 calc_per_samples_library_nd <- function(processed_qf,
                                         peptide_library_ids =
                                             mspms::peptide_library$library_id) {
-    # tidying the data so we can work with it
     mspms_data <- mspms_tidy(processed_qf, "peptides")
-    # calculating n of samples
     n_samples <- length(unique(mspms_data$quantCols))
-    # converting to wide format, easier to reason with this way
     wide <- mspms_data %>%
         dplyr::select(
-            "peptide", "library_id", "peptides",
-            "peptide_type", "quantCols"
+            "peptide", "library_id", "peptides", "peptide_type", "quantCols"
         )
-    # considering full length peptides only
     full_length <- wide %>%
         dplyr::filter(.data$peptide_type == "full_length") %>%
-        tidyr::pivot_wider(
-            names_from = "quantCols",
-            values_from = "peptides"
-        )
-    # What peptides are not detected at all
-    nd_full <- peptide_library_ids[peptide_library_ids %!in% unique(
-        full_length$library_id
-    )]
-    # Building a tibble of the peptides not detected
+        tidyr::pivot_wider(names_from = "quantCols", values_from = "peptides")
+    nd_full <- peptide_library_ids[peptide_library_ids %!in%
+        unique(full_length$library_id)]
     nd_full <- tibble::tibble(
-        library_id = nd_full,
-        n_samples = n_samples,
+        library_id = nd_full, n_samples = n_samples,
         n_missing = n_samples
     )
-    # Figuring the number of full length library ids missing per sample
     n_missing_full_length <- tibble::tibble(
-        library_id = full_length$library_id,
-        n_samples = n_samples,
-        n_missing = rowSums(is.na(
-            full_length
-        ))
+        library_id = full_length$library_id, n_samples = n_samples,
+        n_missing = rowSums(is.na(full_length))
     )
-    # Combining the completely missing with partially missing data
     full <- dplyr::bind_rows(n_missing_full_length, nd_full) %>%
         dplyr::mutate(peptide_type = "full_length", .after = "library_id")
-    # Now considering cleavage products, conting the number of non nas, per sample
     cleavage_product <- wide %>%
         dplyr::filter(.data$peptide_type == "cleavage_product") %>%
         dplyr::select(-"peptide") %>%
         tidyr::pivot_wider(
-            names_from = "quantCols",
-            values_from = "peptides",
+            names_from = "quantCols", values_from = "peptides",
             values_fn = ~ sum(!is.na(.))
         )
-    # If there are 0 non NAs, there must only be NA values for that sample
     cleavage_product[cleavage_product == 0] <- NA
-    # Creating a tibble with all the data
     cp_row_sums <- tibble::tibble(
-        library_id = cleavage_product$library_id,
-        n_samples = n_samples,
+        library_id = cleavage_product$library_id, n_samples = n_samples,
         n_missing = rowSums(is.na(cleavage_product))
     )
     nd_cleavage <- peptide_library_ids[peptide_library_ids %!in% unique(
@@ -73,15 +50,10 @@ calc_per_samples_library_nd <- function(processed_qf,
     )]
     nd_cleavage <- tibble::tibble(
         library_id = nd_cleavage,
-        n_samples = n_samples,
-        n_missing = n_samples
+        n_samples = n_samples, n_missing = n_samples
     )
-    cp_final <- dplyr::bind_rows(
-        cp_row_sums,
-        nd_cleavage
-    ) %>%
+    cp_final <- dplyr::bind_rows(cp_row_sums, nd_cleavage) %>%
         dplyr::mutate(peptide_type = "cleavage_product", .after = "library_id")
-    # Combining all data
     out <- dplyr::bind_rows(full, cp_final) %>%
         dplyr::mutate(per_samples_undetected = .data$n_missing /
             .data$n_samples * 100)
@@ -138,13 +110,12 @@ prepare_qc_check_data <- function(processed_qf,
 icelogo_col_scheme <- function() {
     col_scheme <- ggseqlogo::make_col_scheme(
         chars = c(
-            "G", "S", "T", "Y", "C", "N", "Q", "K", "R", "H", "D", "E", "P", "A", "W",
-            "F", "L", "I", "M", "V", "n", "X"
+            "G", "S", "T", "Y", "C", "N", "Q", "K", "R", "H", "D", "E", "P",
+            "A", "W", "F", "L", "I", "M", "V", "n", "X"
         ),
         group = c(
-            rep("Polar", 5), rep("Neutral", 2), rep("Basic", 3), rep("Acidic", 2),
-            rep("Hydrophobic", 9),
-            "Past Terminus"
+            rep("Polar", 5), rep("Neutral", 2), rep("Basic", 3),
+            rep("Acidic", 2), rep("Hydrophobic", 9), "Past Terminus"
         ),
         col = c(
             rep("#058644", 5), rep("#720091", 2), rep("#0046C5", 3),
