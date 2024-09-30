@@ -21,7 +21,7 @@ plot the number of cleavages at each
 \examples{
 # Defining the significant peptides
 sig_cleavage_data <- log2fc_t_test_data \%>\%
-  dplyr::filter(p.adj <= 0.05, log2fc > 3)
+    dplyr::filter(p.adj <= 0.05, log2fc > 3)
 # Plotting
 p1 <- mspms::plot_cleavages_per_pos(sig_cleavage_data)
 p1

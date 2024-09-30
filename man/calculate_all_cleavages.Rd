@@ -26,6 +26,6 @@ peptides of the same length.
 }
 \examples{
 calculate_all_cleavages(mspms::peptide_library$library_real_sequence,
-  n_AA_after_cleavage = 4
+    n_AA_after_cleavage = 4
 )
 }

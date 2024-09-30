@@ -35,7 +35,7 @@ condition of an experiment.
 \examples{
 # Determining cleavages of interest
 sig_cleavage_data <- mspms::log2fc_t_test_data \%>\%
-  dplyr::filter(p.adj <= 0.05, log2fc > 3)
+    dplyr::filter(p.adj <= 0.05, log2fc > 3)
 # Plotting a iceLogo for each condition.
 plot_all_icelogos(sig_cleavage_data)
 }

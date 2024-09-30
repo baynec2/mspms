@@ -48,7 +48,7 @@ prepare_pd <- function(peptide_groups_filepath,
     dplyr::select(-dplyr::contains("Scaled"))
   # Extracting only needed columns
   lfq <- lfq %>%
-    dplyr::select(peptide, library_id, contains("Abundance")) %>%
+    dplyr::select("peptide", "library_id", dplyr::contains("Abundance")) %>%
     dplyr::rename_with(~ gsub("Abundance: ", "", .)) %>%
     dplyr::rename_with(~ gsub(": Sample", "", .))
   # Loading colData

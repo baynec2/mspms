@@ -29,12 +29,12 @@ peptide.
 \examples{
 # Determining peptide of interest
 max_log2fc_pep <- mspms::log2fc_t_test_data \%>\%
-  dplyr::filter(p.adj <= 0.05, log2fc > 3) \%>\%
-  dplyr::filter(log2fc == max(log2fc)) \%>\%
-  dplyr::pull(peptide)
+    dplyr::filter(p.adj <= 0.05, log2fc > 3) \%>\%
+    dplyr::filter(log2fc == max(log2fc)) \%>\%
+    dplyr::pull(peptide)
 
 # Defining QFeatures filter
 filtered <- mspms::mspms_tidy_data \%>\%
-  dplyr::filter(peptide == max_log2fc_pep) \%>\%
-  plot_time_course()
+    dplyr::filter(peptide == max_log2fc_pep) \%>\%
+    plot_time_course()
 }

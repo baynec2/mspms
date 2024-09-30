@@ -25,10 +25,6 @@ columns "library_id", "library_match_sequence", and "library_real_sequence".}
 
 \item{n_residues}{the number of amino acid residues before and after the
 cleavage site to generate a cleavage seq for.}
-
-\item{proteome_discover_id_map}{filepath to PeptideGroups.txt file exported
-from proteome discoverer. Must contain non normalized and non scaled
-abundances.}
 }
 \value{
 a QFeatures object containing a summarizedExperiment named "peptides"
@@ -39,6 +35,9 @@ Prepare a label free quantification file exported from Proteome Discoverer
 for subsequent mspms analysis.
 }
 \examples{
-peptide_groups_filepath <- system.file("extdata/proteome_discoverer_PeptideGroups.txt", package = "mspms")
+peptide_groups_filepath <- system.file(
+  "extdata/proteome_discoverer_PeptideGroups.txt",
+  package = "mspms"
+)
 colData_filepath <- system.file("extdata/colData.csv", package = "mspms")
 }
