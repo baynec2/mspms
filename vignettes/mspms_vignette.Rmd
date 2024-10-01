@@ -92,16 +92,6 @@ components of the Java software in R.
 
 ## Installation
 
-You can install the stable release from Bioconductor:
-
-Alternatively, you can install the development version from github.
-
-```{r,eval = FALSE}
-devtools::install_github("baynec2/mspms",
-    ref = "develop"
-)
-```
-
 ## Quickstart
 
 To generate a general report using your own data, run the following code. It

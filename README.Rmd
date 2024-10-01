@@ -86,14 +86,10 @@ components of the Java software in R.
 
 ## Installation
 
-You can install the stable release from Bioconductor:
-
-Alternatively, you can install the development version from github.
+You can install the development version from github.
 
 ```{r,eval = FALSE}
-devtools::install_github("baynec2/mspms",
-    ref = "develop"
-)
+devtools::install_github("baynec2/mspms")
 ```
 
 ## Quickstart

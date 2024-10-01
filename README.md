@@ -70,19 +70,15 @@ Some excellent non-Bioconductor packages are also utilized.
 
 Lastly, mspms takes advantage of iceLogos ([Colaert, N. et al. Nature
 Methods 6, 786-787 (2009)](http://www.ncbi.nlm.nih.gov/pubmed/19876014))
-to viusalize overrepresented amino acid motifs relative to a background
+to visualize over-represented amino acid motifs relative to a background
 set by implementing components of the Java software in R.
 
 ## Installation
 
-You can install the stable release from Bioconductor:
-
-Alternatively, you can install the development version from github.
+You can install the development version from github.
 
 ``` r
-devtools::install_github("baynec2/mspms",
-    ref = "develop"
-)
+devtools::install_github("baynec2/mspms")
 ```
 
 ## Quickstart
@@ -272,7 +268,8 @@ peaks_prepared_data <- mspms::prepare_peaks(lfq_filepath,
 #> 
 #> ℹ Use `spec()` to retrieve the full column specification for this data.
 #> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> [1] "841 peptides were removed because they had a quality score < 0.3 (34%)"
+#> 841 peptides were removed because they had a quality score < 0.3 (34%)
+#> 
 #> Rows: 42 Columns: 4
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: ","
@@ -703,12 +700,12 @@ sessionInfo()
 #>  [29] ggseqlogo_0.2               zlibbioc_1.50.0            
 #>  [31] GenomeInfoDb_1.40.1         jsonlite_1.8.9             
 #>  [33] gmm_1.8                     highr_0.11                 
-#>  [35] DelayedArray_0.30.1         broom_1.0.6                
+#>  [35] DelayedArray_0.30.1         broom_1.0.7                
 #>  [37] parallel_4.4.1              cluster_2.1.6              
 #>  [39] R6_2.5.1                    stringi_1.8.4              
-#>  [41] RColorBrewer_1.1-3          car_3.1-2                  
+#>  [41] RColorBrewer_1.1-3          car_3.1-3                  
 #>  [43] GenomicRanges_1.56.1        iterators_1.0.14           
-#>  [45] Rcpp_1.0.13                 assertthat_0.2.1           
+#>  [45] assertthat_0.2.1            Rcpp_1.0.13                
 #>  [47] SummarizedExperiment_1.34.0 knitr_1.48                 
 #>  [49] zoo_1.8-12                  readr_2.1.5                
 #>  [51] IRanges_2.38.1              Matrix_1.7-0               
@@ -738,13 +735,14 @@ sessionInfo()
 #>  [99] tidyr_1.3.1                 crosstalk_1.2.1            
 #> [101] seriation_1.5.6             MsCoreUtils_1.16.1         
 #> [103] colorspace_2.1-1            GenomeInfoDbData_1.2.12    
-#> [105] cli_3.6.3                   fansi_1.0.6                
-#> [107] S4Arrays_1.4.1              viridisLite_0.4.2          
-#> [109] AnnotationFilter_1.28.0     pcaMethods_1.96.0          
-#> [111] gtable_0.3.5                rstatix_0.7.2              
-#> [113] digest_0.6.37               BiocGenerics_0.50.0        
-#> [115] SparseArray_1.4.8           htmlwidgets_1.6.4          
-#> [117] farver_2.1.2                htmltools_0.5.8.1          
-#> [119] lifecycle_1.0.4             httr_1.4.7                 
-#> [121] bit64_4.5.2                 MASS_7.3-61
+#> [105] Formula_1.2-5               cli_3.6.3                  
+#> [107] fansi_1.0.6                 S4Arrays_1.4.1             
+#> [109] viridisLite_0.4.2           AnnotationFilter_1.28.0    
+#> [111] pcaMethods_1.96.0           gtable_0.3.5               
+#> [113] rstatix_0.7.2               digest_0.6.37              
+#> [115] BiocGenerics_0.50.0         SparseArray_1.4.8          
+#> [117] htmlwidgets_1.6.4           farver_2.1.2               
+#> [119] htmltools_0.5.8.1           lifecycle_1.0.4            
+#> [121] httr_1.4.7                  bit64_4.5.2                
+#> [123] MASS_7.3-61
 ```
