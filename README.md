@@ -85,8 +85,7 @@ devtools::install_github("baynec2/mspms")
 
 To generate a general report using your own data, run the following
 code. It requires data that has been prepared for mspms data analysis by
-a converter function, and a design matrix. For more information see
-subsequent sections.
+a converter function. For more information see subsequent sections.
 
 ``` r
 mspms::generate_report(
