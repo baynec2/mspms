@@ -21,8 +21,6 @@ ggplot2::theme_set(
 )
 ```
 
-<img src="man/figures/logo.png" align="right" width="170"/>
-
 # mspms
 
 <!-- badges: start -->
