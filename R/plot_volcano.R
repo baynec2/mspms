@@ -6,6 +6,7 @@
 #' @param log2fc_t_test_data a tibble containing the log2fc
 #' and adjusted p values
 #' @param log2fc_threshold  the log2fc threshold that you want displayed on plot
+#' @param padj_threshold  the padj threshold that you want displayed on plot
 #' @param facets how facets should be displayed. Accepted values are grid and
 #' wrap
 #' @param ncol ncol to include if facets = "wrap"
@@ -18,6 +19,7 @@
 #' p1
 plot_volcano <- function(log2fc_t_test_data,
                          log2fc_threshold = 3,
+                         padj_threshold = 0.05,
                          facets = "grid",
                          ncol = 1) {
     ncol <- length(unique(log2fc_t_test_data$time))
@@ -29,7 +31,7 @@ plot_volcano <- function(log2fc_t_test_data,
         )) +
         ggplot2::geom_point(size = 0.5) +
         ggplot2::geom_hline(
-            yintercept = -log10(0.05),
+            yintercept = -log10(padj_threshold),
             linetype = "dashed", color = "red"
         ) +
         ggplot2::geom_vline(

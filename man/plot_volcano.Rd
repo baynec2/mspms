@@ -7,6 +7,7 @@
 plot_volcano(
   log2fc_t_test_data,
   log2fc_threshold = 3,
+  padj_threshold = 0.05,
   facets = "grid",
   ncol = 1
 )
@@ -16,6 +17,8 @@ plot_volcano(
 and adjusted p values}
 
 \item{log2fc_threshold}{the log2fc threshold that you want displayed on plot}
+
+\item{padj_threshold}{the padj threshold that you want displayed on plot}
 
 \item{facets}{how facets should be displayed. Accepted values are grid and
 wrap}
