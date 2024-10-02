@@ -32,6 +32,11 @@ testthat::test_that("works with one clevage site", {
 
 # Testing for case where there are two cleavage sites
 testthat::test_that("works with two clevage site", {
+  
+  peptide_sequence = "A_BCDEFGHIJKLM_N"
+  library_match_sequence = "ABCDEFGHIJKLMN"
+  library_real_sequence = "ABCDEFGHIJKLMN"
+  n_residues = 4
     testthat::expect_equal(
         mspms:::cterm_cleavage(
             "A_BCDEFGHIJKLM_N", "ABCDEFGHIJKLMN",

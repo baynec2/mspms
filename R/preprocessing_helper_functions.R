@@ -119,50 +119,45 @@ cterm_cleavage <- function(peptide_sequence,
                            library_match_sequence,
                            library_real_sequence,
                            n_residues = 4) {
-    n_of_match <- length(gregexpr("_", peptide_sequence)[[1]])
-    if ((grepl("_", peptide_sequence) == TRUE) &&
-        (gregexpr("_", peptide_sequence)[[1]][n_of_match] ==
-            nchar(peptide_sequence) - 1)) {
-        # if there is a c term cleavage, it is the last position - 1 e
-        pos <- nchar(peptide_sequence) - 1
-        # Defining the sequence on the left side of the cleavage
-        temp <- substr(peptide_sequence, pos - n_residues, pos - 1)
-        # Checking to see what part of the reference sequence this matches.
-        left_reference_beginning <- regexpr(temp, library_match_sequence)[[1]][1]
-        left_reference_end <- left_reference_beginning + (n_residues - 1)
-        right_reference_beginning <- left_reference_end + 1
-        # the cterm cleavage position is the right reference beginning minus 1
-        cterm_cleavage_pos <- right_reference_beginning - 1
-        right_reference_end <- right_reference_beginning + (n_residues - 1)
-        # Extracting the sequences from the reference sequence
-        right_sequence <- substr(
-            library_real_sequence, right_reference_beginning, right_reference_end
-        )
-        # Adding X to represent cases where there was no more sequences
-        right_sequence <- paste0(
-            right_sequence,
-            paste0(
-                rep("X", n_residues - nchar(right_sequence)),
-                collapse = ""
-            )
-        )
-        left_sequence <- substr(
-            library_real_sequence, left_reference_beginning, left_reference_end
-        )
-        # Adding X where there are no more sequences in the library peptide
-        left_sequence <- paste0(paste0(rep("X", n_residues - nchar(left_sequence)),
-            collapse = ""
-        ), left_sequence)
-        cterm <- paste(c(left_sequence, right_sequence), collapse = "")
-    } else {
-        cterm <- NA
-        cterm_cleavage_pos <- NA
-    }
-    output <- tibble::tibble(
-        peptide = peptide_sequence,
-        cterm = cterm, cterm_cleavage_pos = cterm_cleavage_pos
+  n_of_match <- length(gregexpr("_", peptide_sequence)[[1]])
+  if ((grepl("_", peptide_sequence) == TRUE) &&
+    (gregexpr("_", peptide_sequence)[[1]][n_of_match] ==
+      nchar(peptide_sequence) - 1)) {
+    # if there is a c term cleavage, it is the last position - 1 e
+    pos <- nchar(peptide_sequence) - 1
+    # Defining the sequence on the left side of the cleavage
+    temp <- substr(peptide_sequence, 1, pos - 1)
+    #taking care of case where there are two _
+    temp <- gsub("_","",temp)
+    # modify the sequence to contain max n of Xs possible on both sides
+    n_x <- paste0(rep("X", times = n_residues), collapse = "")
+    x_mod_match <- paste0(n_x, library_match_sequence, n_x, collapse = "")
+    x_mod_real <- paste0(n_x, library_real_sequence, n_x, collapse = "")
+    # Checking to see what part of the reference sequence this matches.
+    left_reference_beginning <- regexpr(temp, x_mod_match)[[1]][1]
+    left_side_length <- nchar(temp) 
+    # Where did the peptide get cleaved?
+    cleavage_pos <- (left_reference_beginning + left_side_length) - 1
+    left_sequence <- substr(x_mod_real,
+      start = (cleavage_pos - n_residues + 1),
+      cleavage_pos
     )
-    return(output)
+    right_sequence <- substr(x_mod_real,
+      start = (cleavage_pos + 1),
+      cleavage_pos + n_residues
+    )
+    cterm <- paste(c(left_sequence, right_sequence), collapse = "")
+    real_cleavage_pos <- (regexpr(temp, library_match_sequence)[[1]][1] +
+                            left_side_length) - 1
+  } else {
+    cterm <- NA
+    real_cleavage_pos <- NA
+  }
+  output <- tibble::tibble(
+    peptide = peptide_sequence,
+    cterm = cterm, cterm_cleavage_pos = real_cleavage_pos
+  )
+  return(output)
 }
 
 #' nterm_cleavage
@@ -194,49 +189,39 @@ nterm_cleavage <- function(peptide_sequence,
                            library_match_sequence,
                            library_real_sequence,
                            n_residues = 4) {
-    # _ denotes a cleavage, and if it is the second position, it is on the n term!
+    # _ denotes a cleavage, and if it is the second position, it is on the n
     if ((grepl("_", peptide_sequence) == TRUE) &&
         (regexpr("_", peptide_sequence)[[1]][1] == 2)) {
         # The first letter of the right side is the third letter our sequence
         pos <- 2 + 1
-        # taking the sequence from right after the _ to .
-        temp <- substr(peptide_sequence, pos, pos + (n_residues - 1))
+        # taking the sequence from right after the _ to the beginning.
+        temp <- substr(peptide_sequence, pos , nchar(peptide_sequence))
+        #taking care of case where there are two _
+        temp <- gsub("_","",temp)
+        # modify the sequence to contain max n of Xs possible on both sides
+        n_x <- paste0(rep("X", times = n_residues), collapse = "")
+        x_mod_match <- paste0(n_x, library_match_sequence, n_x, collapse = "")
+        x_mod_real <- paste0(n_x, library_real_sequence, n_x, collapse = "")
         # Checking to see what part of the reference sequence this matches.
-        right_reference_start <- regexpr(temp, library_match_sequence)[[1]][1]
-        right_reference_end <- right_reference_start + (n_residues - 1)
-        # the position of the n term cleavage is right reference start - 1
-        nterm_cleavage_pos <- right_reference_start - 1
-        # Now determining the left side of the cleavage event.
-        left_reference_end <- right_reference_start - 1
-        left_reference_start <- left_reference_end - (n_residues - 1)
-        # Extracting the sequences from the reference sequence
+        cleavage_pos <- regexpr(temp, x_mod_match)[[1]][1] - 1
         right_sequence <- substr(
-            library_real_sequence, right_reference_start, right_reference_end
-        )
-        # Adding X to represent cases where there was no more sequences
-        right_sequence <- paste0(
-            right_sequence,
-            paste0(rep("X", n_residues - nchar(right_sequence),
-                collapse = ""
-            ))
+            x_mod_real, cleavage_pos + 1,
+            cleavage_pos + n_residues
         )
         left_sequence <- substr(
-            library_real_sequence, left_reference_start, left_reference_end
-        )
-        left_sequence <- paste0(
-            paste0(rep("X", n_residues - nchar(left_sequence)),
-                collapse = ""
-            ), left_sequence
+          x_mod_real, start = cleavage_pos - n_residues + 1,
+          stop = cleavage_pos 
         )
         nterm <- paste(c(left_sequence, right_sequence), collapse = "")
+        real_cleavage_pos = regexpr(temp, library_match_sequence)[[1]][1] - 1
     } else {
         nterm <- NA
-        nterm_cleavage_pos <- NA
+        real_cleavage_pos <- NA
     }
     output <- tibble::tibble(
         peptide = peptide_sequence,
         nterm = nterm,
-        nterm_cleavage_pos = nterm_cleavage_pos
+        nterm_cleavage_pos = real_cleavage_pos
     )
     return(output)
 }
