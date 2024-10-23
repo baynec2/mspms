@@ -319,6 +319,20 @@ prepared_to_qf <- function(prepared_data,
                            colData,
                            peptide_library = mspms::peptide_library,
                            n_residues = 4) {
+  #check peptide library for correct names.
+  check_peptide_library(peptide_library)
+  # Making sure that prepared_data and peptide library are consistent
+  peptide_library_ids <- peptide_library$library_id
+  peptide_library_ids_data <- unique(prepared_data$library_id)
+  missing <- peptide_library_ids[peptide_library_ids_data %!in% 
+                                        peptide_library_ids]
+  missing_mes <- paste0(missing,collapse = ",")
+  if(length(missing > 1)){
+    stop("There are peptide library ids in your data that are not in your 
+         peptide library. Specificially ", missing_mes, "are missing from your 
+         peptide library."
+    )
+  }
     # combining peptide sequences
     combined <- dplyr::inner_join(peptide_library, prepared_data,
         by = "library_id"
@@ -380,4 +394,21 @@ load_colData <- function(colData_filepath) {
         )
     }
     return(colData)
+}
+
+#' check_peptide_library
+#'
+#' @param peptide_library 
+#'
+#' @return an informative error if the column names of the peptide library are 
+#' unexpected. Otherwise nothing.
+#' @keywords internal
+
+check_peptide_library <- function(peptide_library){
+  names <- names(peptide_library)
+  if(names != c("library_id","library_match_sequence","library_real_sequence")){
+    stop("the first three columns of the peptide library .csv are not as 
+         expected. They must be library_id, library_match_sequence, and 
+         library_real_sequence")
+  }
 }
