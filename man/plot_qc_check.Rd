@@ -9,8 +9,8 @@ each sample group.}
 plot_qc_check(
   processed_qf,
   peptide_library = mspms::peptide_library$library_id,
-  full_length_threshold = 10,
-  cleavage_product_threshold = 5,
+  full_length_threshold = NULL,
+  cleavage_product_threshold = NULL,
   ncol = 2
 )
 }
