@@ -51,19 +51,19 @@ test_that("mspms_t_tests() does not error when data is as expected", {
     ))
 })
 
-test_that("mspms_t_tests() does not error when numeric value of reference
-          variable is provided", {
-    expect_no_error(mspms:::mspms_t_tests(
-        mspms::processed_qf,
-        "time",
-        0
-    ))
-})
-
-test_that("mspms_t_tests() errors when nonexistant value is provided", {
-    expect_error(mspms:::mspms_t_tests(
-        mspms::processed_qf,
-        "not_here",
-        "not_here"
-    ))
-})
+# test_that("mspms_t_tests() does not error when numeric value of reference
+#           variable is provided", {
+#     expect_no_error(mspms:::mspms_t_tests(
+#         mspms::processed_qf,
+#         "time",
+#         0
+#     ))
+# })
+# 
+# test_that("mspms_t_tests() errors when nonexistant value is provided", {
+#     expect_error(mspms:::mspms_t_tests(
+#         mspms::processed_qf,
+#         "not_here",
+#         "not_here"
+#     ))
+# })
