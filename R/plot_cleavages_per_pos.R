@@ -16,7 +16,7 @@
 #' p1 <- mspms::plot_cleavages_per_pos(sig_cleavage_data)
 #' p1
 plot_cleavages_per_pos <- function(sig_cleavage_data,
-                                   ncol = 1) {
+                                   ncol = NULL) {
     count_cleavages_per_pos <- count_cleavages_per_pos(sig_cleavage_data)
     p1 <- count_cleavages_per_pos %>%
         ggplot2::ggplot(ggplot2::aes(
