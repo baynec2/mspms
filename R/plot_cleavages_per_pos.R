@@ -24,7 +24,7 @@ plot_cleavages_per_pos <- function(sig_cleavage_data,
             y = .data$n,
             color = .data$time
         )) +
-        ggplot2::facet_wrap(~ .data$condition, scales = "free_y") +
+        ggplot2::facet_wrap(~ .data$condition, scales = "free_y",ncol = ncol) +
         ggplot2::geom_point() +
         ggplot2::geom_line()
     return(p1)
