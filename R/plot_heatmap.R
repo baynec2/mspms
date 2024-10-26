@@ -23,46 +23,46 @@ plot_heatmap <- function(mspms_tidy_data,
                          value_colname = "peptides_norm",
                          scale = "column",
                          plot_method = "plotly") {
-    value_colname <- dplyr::sym(value_colname)
-    heatmap_data <- mspms_tidy_data %>%
-        dplyr::select(
-            "quantCols", "condition", "time",
-            "peptide", !!value_colname
-        ) %>%
-        tidyr::pivot_wider(
-            names_from = "peptide",
-            values_from = "peptides_norm",
-            values_fn = NULL,
-        ) %>%
-        tibble::column_to_rownames("quantCols")
-    values <- heatmap_data %>%
-        dplyr::select(-"condition", -"time") %>%
-        as.matrix()
-    colors <- heatmap_data %>%
-        dplyr::select("condition", "time")
-    peptide_order <- colnames(values)
-    mat <- mspms_tidy_data %>%
-        dplyr::select("quantCols", "peptide", "cleavage_seq") %>%
-        tidyr::pivot_wider(
-            names_from = "peptide",
-            values_from = "cleavage_seq"
-        ) %>%
-        tibble::column_to_rownames("quantCols") %>%
-        dplyr::select(dplyr::all_of(peptide_order)) %>%
-        as.matrix()
-    # Creating column labels for whether a peptide is cleaved or not
-    col_logic <- grepl(".*_.*", colnames(values))
-    col_p_colors <- c("cleavage_product", "full_length")
-    col_colors <- data.frame(peptide_type = ifelse(col_logic,
-        col_p_colors[1],
-        col_p_colors[2]
-    ))
-    heatmaply::heatmaply(values,
-        scale = scale,
-        showticklabels = c(FALSE, TRUE),
-        custom_hovertext = mat,
-        row_side_colors = colors,
-        col_side_colors = col_colors,
-        plot_method = plot_method
-    )
+  value_colname <- dplyr::sym(value_colname)
+  heatmap_data <- mspms_tidy_data %>%
+    dplyr::select(
+      "quantCols", "condition", "time",
+      "peptide", !!value_colname
+    ) %>%
+    tidyr::pivot_wider(
+      names_from = "peptide",
+      values_from = "peptides_norm",
+      values_fn = NULL,
+    ) %>%
+    tibble::column_to_rownames("quantCols")
+  values <- heatmap_data %>%
+    dplyr::select(-"condition", -"time") %>%
+    as.matrix()
+  colors <- heatmap_data %>%
+    dplyr::select("condition", "time")
+  peptide_order <- colnames(values)
+  mat <- mspms_tidy_data %>%
+    dplyr::select("quantCols", "peptide", "cleavage_seq") %>%
+    tidyr::pivot_wider(
+      names_from = "peptide",
+      values_from = "cleavage_seq"
+    ) %>%
+    tibble::column_to_rownames("quantCols") %>%
+    dplyr::select(dplyr::all_of(peptide_order)) %>%
+    as.matrix()
+  # Creating column labels for whether a peptide is cleaved or not
+  col_logic <- grepl(".*_.*", colnames(values))
+  col_p_colors <- c("cleavage_product", "full_length")
+  col_colors <- data.frame(peptide_type = ifelse(col_logic,
+    col_p_colors[1],
+    col_p_colors[2]
+  ))
+  heatmaply::heatmaply(values,
+    scale = scale,
+    showticklabels = c(FALSE, TRUE),
+    custom_hovertext = mat,
+    row_side_colors = colors,
+    col_side_colors = col_colors,
+    plot_method = plot_method
+  )
 }

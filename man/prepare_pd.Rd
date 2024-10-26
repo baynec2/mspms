@@ -2,7 +2,7 @@
 % Please edit documentation in R/prepare_pd.R
 \name{prepare_pd}
 \alias{prepare_pd}
-\title{prepare_pd 
+\title{prepare_pd
 Prepare a label free quantification file exported from Proteome Discoverer
 for subsequent mspms analysis.}
 \usage{
@@ -30,7 +30,7 @@ cleavage site to generate a cleavage seq for.}
 a QFeatures object containing a summarizedExperiment named "peptides"
 }
 \description{
-prepare_pd 
+prepare_pd
 Prepare a label free quantification file exported from Proteome Discoverer
 for subsequent mspms analysis.
 }

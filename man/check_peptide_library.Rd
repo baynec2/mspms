@@ -10,7 +10,7 @@ check_peptide_library(peptide_library)
 \item{peptide_library}{}
 }
 \value{
-an informative error if the column names of the peptide library are 
+an informative error if the column names of the peptide library are
 unexpected. Otherwise nothing.
 }
 \description{

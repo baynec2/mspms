@@ -24,46 +24,46 @@ prepare_fragpipe <- function(combined_peptide_filepath,
                              colData_filepath,
                              peptide_library = mspms::peptide_library,
                              n_residues = 4) {
-    # Reading in the label free quantification data
-    lfq <- readr::read_tsv(combined_peptide_filepath, na = c("-", 0, "", "NA"))
-    # Check that this file appears to be a proper fragpipe file
-    check_file_is_valid_fragpipe(lfq)
-    # Reformat the columns to be consistent with mspsms framework
-    lfq_mod <- lfq %>%
-        dplyr::mutate(`Prev AA` = dplyr::case_when(
-            is.na(.data$`Prev AA`) ~ "",
-            TRUE ~ .data$`Prev AA`
-        )) %>%
-        dplyr::mutate(`Next AA` = dplyr::case_when(
-            is.na(.data$`Next AA`) ~ "",
-            TRUE ~ .data$`Next AA`
-        )) %>%
-        dplyr::mutate(
-            peptide = paste0(
-                .data$`Prev AA`, "_",
-                .data$`Peptide Sequence`, "_", .data$`Next AA`
-            ),
-            .before = 1
-        ) %>%
-        dplyr::mutate(
-            peptide = gsub("^_", "", .data$peptide),
-            peptide = gsub("_$", "", .data$peptide)
-        ) %>%
-        dplyr::select("peptide",
-            library_id = "Protein",
-            dplyr::contains("MaxLFQ Intensity")
-        ) %>%
-        dplyr::rename_with(
-            ~ stringr::str_replace_all(., " MaxLFQ Intensity", "")
-        )
-    # Converting 0 to NA
-    lfq_mod[lfq_mod == 0] <- NA
-    # reading in colData
-    colData <- load_colData(colData_filepath)
-    # converting into QF object
-    fragpipe_prepared_qf <- prepared_to_qf(
-        lfq_mod, colData,
-        peptide_library, n_residues
+  # Reading in the label free quantification data
+  lfq <- readr::read_tsv(combined_peptide_filepath, na = c("-", 0, "", "NA"))
+  # Check that this file appears to be a proper fragpipe file
+  check_file_is_valid_fragpipe(lfq)
+  # Reformat the columns to be consistent with mspsms framework
+  lfq_mod <- lfq %>%
+    dplyr::mutate(`Prev AA` = dplyr::case_when(
+      is.na(.data$`Prev AA`) ~ "",
+      TRUE ~ .data$`Prev AA`
+    )) %>%
+    dplyr::mutate(`Next AA` = dplyr::case_when(
+      is.na(.data$`Next AA`) ~ "",
+      TRUE ~ .data$`Next AA`
+    )) %>%
+    dplyr::mutate(
+      peptide = paste0(
+        .data$`Prev AA`, "_",
+        .data$`Peptide Sequence`, "_", .data$`Next AA`
+      ),
+      .before = 1
+    ) %>%
+    dplyr::mutate(
+      peptide = gsub("^_", "", .data$peptide),
+      peptide = gsub("_$", "", .data$peptide)
+    ) %>%
+    dplyr::select("peptide",
+      library_id = "Protein",
+      dplyr::contains("MaxLFQ Intensity")
+    ) %>%
+    dplyr::rename_with(
+      ~ stringr::str_replace_all(., " MaxLFQ Intensity", "")
     )
-    return(fragpipe_prepared_qf)
+  # Converting 0 to NA
+  lfq_mod[lfq_mod == 0] <- NA
+  # reading in colData
+  colData <- load_colData(colData_filepath)
+  # converting into QF object
+  fragpipe_prepared_qf <- prepared_to_qf(
+    lfq_mod, colData,
+    peptide_library, n_residues
+  )
+  return(fragpipe_prepared_qf)
 }

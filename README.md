@@ -89,8 +89,8 @@ a converter function. For more information see subsequent sections.
 
 ``` r
 mspms::generate_report(
-    prepared_data = mspms::peaks_prepared_data,
-    outdir = "../Desktop/mspms_report"
+  prepared_data = mspms::peaks_prepared_data,
+  outdir = "../Desktop/mspms_report"
 )
 ```
 
@@ -171,7 +171,7 @@ An example of a valid colData file is shown below.
 
 ``` r
 colData <- readr::read_csv(system.file("extdata/colData.csv",
-    package = "mspms"
+  package = "mspms"
 ))
 #> Rows: 42 Columns: 4
 #> ── Column specification ────────────────────────────────────────────────────────
@@ -247,16 +247,16 @@ library(mspms)
 
 # File path of peaks lfq file
 lfq_filepath <- system.file("extdata/peaks_protein-peptides-lfq.csv",
-    package = "mspms"
+  package = "mspms"
 )
 
 colData_filepath <- system.file("extdata/colData.csv", package = "mspms")
 
 # Prepare the data
 peaks_prepared_data <- mspms::prepare_peaks(lfq_filepath,
-    colData_filepath,
-    0.3,
-    n_residues = 4
+  colData_filepath,
+  0.3,
+  n_residues = 4
 )
 #> Rows: 2444 Columns: 70
 #> ── Column specification ────────────────────────────────────────────────────────
@@ -306,22 +306,23 @@ This can be loaded into mspms as follows:
 
 ``` r
 combined_peptide_filepath <- system.file("extdata/fragpipe_combined_peptide.tsv",
-                                        package = "mspms")
+  package = "mspms"
+)
 
 colData_filepath <- system.file("extdata/colData.csv", package = "mspms")
 
 
 fragpipe_prepared_data <- prepare_fragpipe(
-    combined_peptide_filepath,
-    colData_filepath
+  combined_peptide_filepath,
+  colData_filepath
 )
-#> Rows: 1911 Columns: 182
+#> Rows: 1847 Columns: 182
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: "\t"
-#> chr  (50): Peptide Sequence, Prev AA, Next AA, Protein, Protein ID, Entry Na...
+#> chr  (49): Peptide Sequence, Prev AA, Next AA, Protein, Protein ID, Entry Na...
 #> dbl (129): Start, End, Peptide Length, CatA_0000_1 Spectral Count, CatA_0000...
 #> num   (1): Charges
-#> lgl   (2): Mapped Genes, Mapped Proteins
+#> lgl   (3): Gene, Mapped Genes, Mapped Proteins
 #> 
 #> ℹ Use `spec()` to retrieve the full column specification for this data.
 #> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
@@ -362,12 +363,12 @@ F1 - Fn) must match the quantCols in colData.
 
 ``` r
 peptide_groups_filepath <- system.file(
-    "extdata/proteome_discoverer_PeptideGroups.txt",
-    package = "mspms"
+  "extdata/proteome_discoverer_PeptideGroups.txt",
+  package = "mspms"
 )
 
 colData_filepath <- system.file("extdata/proteome_discover_colData.csv",
-    package = "mspms"
+  package = "mspms"
 )
 
 prepared_pd_data <- prepare_pd(peptide_groups_filepath, colData_filepath)
@@ -481,8 +482,8 @@ threshold ~\< 5 is good):
 
 ``` r
 plot_qc_check(processed_qf,
-    full_length_threshold = 10,
-    cleavage_product_threshold = 5
+  full_length_threshold = 10,
+  cleavage_product_threshold = 5
 )
 #> Joining with `by = join_by(quantCols)`
 ```
@@ -556,7 +557,7 @@ We can do this as follows:
 
 ``` r
 sig_cleavage_data <- log2fc_t_test_data %>%
-    dplyr::filter(p.adj <= 0.05, log2fc > 3)
+  dplyr::filter(p.adj <= 0.05, log2fc > 3)
 
 p1 <- mspms::plot_cleavages_per_pos(sig_cleavage_data)
 
@@ -582,10 +583,10 @@ below.
 
 ``` r
 catA_sig_cleavages <- log2fc_t_test_data %>%
-    dplyr::filter(p.adj <= 0.05, log2fc > 3) %>%
-    dplyr::filter(condition == "CatA") %>%
-    dplyr::pull(cleavage_seq) %>%
-    unique()
+  dplyr::filter(p.adj <= 0.05, log2fc > 3) %>%
+  dplyr::filter(condition == "CatA") %>%
+  dplyr::pull(cleavage_seq) %>%
+  unique()
 ```
 
 We also need to know all of the possible cleavages we could see among
@@ -593,8 +594,8 @@ our peptide library. We can generate that as below:
 
 ``` r
 all_possible_8mers_from_228_library <- calculate_all_cleavages(
-    mspms::peptide_library$library_real_sequence,
-    n_AA_after_cleavage = 4
+  mspms::peptide_library$library_real_sequence,
+  n_AA_after_cleavage = 4
 )
 ```
 
@@ -603,7 +604,7 @@ possible cleavages in our peptide library like so:
 
 ``` r
 plot_icelogo(catA_sig_cleavages,
-    background_universe = all_possible_8mers_from_228_library
+  background_universe = all_possible_8mers_from_228_library
 )
 #> Scale for x is already present.
 #> Adding another scale for x, which will replace the existing scale.
@@ -616,7 +617,7 @@ conditions from the experiment all together.
 
 ``` r
 sig_cleavage_data <- log2fc_t_test_data %>%
-    dplyr::filter(p.adj <= 0.05, log2fc > 3)
+  dplyr::filter(p.adj <= 0.05, log2fc > 3)
 
 plot_all_icelogos(sig_cleavage_data)
 #> Scale for x is already present.
@@ -641,9 +642,9 @@ log2fc.
 
 ``` r
 max_log2fc_pep <- log2fc_t_test_data %>%
-    dplyr::filter(p.adj <= 0.05, log2fc > 3) %>%
-    dplyr::filter(log2fc == max(log2fc)) %>%
-    pull(peptide)
+  dplyr::filter(p.adj <= 0.05, log2fc > 3) %>%
+  dplyr::filter(log2fc == max(log2fc)) %>%
+  pull(peptide)
 ```
 
 We can then filter our tidy mspms data to only include this peptide and
@@ -651,8 +652,8 @@ plot
 
 ``` r
 p1 <- mspms_tidy_data %>%
-    dplyr::filter(peptide == max_log2fc_pep) %>%
-    plot_time_course()
+  dplyr::filter(peptide == max_log2fc_pep) %>%
+  plot_time_course()
 
 p1
 ```
@@ -679,7 +680,7 @@ sessionInfo()
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] mspms_0.99.0 dplyr_1.1.4 
+#> [1] mspms_0.99.2 dplyr_1.1.4 
 #> 
 #> loaded via a namespace (and not attached):
 #>   [1] gridExtra_2.3               sandwich_3.1-1             
@@ -695,7 +696,7 @@ sessionInfo()
 #>  [21] rmarkdown_2.28              tzdb_0.4.0                 
 #>  [23] ps_1.8.0                    UCSC.utils_1.0.0           
 #>  [25] purrr_1.0.2                 bit_4.5.0                  
-#>  [27] xfun_0.47                   MultiAssayExperiment_1.30.3
+#>  [27] xfun_0.48                   MultiAssayExperiment_1.30.3
 #>  [29] ggseqlogo_0.2               zlibbioc_1.50.0            
 #>  [31] GenomeInfoDb_1.40.1         jsonlite_1.8.9             
 #>  [33] gmm_1.8                     highr_0.11                 
@@ -703,7 +704,7 @@ sessionInfo()
 #>  [37] parallel_4.4.1              cluster_2.1.6              
 #>  [39] R6_2.5.1                    stringi_1.8.4              
 #>  [41] RColorBrewer_1.1-3          car_3.1-3                  
-#>  [43] GenomicRanges_1.56.1        iterators_1.0.14           
+#>  [43] GenomicRanges_1.56.2        iterators_1.0.14           
 #>  [45] assertthat_0.2.1            Rcpp_1.0.13                
 #>  [47] SummarizedExperiment_1.34.0 knitr_1.48                 
 #>  [49] zoo_1.8-12                  readr_2.1.5                
@@ -715,7 +716,7 @@ sessionInfo()
 #>  [61] processx_3.8.4              lattice_0.22-6             
 #>  [63] tibble_3.2.1                plyr_1.8.9                 
 #>  [65] Biobase_2.64.0              withr_3.0.1                
-#>  [67] evaluate_1.0.0              tmvtnorm_1.6               
+#>  [67] evaluate_1.0.1              tmvtnorm_1.6               
 #>  [69] heatmaply_1.5.0             norm_1.0-11.1              
 #>  [71] ggpubr_0.6.0                pillar_1.9.0               
 #>  [73] MatrixGenerics_1.16.0       carData_3.0-5              
@@ -724,9 +725,9 @@ sessionInfo()
 #>  [79] vroom_1.6.5                 S4Vectors_0.42.1           
 #>  [81] hms_1.1.3                   ggplot2_3.5.1              
 #>  [83] munsell_0.5.1               scales_1.3.0               
-#>  [85] glue_1.7.0                  lazyeval_0.2.2             
-#>  [87] tools_4.4.1                 dendextend_1.17.1          
-#>  [89] data.table_1.16.0           QFeatures_1.14.2           
+#>  [85] glue_1.8.0                  lazyeval_0.2.2             
+#>  [87] tools_4.4.1                 dendextend_1.18.1          
+#>  [89] data.table_1.16.2           QFeatures_1.14.2           
 #>  [91] ggsignif_0.6.4              webshot_0.5.5              
 #>  [93] registry_0.5-1              imputeLCMD_2.1             
 #>  [95] mvtnorm_1.3-1               cowplot_1.1.3              

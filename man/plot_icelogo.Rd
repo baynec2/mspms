@@ -35,13 +35,13 @@ https://iomics.ugent.be/icelogoserver/resources/manual.pdf
 \examples{
 # Determining significant cleavages for catA
 catA_sig_cleavages <- mspms::log2fc_t_test_data \%>\%
-    dplyr::filter(p.adj <= 0.05, log2fc > 3) \%>\%
-    dplyr::filter(condition == "CatA") \%>\%
-    dplyr::pull(cleavage_seq) \%>\%
-    unique()
+  dplyr::filter(p.adj <= 0.05, log2fc > 3) \%>\%
+  dplyr::filter(condition == "CatA") \%>\%
+  dplyr::pull(cleavage_seq) \%>\%
+  unique()
 
 # Plotting icelogo
 plot_icelogo(catA_sig_cleavages,
-    background_universe = all_possible_8mers_from_228_library
+  background_universe = all_possible_8mers_from_228_library
 )
 }

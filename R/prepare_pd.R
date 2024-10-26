@@ -1,4 +1,4 @@
-#' prepare_pd 
+#' prepare_pd
 #' Prepare a label free quantification file exported from Proteome Discoverer
 #' for subsequent mspms analysis.
 #' @param peptide_groups_filepath filepath to PeptideGroups.txt file exported
