@@ -17,3 +17,8 @@ n_residue != 4. Simplified the logic behind these functions and added extensive
 testing to confirm that they work as expected with a range of peptide sequences.
 Minor change to the plot_volcano() function allowing the user to specify a 
 padj threshold.
+
+## mspms 0.99.3
+
+* Removed some redundant tests of the log2fc_t_test() function that took a long
+time to perform and were causing timeouts on the Bioconductor build.
