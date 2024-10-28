@@ -173,7 +173,7 @@ An example of a valid colData file is shown below.
 colData <- readr::read_csv(system.file("extdata/colData.csv",
   package = "mspms"
 ))
-#> Rows: 42 Columns: 4
+#> Rows: 12 Columns: 4
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: ","
 #> chr (3): quantCols, group, condition
@@ -258,18 +258,18 @@ peaks_prepared_data <- mspms::prepare_peaks(lfq_filepath,
   0.3,
   n_residues = 4
 )
-#> Rows: 2444 Columns: 70
+#> Rows: 2444 Columns: 32
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: ","
 #> chr  (6): Protein Accession, Peptide, Used, Candidate, Sample Profile (Ratio...
-#> dbl (63): Protein Group, Protein ID, Quality, Significance, Avg. ppm, Avg. A...
+#> dbl (25): Protein Group, Protein ID, Quality, Significance, Avg. ppm, Avg. A...
 #> lgl  (1): PTM
 #> 
 #> ℹ Use `spec()` to retrieve the full column specification for this data.
 #> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 #> 841 peptides were removed because they had a quality score < 0.3 (34%)
 #> 
-#> Rows: 42 Columns: 4
+#> Rows: 12 Columns: 4
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: ","
 #> chr (3): quantCols, group, condition
@@ -287,7 +287,7 @@ peaks_prepared_data <- mspms::prepare_peaks(lfq_filepath,
 
 peaks_prepared_data
 #> An instance of class QFeatures containing 1 assays:
-#>  [1] peptides: SummarizedExperiment with 2071 rows and 42 columns
+#>  [1] peptides: SummarizedExperiment with 2071 rows and 12 columns
 ```
 
 #### Fragpipe
@@ -316,17 +316,17 @@ fragpipe_prepared_data <- prepare_fragpipe(
   combined_peptide_filepath,
   colData_filepath
 )
-#> Rows: 1847 Columns: 182
+#> Rows: 1847 Columns: 63
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: "\t"
-#> chr  (49): Peptide Sequence, Prev AA, Next AA, Protein, Protein ID, Entry Na...
-#> dbl (129): Start, End, Peptide Length, CatA_0000_1 Spectral Count, CatA_0000...
-#> num   (1): Charges
-#> lgl   (3): Gene, Mapped Genes, Mapped Proteins
+#> chr (19): Peptide Sequence, Prev AA, Next AA, Protein, Protein ID, Entry Nam...
+#> dbl (40): Start, End, Peptide Length, CatA_0000_1 Spectral Count, CatA_0000_...
+#> num  (1): Charges
+#> lgl  (3): Gene, Mapped Genes, Mapped Proteins
 #> 
 #> ℹ Use `spec()` to retrieve the full column specification for this data.
 #> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Rows: 42 Columns: 4
+#> Rows: 12 Columns: 4
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: ","
 #> chr (3): quantCols, group, condition
@@ -344,7 +344,7 @@ fragpipe_prepared_data <- prepare_fragpipe(
 
 fragpipe_prepared_data
 #> An instance of class QFeatures containing 1 assays:
-#>  [1] peptides: SummarizedExperiment with 1694 rows and 42 columns
+#>  [1] peptides: SummarizedExperiment with 1694 rows and 12 columns
 ```
 
 #### Proteome Discoverer
@@ -372,16 +372,16 @@ colData_filepath <- system.file("extdata/proteome_discover_colData.csv",
 )
 
 prepared_pd_data <- prepare_pd(peptide_groups_filepath, colData_filepath)
-#> Rows: 1207 Columns: 189
+#> Rows: 1207 Columns: 68
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: "\t"
-#> chr  (48): Confidence, Annotated Sequence, Master Protein Accessions, Positi...
-#> dbl (138): Peptide Groups Peptide Group ID, Qvality PEP, Qvality q-value, # ...
-#> lgl   (3): Checked, Modifications, Modifications in Master Proteins
+#> chr (17): Confidence, Annotated Sequence, Master Protein Accessions, Positio...
+#> dbl (48): Peptide Groups Peptide Group ID, Qvality PEP, Qvality q-value, # P...
+#> lgl  (3): Checked, Modifications, Modifications in Master Proteins
 #> 
 #> ℹ Use `spec()` to retrieve the full column specification for this data.
 #> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> Rows: 42 Columns: 4
+#> Rows: 12 Columns: 4
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: ","
 #> chr (3): quantCols, group, condition
@@ -399,7 +399,7 @@ prepared_pd_data <- prepare_pd(peptide_groups_filepath, colData_filepath)
 
 prepared_pd_data
 #> An instance of class QFeatures containing 1 assays:
-#>  [1] peptides: SummarizedExperiment with 1161 rows and 42 columns
+#>  [1] peptides: SummarizedExperiment with 1161 rows and 12 columns
 ```
 
 ## Data Processing
@@ -426,11 +426,11 @@ processed_qf <- process_qf(peaks_prepared_data)
 #> of missing values on data aggregation.
 processed_qf
 #> An instance of class QFeatures containing 5 assays:
-#>  [1] peptides: SummarizedExperiment with 2071 rows and 42 columns 
-#>  [2] peptides_log: SummarizedExperiment with 2071 rows and 42 columns 
-#>  [3] peptides_log_norm: SummarizedExperiment with 2071 rows and 42 columns 
-#>  [4] peptides_log_impute_norm: SummarizedExperiment with 2071 rows and 42 columns 
-#>  [5] peptides_norm: SummarizedExperiment with 2071 rows and 42 columns
+#>  [1] peptides: SummarizedExperiment with 2071 rows and 12 columns 
+#>  [2] peptides_log: SummarizedExperiment with 2071 rows and 12 columns 
+#>  [3] peptides_log_norm: SummarizedExperiment with 2071 rows and 12 columns 
+#>  [4] peptides_log_impute_norm: SummarizedExperiment with 2071 rows and 12 columns 
+#>  [5] peptides_norm: SummarizedExperiment with 2071 rows and 12 columns
 ```
 
 ## Statistics
@@ -529,9 +529,6 @@ We can also inspect our data using a PCA as follows.
 
 ``` r
 plot_pca(mspms_tidy_data, value_colname = "peptides_norm")
-#> Too few points to calculate an ellipse
-#> Warning: Removed 1 row containing missing values or values outside the scale range
-#> (`geom_path()`).
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
@@ -622,12 +619,6 @@ sig_cleavage_data <- log2fc_t_test_data %>%
 plot_all_icelogos(sig_cleavage_data)
 #> Scale for x is already present.
 #> Adding another scale for x, which will replace the existing scale.
-#> Scale for x is already present.
-#> Adding another scale for x, which will replace the existing scale.
-#> Scale for x is already present.
-#> Adding another scale for x, which will replace the existing scale.
-#> Scale for x is already present.
-#> Adding another scale for x, which will replace the existing scale.
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
@@ -680,7 +671,7 @@ sessionInfo()
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] mspms_0.99.2 dplyr_1.1.4 
+#> [1] mspms_0.99.3 dplyr_1.1.4 
 #> 
 #> loaded via a namespace (and not attached):
 #>   [1] gridExtra_2.3               sandwich_3.1-1             

@@ -181,6 +181,7 @@ colData <- readr::read_csv(system.file("extdata/colData.csv",
 ))
 
 head(colData)
+
 ```
 
 #### PEAKS
@@ -233,6 +234,7 @@ peaks_prepared_data <- mspms::prepare_peaks(lfq_filepath,
 )
 
 peaks_prepared_data
+
 ```
 
 
@@ -325,6 +327,7 @@ We provide a user-friendly implementation of this statistical test as follows:
 
 ```{r}
 log2fc_t_test_data <- mspms::log2fc_t_test(processed_qf = processed_qf)
+
 ```
 
 Please note that statistical analyses are one of the strengths of the

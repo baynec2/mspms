@@ -22,3 +22,10 @@ padj threshold.
 
 * Removed some redundant tests of the log2fc_t_test() function that took a long
 time to perform and were causing timeouts on the Bioconductor build.
+
+
+## mspms 0.99.4
+
+* Removed the cathepsin B-D data from the internal datasets and from extdata/
+. This keeps the example run time down, as well as greatly reduces the
+overall size of the package. 
