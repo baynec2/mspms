@@ -339,19 +339,15 @@ prepared_to_qf <- function(prepared_data,
   ) %>%
     add_cleavages(n_residues = n_residues) %>%
     consolidate_cleavages()
-  # if colData quantCol names
   name_in_prepared_data <- names(prepared_data)[3:length(prepared_data)]
-
   n_coldata_nin_prepared_data <- sum(colData$quantCols %!in%
     name_in_prepared_data)
-
   missing_name <- paste0(
     name_in_prepared_data[
       colData$quantCols %!in% name_in_prepared_data
     ],
     collapse = " "
   )
-
   if (n_coldata_nin_prepared_data > 0) {
     stop(
       "the quantCol names in your colData do not match those in your",
@@ -360,8 +356,6 @@ prepared_to_qf <- function(prepared_data,
       " colData"
     )
   }
-
-  # Creating a QFeatures object
   QF <- QFeatures::readQFeatures(combined,
     quantCols = 8:length(combined),
     fnames = "peptide",
