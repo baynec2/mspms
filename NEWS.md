@@ -29,3 +29,8 @@ time to perform and were causing timeouts on the Bioconductor build.
 * Removed the cathepsin B-D data from the internal datasets and from extdata/
 . This keeps the example run time down, as well as greatly reduces the
 overall size of the package. 
+
+## mspms 0.99.5
+
+* Removed interactive heatmap from vignette to get rid of warning that vignette 
+size was too large. Minor changes to vignette aesthetics.  
