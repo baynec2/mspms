@@ -671,7 +671,7 @@ sessionInfo()
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] mspms_0.99.3 dplyr_1.1.4 
+#> [1] mspms_0.99.4 dplyr_1.1.4 
 #> 
 #> loaded via a namespace (and not attached):
 #>   [1] gridExtra_2.3               sandwich_3.1-1             

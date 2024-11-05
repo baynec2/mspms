@@ -467,7 +467,7 @@ plot_icelogo(catA_sig_cleavages,
 We also provide a function that conveniently plots all icelogos from all
 conditions from the experiment all together.
 
-```{r,fig.height = 10, fig.width = 4}
+```{r}
 sig_cleavage_data <- log2fc_t_test_data %>%
   dplyr::filter(p.adj <= 0.05, log2fc > 3)
 

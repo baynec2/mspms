@@ -26,14 +26,6 @@ library(dplyr)
 
 # mspms
 
-<!-- badges: start -->
-
-[![R-CMD-check](https://github.com/baynec2/mspms/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/baynec2/mspms/actions/workflows/R-CMD-check.yaml)
-[![Codecov test
-coverage](https://codecov.io/gh/baynec2/mspms/branch/main/graph/badge.svg)](https://app.codecov.io/gh/baynec2/mspms?branch=main)
-
-<!-- badges: end -->
-
 ## Introduction
 
 The goal of mspms is provide a R Package that can be used to easily and
@@ -91,8 +83,6 @@ Lastly, mspms takes advantage of iceLogos ([Colaert, N. et al. Nature Methods 6,
 overrepresented amino acid motifs relative to a background set by implementing
 components of the Java software in R.
 
-## Installation
-
 ## Quickstart
 
 To generate a general report using your own data, run the following code. It
@@ -119,11 +109,9 @@ Functions in this package are logically divided into 4 broad types of functions.
 1.  Pre-processing data. These functions are focused on getting all of the data
     necessary for a mspms analysis together and in a consistent format.
 
-2.  Data processing. These functions allow the user to process the proteomics
-    data (imputation, normalization, etc).
+2.  Data processing. These functions allow the user to process the proteomics data (imputation, normalization, etc).
 
-3.  Statistics. These methods allow the user to perform basic statistics on the
-    normalized/processed data.
+3.  Statistics. These methods allow the user to perform basic statistics on the normalized/processed data.
 
 4.  Data visualization. These functions allow the user to visualize the data.
 
@@ -152,13 +140,12 @@ All of the information is then loaded as a QFeatures object along with colData
 (metadata about each sample) where it is stored as a SummarizedExperiment object
 named "peptides".
 
-#### A note on colData
+### A note on colData
 
 As briefly described above, the colData contains metadata describing the samples
 you are trying to analyze.
 
-It is very important that this contains at least the following columns
--"quantCols","group","condition",and "time".
+**It is very important that this contains at least the following columns: quantCols","group","condition",and "time".**
 
 The quantCols field contains the name of each sample. These names must match
 whatever the samples are named in the files exported from the upstream
@@ -184,7 +171,7 @@ colData <- readr::read_csv(system.file("extdata/colData.csv",
 head(colData)
 ```
 
-#### PEAKS
+### PEAKS
 
 Analysis using a .csv exported from [PEAKS
 software](https://www.bioinfor.com/peaks-studio/) is supported.
@@ -239,7 +226,7 @@ peaks_prepared_data
 ```
 
 
-#### Fragpipe
+### Fragpipe
 
 Data exported from [Fragpipe](https://github.com/Nesvilab/FragPipe) as a .tsv
 file is supported.
@@ -268,7 +255,7 @@ fragpipe_prepared_data <- prepare_fragpipe(
 
 fragpipe_prepared_data
 ```
-#### Proteome Discoverer
+### Proteome Discoverer
 
 Analysis of a PeptideGroups.txt file exported from [proteome
 discoverer](https://www.thermofisher.com/us/en/home/industrial/mass-spectrometry/liquid-chromatography-mass-spectrometry-lc-ms/lc-ms-software/multi-omics-data-analysis/proteome-discoverer-software.html) 
@@ -388,9 +375,12 @@ mspms_tidy_data <- mspms_tidy(processed_qf)
 
 We can inspect our data using an interactive heatmap as follows:
 
-```{r}
+```{r,eval = FALSE}
 plot_heatmap(mspms_tidy_data)
 ```
+
+note that the interactive plot is not returned in this vignette 
+due to size constraints. 
 
 ### PCA
 
@@ -467,7 +457,7 @@ plot_icelogo(catA_sig_cleavages,
 We also provide a function that conveniently plots all icelogos from all
 conditions from the experiment all together.
 
-```{r,fig.height = 10, fig.width = 4}
+```{r}
 sig_cleavage_data <- log2fc_t_test_data %>%
   dplyr::filter(p.adj <= 0.05, log2fc > 3)
 
