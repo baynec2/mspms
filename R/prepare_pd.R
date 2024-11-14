@@ -45,7 +45,8 @@ prepare_pd <- function(peptide_groups_filepath,
   # Converting the column names to reasonable sample ID names
   lfq <- lfq %>%
     dplyr::select(-dplyr::contains("Normalized")) %>%
-    dplyr::select(-dplyr::contains("Scaled"))
+    dplyr::select(-dplyr::contains("Scaled")) %>% 
+    dplyr::select(-dplyr::contains("Count"))
   # Extracting only needed columns
   lfq <- lfq %>%
     dplyr::select("peptide", "library_id", dplyr::contains("Abundance")) %>%
