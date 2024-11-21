@@ -34,3 +34,9 @@ overall size of the package.
 
 * Removed interactive heatmap from vignette to get rid of warning that vignette 
 size was too large. Minor changes to vignette aesthetics.  
+
+## mspms 0.99.6
+
+* Improved vignette according to review feedback. Added peptide length 
+calculation to row data. 
+
