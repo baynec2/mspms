@@ -320,6 +320,11 @@ prepared_to_qf <- function(prepared_data,
                            colData,
                            peptide_library = mspms::peptide_library,
                            n_residues = 4) {
+  #adding peptide length to prepared_data
+  prepared_data <- prepared_data %>%
+    dplyr::mutate(peptide_length = gsub("^._","",.data$peptide),
+                  peptide_length = nchar(gsub("_.$","",.data$peptide_length)),
+                  .after = .data$peptide) 
   # check peptide library for correct names.
   check_peptide_library(peptide_library)
   # Making sure that prepared_data and peptide library are consistent
@@ -357,7 +362,7 @@ prepared_to_qf <- function(prepared_data,
     )
   }
   QF <- QFeatures::readQFeatures(combined,
-    quantCols = 8:length(combined),
+    quantCols = 9:length(combined),
     fnames = "peptide",
     colData = colData,
     name = "peptides"
