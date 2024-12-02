@@ -40,3 +40,9 @@ size was too large. Minor changes to vignette aesthetics.
 * Improved vignette according to review feedback. Added peptide length 
 calculation to row data. 
 
+## mspms 0.99.7
+
+* Added ability to remove dendrogram plotting from plot_heatmap(). This was 
+done because the dendrogram plotting feature in heatmaply is recursive and 
+uses a ton of memory which was problematic for the shiny instance.
+
