@@ -124,7 +124,9 @@ mspms_t_tests <- function(processed_qf,
       formula = formula,
       ref.group = reference_value
     ) %>%
-    rstatix::adjust_pvalue(p.col = "p.adj", method = "fdr") %>%
+    dplyr::select(-"p.adj.signif") %>% 
+    rstatix::adjust_pvalue(method = "fdr") %>%
+    rstatix::add_significance(p.col = "p.adj") %>% 
     dplyr::mutate(
       comparison = paste0(
         !!remaining_variable_syms, ".", .data$group2, "/",
