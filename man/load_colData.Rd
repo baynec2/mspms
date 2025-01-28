@@ -13,6 +13,6 @@ load_colData(colData_filepath)
 a tibble
 }
 \description{
-load a .csv file containing sample colData.
+load a .csv file containing sample colData. Check for errors
 }
 \keyword{internal}

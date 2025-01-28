@@ -118,7 +118,8 @@ mspms_t_tests <- function(processed_qf,
       .data$cleavage_seq,
       !!group_by_cols,
       .data$peptide,
-      .data$cleavage_pos
+      .data$cleavage_pos,
+      .data$peptide_type
     ) %>%
     rstatix::t_test(
       formula = formula,
@@ -136,3 +137,84 @@ mspms_t_tests <- function(processed_qf,
     tibble::as_tibble()
   return(stat)
 }
+
+#' add_peptide_data
+#'
+#' adds peptide information for every peptide in the data. 
+#'
+#' @param tibble tibble you would like to add peptide info to. Must have column 
+#' named peptide
+#' @param qf a QFeatures object with rowData for peptides. cleavage_seq,
+#' cleavage_pos, and cleavage_type. 
+#' @return a tibble with column named peptide. 
+#' @keywords internal
+add_peptide_data <- function(tibble, qf) {
+  # extract peptide data
+  pd <- SummarizedExperiment::rowData(qf[["peptides_log_impute_norm"]]) %>%
+    tibble::as_tibble() %>%
+    dplyr::select("peptide", "peptide_type", "cleavage_seq", "cleavage_pos")
+  # innerjoin
+  out <- dplyr::inner_join(pd,tibble, by = "peptide")
+  return(out)
+}
+
+
+#' calc_limma_design_matrix
+#' 
+#' Calculates a limma compatible design matrix for mspms data. 
+#'
+#' @param colData colData with condition and time variables as factors
+#' @returns a model matrix
+#' @keywords internal
+calc_limma_design_matrix <- function(colData,
+                                     norm_data){
+  # Create the design matrix with a valid naming format using periods
+  if(length(unique(colData$condition))  == 1) {
+    design <- model.matrix(~ 0 + time, data = colData)
+  } else {
+    design <- model.matrix(~ 0 + condition:time, data = colData)
+  }
+  colnames(design) <- apply(
+    expand.grid(levels(colData$condition), levels(colData$time)), 1,
+    function(x) paste0("condition.", x[1], ".time.", x[2])
+  )
+  rownames(design) <- colnames(norm_data) # Match sample names
+  return(design)
+}
+
+#' calc_limma_contrasts
+#' 
+#' Calculates limma contrasts given colData. The contrasts returned are pairwise
+#' relative to T0 for each timepoint assayed.
+#'
+#' @param colData colData
+#'
+#' @returns a contrast matrix
+#' @keywords internal
+calc_limma_contrasts <- function(colData,design_mat){
+  contrast_list <- list()
+  conditions <- levels(colData$condition)
+  
+  for (cond in conditions) {
+    # Get all time points available for the condition
+    valid_time_points <- unique(colData$time[colData$condition == cond])
+    
+    for (t in valid_time_points[-1]) { # Skip time 0 for each condition
+      # Construct contrast names to match the standardized format with periods
+      base_name <- paste0("condition.", cond, ".time.", t)
+      ref_name <- paste0("condition.", cond, ".time.0")
+      
+      # Contrast name and formula
+      contrast_name <- paste0(base_name, " - ", ref_name)
+      contrast_formula <- paste0(base_name, " - ", ref_name)
+      contrast_list[[contrast_name]] <- contrast_formula
+    }
+  }
+  # Create contrast matrix
+  contrast_matrix <- limma::makeContrasts(
+    contrasts = unlist(contrast_list),
+    levels = design_mat
+  )
+  return(contrast_matrix)
+}
+

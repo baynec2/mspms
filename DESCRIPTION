@@ -19,6 +19,7 @@ biocViews: Proteomics, MassSpectrometry, Preprocessing
 LazyData: true
 Imports: 
     QFeatures,
+    limma,
     SummarizedExperiment,
     magrittr,
     rlang,

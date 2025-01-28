@@ -372,7 +372,7 @@ prepared_to_qf <- function(prepared_data,
 
 #' load_colData
 #'
-#' load a .csv file containing sample colData.
+#' load a .csv file containing sample colData. Check for errors
 #'
 #' @param colData_filepath filepath to .csv file containing colData.
 #'
@@ -381,20 +381,43 @@ prepared_to_qf <- function(prepared_data,
 
 load_colData <- function(colData_filepath) {
   colData <- readr::read_csv(colData_filepath)
-  colData_names <- names(colData)
+  # Expected names
+  `%!in%` <- Negate(`%in%`)
   expected_names <- c("quantCols", "group", "condition", "time")
+  colData_names <- names(colData)
   unexpected_names <- expected_names %!in% colData_names
   n_unexpected_names <- sum(unexpected_names)
   if (n_unexpected_names > 0) {
     missing_names <- expected_names[unexpected_names]
     stop(paste0(c("colData must have columns named \"quantCols\",\"group\",
-    \"condition\", and \"time\" ", "you are missing ", missing_names)),
-      collapse = ""
+    \"condition\", and \"time\" ", "you are missing ", paste(missing_names,
+                                                             collapse = ", "))),
+         collapse = ""
     )
   }
+  # Check if the column types match
+  expected_types <- c("character", "character", "character", "numeric")
+  colData_types <- sapply(colData, class)
+  unexpected_types <- (colData_types != expected_types[1:4])
+  n_unexpected_types <- sum(unexpected_types)
+  
+  if (n_unexpected_types > 0) {
+    missing_types <- names(colData)[unexpected_types]
+    stop(paste0("colData columns must be as follows: quantCols = character,
+    group = character, condition = character, time = numeric.",
+                "You have the wrong type for the following column(s): ",
+                paste(missing_types, collapse = ", ")))
+  }
+  # Check to make sure none of the columns have spaces in them
+  n_spaces <- sum(sapply(colData, function(x){grepl(".* .*",x)}))
+  if(n_spaces > 0){
+    stop("Your colData has spaces in it (ie condition = Cathepsin A). Please
+    change it to not contain any spaces to be compatible with limma (ie
+    condition  = cathepsin_A)")
+    }
   return(colData)
 }
-
+  
 #' check_peptide_library
 #'
 #' @param peptide_library

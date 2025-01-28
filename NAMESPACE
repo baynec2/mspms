@@ -3,6 +3,7 @@
 export("%>%")
 export(calculate_all_cleavages)
 export(generate_report)
+export(limma_stats)
 export(log2fc_t_test)
 export(mspms_tidy)
 export(plot_all_icelogos)

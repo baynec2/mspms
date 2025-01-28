@@ -60,11 +60,14 @@ In order to do so, mspms uses several excellent packages from the Bioconductor
 project to provide a framework to easily and reproducibly analyze MSP-MS data.
 These include:
 
--   `r BiocStyle::Biocpkg("QFeatures")`: management and processing of peptide quantitative features and
-    sample metadata.
+-   `r BiocStyle::Biocpkg("QFeatures")`: management and processing of peptide 
+quantitative features and sample metadata.
+    
+-   `r BiocStyle::Biocpkg("limma")`: Powerful linear models and empirical 
+Bayesian methods for omics data.
 
--   `r BiocStyle::Biocpkg("MsCoreUtils")`: log2 transformation, imputation (QRILC), and normalization
-    (center.median).
+-   `r BiocStyle::Biocpkg("MsCoreUtils")`: log2 transformation, 
+imputation (QRILC), and normalization (center.median).
 
 Some excellent non-Bioconductor packages are also utilized.
 
@@ -313,26 +316,25 @@ processed_qf
 MSP-MS analysis has traditionally used T-tests to what peptides are
 significantly different relative to T0. The authors of the assay suggest using a
 T-test derived FDR adjusted p value threshold \<= 0.05 and log2 fold change
-threshold \>= 3.
+threshold \>= 3. 
 
-We provide a user-friendly implementation of this statistical test as follows:
+We recommend that the user now uses a Limma based approach that uses a linear 
+modeling and empirical Bayesian approach. This is a approach well suited to 
+proteomics data that is powerful, flexible, and fast.
+
+This limma based approach (with stats calculated relative to time 0 for each 
+condition) can be utilized as follows:
+
+```{r}
+limma_stats <- mspms::limma_stats(processed_qf = processed_qf)
+```
+
+Alternatively, we provide a user-friendly implementation of the traditional
+t-test approach as follows:
 
 ```{r}
 log2fc_t_test_data <- mspms::log2fc_t_test(processed_qf = processed_qf)
 ```
-
-Please note that statistical analyses are one of the strengths of the
-Bioconductor project and several packages provide alternative statistical
-approaches that are more flexible than t-tests and could be used with the
-QFeatures objects produced by mspms.
-
-This includes packages using empirical Bayesian approaches (see
-[limma](https://bioconductor.org/packages/release/bioc/html/limma.html)) and
-mixed modelling (see
-[msqrob2](https://bioconductor.org/packages/release/bioc/html/msqrob2.html)),
-that are suited for proteomics data.
-
-Users are encouraged to use these excellent packages.
 
 ## Data Visualizations
 
