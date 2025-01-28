@@ -164,6 +164,7 @@ add_peptide_data <- function(tibble, qf) {
 #' Calculates a limma compatible design matrix for mspms data. 
 #'
 #' @param colData colData with condition and time variables as factors
+#' @param norm_data normalized data from QFeatures object to use
 #' @returns a model matrix
 #' @keywords internal
 calc_limma_design_matrix <- function(colData,
@@ -187,8 +188,8 @@ calc_limma_design_matrix <- function(colData,
 #' Calculates limma contrasts given colData. The contrasts returned are pairwise
 #' relative to T0 for each timepoint assayed.
 #'
-#' @param colData colData
-#'
+#' @param colData colData from mspms experiment
+#' @param design_mat design_mat as returned by calc_limma_design_matrix
 #' @returns a contrast matrix
 #' @keywords internal
 calc_limma_contrasts <- function(colData,design_mat){

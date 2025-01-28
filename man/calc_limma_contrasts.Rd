@@ -7,7 +7,9 @@
 calc_limma_contrasts(colData, design_mat)
 }
 \arguments{
-\item{colData}{colData}
+\item{colData}{colData from mspms experiment}
+
+\item{design_mat}{design_mat as returned by calc_limma_design_matrix}
 }
 \value{
 a contrast matrix

@@ -8,6 +8,8 @@ calc_limma_design_matrix(colData, norm_data)
 }
 \arguments{
 \item{colData}{colData with condition and time variables as factors}
+
+\item{norm_data}{normalized data from QFeatures object to use}
 }
 \value{
 a model matrix
