@@ -1,7 +1,7 @@
 Package: mspms
 Type: Package
 Title: Tools for the analysis of MSP-MS data
-Version: 0.99.7
+Version: 0.99.8
 Authors@R: person("Charlie", "Bayne", email = "baynec2@gmail.com",
     role = c("aut", "cre"),comment=c(ORCID="0000-0003-1870-5298"))
 Description: This package provides functions for the analysis of data generated 

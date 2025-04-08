@@ -46,3 +46,7 @@ calculation to row data.
 done because the dendrogram plotting feature in heatmaply is recursive and 
 uses a ton of memory which was problematic for the shiny instance.
 
+## mspms 0.99.8
+
+* Added support for limma based statistics via limma_stats() function
+

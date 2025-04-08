@@ -76,7 +76,7 @@ limma_stats <- function(processed_qf) {
   # Convert results to a consistent format.
   results_formatted <- results_combined %>%
     dplyr::inner_join(t0, by = c("peptide", "condition")) %>%
-    dplyr::select("condition", "peptide", "peptide_type", "control_mean",
+    dplyr::select("condition", "peptide","library_id", "peptide_type", "control_mean",
       "time",
       "sample_mean" = "AveExpr", "comparison" = "contrast",
       "log2fc" = "logFC", "cleavage_seq", "cleavage_pos", "group1",

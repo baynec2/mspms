@@ -152,7 +152,7 @@ add_peptide_data <- function(tibble, qf) {
   # extract peptide data
   pd <- SummarizedExperiment::rowData(qf[["peptides_log_impute_norm"]]) %>%
     tibble::as_tibble() %>%
-    dplyr::select("peptide", "peptide_type", "cleavage_seq", "cleavage_pos")
+    dplyr::select("peptide","library_id", "peptide_type", "cleavage_seq", "cleavage_pos")
   # innerjoin
   out <- dplyr::inner_join(pd,tibble, by = "peptide")
   return(out)
