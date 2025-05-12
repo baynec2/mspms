@@ -50,3 +50,6 @@ uses a ton of memory which was problematic for the shiny instance.
 
 * Added support for limma based statistics via limma_stats() function
 
+## mspms 1.1.0
+
+* Added support for DIA-NN report.pr_matrix.tsv output. 

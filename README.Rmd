@@ -308,7 +308,34 @@ prepared_pd_data <- prepare_pd(peptide_groups_filepath, colData_filepath)
 
 prepared_pd_data
 ```
-  
+### DIA-NN
+
+We are currently investigating how well the method works with DIA data. 
+To allow for this we have created a parser to make DIA-NN output compatible with
+mspms.
+
+Note that this could be used with DIA-NN alone or with Fragpipe (MSFragger-DIA) 
+uses DIA-NN for quantification. Here we are using the file output from Fragpipe.
+
+Use caution when using this approach, we haven't thoroughly investigated how 
+well DIA data works with mspms using ground truth data yet.
+
+```{r}
+precursor_filepath = system.file(
+  "extdata/diann_report.pr_matrix.tsv",
+  package = "mspms"
+)
+colData_filepath = system.file(
+  "extdata/diann_colData.csv",
+  package = "mspms"
+)
+
+prepared_diann_data <- prepare_diann(precursor_filepath,colData_filepath)
+
+prepared_diann_data
+```
+
+
 ## Data Processing
 
 Data processing includes imputation and normalization of the proteomics data.
