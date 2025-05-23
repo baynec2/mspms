@@ -53,3 +53,10 @@ uses a ton of memory which was problematic for the shiny instance.
 ## mspms 1.1.0
 
 * Added support for DIA-NN report.pr_matrix.tsv output. 
+
+## mspms 1.1.1
+
+* Fixed a bug where rownames in the QFeatures object could be misaligned due
+to a mismatch in the order of colData compared to prepared_data. Fixed by 
+changing the order of the colData to be the order of the prepared data before 
+reading as a QFeatures object

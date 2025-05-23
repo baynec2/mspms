@@ -386,6 +386,14 @@ prepared_to_qf <- function(prepared_data,
       " colData"
     )
   }
+  #Need columns in the combined data frame to be in the same order as colData
+  # Extract the ordered sample names (columns 9 onward in combined)
+  order_in_combined <- names(combined)[9:ncol(combined)]
+  
+  # arrange colData to be in the same order
+  colData <- colData |> 
+    dplyr::arrange(factor(quantCols, levels = order_in_combined))
+  
   QF <- QFeatures::readQFeatures(combined,
     quantCols = 9:length(combined),
     fnames = "peptide",
