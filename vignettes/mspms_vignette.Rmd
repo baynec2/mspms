@@ -311,6 +311,28 @@ processed_qf <- process_qf(peaks_prepared_data)
 processed_qf
 ```
 
+## Accessing data stored in QFeatures
+
+Once your data has been processed, you might want to take a closer look at the 
+peptide-level results. In MSP-MS, these are stored as SummarizedExperiment 
+objects within your QFeatures. You can easily pull them out using the assay
+name. For example:
+
+```{r}
+# Extracting the 'peptides_norm' SummarizedExperiment
+pn <- processed_qf[["peptides_norm"]]
+
+# View the main assay (e.g., intensity matrix)
+head(SummarizedExperiment::assay(pn))
+
+```
+
+```{r}
+# View metadata for rows (peptides)
+head(SummarizedExperiment::rowData(pn))
+```
+
+
 ## Statistics
 
 MSP-MS analysis has traditionally used T-tests to what peptides are
