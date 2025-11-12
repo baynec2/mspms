@@ -1,11 +1,11 @@
 ### check_file_is_valid_peaks()###
-test_that("check_file_is_valid_peaks() errors when PTM is provided.", {
+test_that("check_file_is_valid_peaks() works when PTM is provided.", {
   peaks_ptm <- readr::read_csv(system.file(
     "extdata/peaks_protein-peptides-lfq.csv",
     package = "mspms"
   )) %>%
     dplyr::mutate(PTM = "PTM")
-  expect_error(mspms:::check_file_is_valid_peaks(peaks_ptm))
+  expect_no_error(mspms:::check_file_is_valid_peaks(peaks_ptm))
 })
 
 ### check_file_is_valid_fragpipe()###
@@ -14,6 +14,24 @@ test_that("check_file_is_valid_fragpipe() errors when peaks file is
   peaks_ptm <- readr::read_csv("tests/testdata/
                                check_file_is_valid_peaks_ptm.csv")
   expect_error(mspms:::check_file_is_valid_fragpipe(peaks_ptm))
+})
+
+### Testing cleavage function ###
+
+test_that("cleavage() works as expected with n_residue = 1", {
+  peptide_sequence <- "G_HIDHL"
+  library_match_sequence <- "LVATVYEFGHIDHL"
+  library_real_sequence <- "LVATVYEFGHIDHL"
+
+  out <- cleavage(peptide_sequence,
+    library_match_sequence,
+    library_real_sequence,
+    n_residues = 1,
+    terminus = "nterm"
+  )
+
+  expect_equal(out$nterm, "GH")
+  expect_equal(out$nterm_cleavage_pos, 9)
 })
 
 
@@ -34,7 +52,7 @@ test_that("nterm_cleavages() works as expected with n_residue = 1", {
   expect_equal(out$nterm_cleavage_pos, 9)
 })
 
-test_that("nterm_cleavages() works as expected with n_residue = 2", {
+test_that("nterm_cleavage() works as expected with n_residue = 2", {
   peptide_sequence <- "G_HIDHL"
   library_match_sequence <- "LVATVYEFGHIDHL"
   library_real_sequence <- "LVATVYEFGHIDHL"
@@ -49,7 +67,7 @@ test_that("nterm_cleavages() works as expected with n_residue = 2", {
   expect_equal(out$nterm_cleavage_pos, 9)
 })
 
-test_that("nterm_cleavages() works as expected with n_residue = 3", {
+test_that("nterm_cleavage() works as expected with n_residue = 3", {
   peptide_sequence <- "G_HIDHL"
   library_match_sequence <- "LVATVYEFGHIDHL"
   library_real_sequence <- "LVATVYEFGHIDHL"
@@ -65,7 +83,7 @@ test_that("nterm_cleavages() works as expected with n_residue = 3", {
 })
 
 
-test_that("nterm_cleavages() works as expected with n_residue = 4", {
+test_that("nterm_cleavage() works as expected with n_residue = 4", {
   peptide_sequence <- "G_HIDHL"
   library_match_sequence <- "LVATVYEFGHIDHL"
   library_real_sequence <- "LVATVYEFGHIDHL"

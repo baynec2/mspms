@@ -24,8 +24,8 @@ but can also be "row", "column", or "none"}
 \item{plot_method}{what plot method would you like to use, can use
 plotly or ggplot2.}
 
-\item{show_dendrogram}{Logical vector of length two, controlling whether 
-the row and/or column dendrograms are displayed. If a logical scalar is 
+\item{show_dendrogram}{Logical vector of length two, controlling whether
+the row and/or column dendrograms are displayed. If a logical scalar is
 provided, it is repeated to become a logical vector of length two.}
 }
 \value{

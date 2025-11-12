@@ -53,9 +53,7 @@ plot_volcano <- function(log2fc_t_test_data,
       ncol = ncol
     )
   } else {
-    stop("facets must be either grid or wrap")
+    stop("facets must be equal to either grid or wrap")
   }
   return(p2)
 }
-
-

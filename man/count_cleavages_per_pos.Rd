@@ -7,11 +7,13 @@
 count_cleavages_per_pos(data, peptide_library = mspms::peptide_library)
 }
 \arguments{
-\item{data}{a tibble containing columns named peptide,cleavage_pos,condition,
+\item{data}{a tibble containing columns named peptide, cleavage_pos, condition,
 and time. Other column names can be included.}
+
+\item{peptide_library}{a peptide library tibble.}
 }
 \value{
-a ggplot2 object
+a tibble with all positions filled.
 }
 \description{
 Count the number of cleavages per position

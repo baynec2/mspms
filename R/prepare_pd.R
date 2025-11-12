@@ -21,43 +21,15 @@ prepare_pd <- function(peptide_groups_filepath,
                        colData_filepath,
                        peptide_library = mspms::peptide_library,
                        n_residues = 4) {
-  # Reading in the label free quantification data
-  lfq <- readr::read_delim(peptide_groups_filepath)
-  # Check that this file appears to be a proper fragpipe file
-  check_file_is_valid_pd(lfq)
-  # Reformat the columns to be consistent with mspsms framework
-  lfq <- lfq %>%
-    dplyr::rename(
-      peptide = "Annotated Sequence",
-      library_id = "Master Protein Accessions"
-    )
-  # Converting the peptide notation from proteome discover to standard format.
-  lfq <- lfq %>%
-    dplyr::mutate(
-      peptide = gsub("\\[-\\]", "", .data$peptide),
-      peptide = gsub("^\\.", "", .data$peptide),
-      peptide = gsub("\\.$", "", .data$peptide),
-      peptide = gsub("\\].", "_", .data$peptide),
-      peptide = gsub("\\.\\[", "_", .data$peptide),
-      peptide = gsub("\\]", "", .data$peptide),
-      peptide = gsub("\\[", "", .data$peptide)
-    )
-  # Converting the column names to reasonable sample ID names
-  lfq <- lfq %>%
-    dplyr::select(-dplyr::contains("Normalized")) %>%
-    dplyr::select(-dplyr::contains("Scaled")) %>% 
-    dplyr::select(-dplyr::contains("Count"))
-  # Extracting only needed columns
-  lfq <- lfq %>%
-    dplyr::select("peptide", "library_id", dplyr::contains("Abundance")) %>%
-    dplyr::rename_with(~ gsub("Abundance: ", "", .)) %>%
-    dplyr::rename_with(~ gsub(": Sample", "", .))
-  # Loading colData
-  colData <- load_colData(colData_filepath)
-  # converting into QF object
-  pd_prepared_qf <- prepared_to_qf(
-    lfq, colData,
-    peptide_library, n_residues
+  prepared_data <- prepare_file(
+    filepath = peptide_groups_filepath,
+    colData_filepath = colData_filepath,
+    peptide_library = peptide_library,
+    n_residues = n_residues,
+    read_fun = readr::read_delim,
+    validate_fun = check_file_is_valid_pd,
+    transform_fun = transform_pd
   )
-  return(pd_prepared_qf)
+
+  return(prepared_data)
 }

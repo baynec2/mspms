@@ -35,7 +35,7 @@ wrapper function to generate an automatic .html report of a basic mspms
 analysis.
 }
 \examples{
-\dontshow{if (isTRUE(FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (isTRUE(FALSE)) withAutoprint(\{ # examplesIf}
 generate_report(mspms::peaks_prepared_data)
 \dontshow{\}) # examplesIf}
 }

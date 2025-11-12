@@ -130,42 +130,43 @@ icelogo_col_scheme <- function() {
 #'
 #' Count the number of cleavages per position
 #'
-#' @param data a tibble containing columns named peptide,cleavage_pos,condition,
+#' @param data a tibble containing columns named peptide, cleavage_pos, condition,
 #' and time. Other column names can be included.
-#' @return a ggplot2 object
+#' @param peptide_library a peptide library tibble.
+#' @return a tibble with all positions filled.
 #' @keywords internal
-
 count_cleavages_per_pos <- function(data,
                                     peptide_library = mspms::peptide_library) {
   peptide_length <- unique(nchar(peptide_library$library_match_sequence))
-
   positions <- seq_len(peptide_length - 1)
-  # Counting
+
+  # Count existing cleavages
   count <- data %>%
     dplyr::group_by(.data$condition, .data$time, .data$cleavage_pos) %>%
-    dplyr::summarise(n = dplyr::n())
-  # Adding missing positions
-  final <- tibble::tibble()
+    dplyr::summarise(n = dplyr::n(), .groups = "drop")
+
+  # Prepare list to collect results
+  results_list <- vector("list", length = length(unique(data$condition)) * length(unique(data$time)))
+  idx <- 1
+
   for (i in unique(data$condition)) {
     f <- count %>% dplyr::filter(.data$condition == i)
     for (t in unique(f$time)) {
-      count_f <- dplyr::filter(
-        f,
-        .data$condition == i,
-        .data$time == t
-      )
+      count_f <- f %>% dplyr::filter(.data$time == t)
       missing <- positions[!positions %in% count_f$cleavage_pos]
       missing_t <- tibble::tibble(
-        condition = i, time = t,
-        cleavage_pos = missing, n = rep(
-          0,
-          length(missing)
-        )
+        condition = i,
+        time = t,
+        cleavage_pos = missing,
+        n = rep(0, length(missing))
       )
       out <- dplyr::bind_rows(count_f, missing_t)
-      final <- dplyr::bind_rows(final, out)
+      results_list[[idx]] <- out
+      idx <- idx + 1
     }
   }
+
+  final <- dplyr::bind_rows(results_list)
   final$time <- as.character(final$time)
   return(final)
 }

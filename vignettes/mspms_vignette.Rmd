@@ -210,7 +210,6 @@ an exported .csv file can be generated from PEAKS as follows:
     • Group samples -\> add quadruplicates of samples to new group.
 
 ```{r}
-
 library(dplyr)
 library(mspms)
 
@@ -229,7 +228,6 @@ peaks_prepared_data <- mspms::prepare_peaks(lfq_filepath,
 )
 
 peaks_prepared_data
-
 ```
 
 
@@ -324,7 +322,6 @@ pn <- processed_qf[["peptides_norm"]]
 
 # View the main assay (e.g., intensity matrix)
 head(SummarizedExperiment::assay(pn))
-
 ```
 
 ```{r}

@@ -3,7 +3,6 @@ test_that("works with standard number of AAs)", {
 })
 
 
-
 test_that("works with non standard number of AAs (so long as even number)", {
   expect_no_error(mspms:::calc_AA_count_of_motif("XXXXXXXXXX"))
 })
