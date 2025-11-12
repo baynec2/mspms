@@ -227,7 +227,6 @@ an exported .csv file can be generated from PEAKS as follows:
     • Group samples -\> add quadruplicates of samples to new group.
 
 ```{r}
-
 library(dplyr)
 library(mspms)
 
@@ -246,7 +245,6 @@ peaks_prepared_data <- mspms::prepare_peaks(lfq_filepath,
 )
 
 peaks_prepared_data
-
 ```
 
 
@@ -308,6 +306,26 @@ prepared_pd_data <- prepare_pd(peptide_groups_filepath, colData_filepath)
 
 prepared_pd_data
 ```
+### Sage
+
+Analysis of a lfq.tsv file exported from [sage](https://github.com/lazear/sage) is supported. We found this software a little harder to use than other solutions (No-GUI), however it is completly open-source, free, and by far the fastest!
+
+```{r}
+sage_lfq_filepath <- system.file(
+  "extdata/sage_lfq.tsv",
+  package = "mspms"
+)
+
+colData_filepath <- system.file("extdata/colData.csv",
+  package = "mspms"
+)
+
+prepare_sage(sage_lfq_filepath, colData_filepath)
+```
+
+
+
+
 ### DIA-NN
 
 We are currently investigating how well the method works with DIA data. 
@@ -321,16 +339,16 @@ Use caution when using this approach, we haven't thoroughly investigated how
 well DIA data works with mspms using ground truth data yet.
 
 ```{r}
-precursor_filepath = system.file(
+precursor_filepath <- system.file(
   "extdata/diann_report.pr_matrix.tsv",
   package = "mspms"
 )
-colData_filepath = system.file(
+colData_filepath <- system.file(
   "extdata/diann_colData.csv",
   package = "mspms"
 )
 
-prepared_diann_data <- prepare_diann(precursor_filepath,colData_filepath)
+prepared_diann_data <- prepare_diann(precursor_filepath, colData_filepath)
 
 prepared_diann_data
 ```

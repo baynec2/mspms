@@ -13,8 +13,8 @@
 #'  but can also be "row", "column", or "none"
 #' @param plot_method what plot method would you like to use, can use
 #' plotly or ggplot2.
-#' @param show_dendrogram Logical vector of length two, controlling whether 
-#' the row and/or column dendrograms are displayed. If a logical scalar is 
+#' @param show_dendrogram Logical vector of length two, controlling whether
+#' the row and/or column dendrograms are displayed. If a logical scalar is
 #' provided, it is repeated to become a logical vector of length two.
 
 #' @return a heatmaply interactive heatmap
@@ -26,7 +26,7 @@ plot_heatmap <- function(mspms_tidy_data,
                          value_colname = "peptides_norm",
                          scale = "column",
                          plot_method = "plotly",
-                         show_dendrogram = c(TRUE,TRUE)) {
+                         show_dendrogram = c(TRUE, TRUE)) {
   value_colname <- dplyr::sym(value_colname)
   heatmap_data <- mspms_tidy_data %>%
     dplyr::select(

@@ -210,7 +210,6 @@ an exported .csv file can be generated from PEAKS as follows:
     • Group samples -\> add quadruplicates of samples to new group.
 
 ```{r}
-
 library(dplyr)
 library(mspms)
 
@@ -229,7 +228,6 @@ peaks_prepared_data <- mspms::prepare_peaks(lfq_filepath,
 )
 
 peaks_prepared_data
-
 ```
 
 
@@ -310,6 +308,27 @@ set.seed(2)
 processed_qf <- process_qf(peaks_prepared_data)
 processed_qf
 ```
+
+## Accessing data stored in QFeatures
+
+Once your data has been processed, you might want to take a closer look at the 
+peptide-level results. In MSP-MS, these are stored as SummarizedExperiment 
+objects within your QFeatures. You can easily pull them out using the assay
+name. For example:
+
+```{r}
+# Extracting the 'peptides_norm' SummarizedExperiment
+pn <- processed_qf[["peptides_norm"]]
+
+# View the main assay (e.g., intensity matrix)
+head(SummarizedExperiment::assay(pn))
+```
+
+```{r}
+# View metadata for rows (peptides)
+head(SummarizedExperiment::rowData(pn))
+```
+
 
 ## Statistics
 

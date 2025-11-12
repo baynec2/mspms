@@ -7,7 +7,7 @@
 add_peptide_data(tibble, qf)
 }
 \arguments{
-\item{tibble}{tibble you would like to add peptide info to. Must have column 
+\item{tibble}{tibble you would like to add peptide info to. Must have column
 named peptide}
 
 \item{qf}{a QFeatures object with rowData for peptides. cleavage_seq,

@@ -60,3 +60,16 @@ uses a ton of memory which was problematic for the shiny instance.
 to a mismatch in the order of colData compared to prepared_data. Fixed by 
 changing the order of the colData to be the order of the prepared data before 
 reading as a QFeatures object
+
+## mspms 1.2.1
+
+* Improvements in response to reviewer comments after BMC Bioinformatics 
+submission. 
+
+1. Added prepare_sage() to support results from Sage search engine. 
+2. Refactored prepare_* functions to prevent unnecessary duplication of code. 
+3. Refactored nterm_cleavage and cterm_cleavage to prevent unnecessary 
+duplication of code. 
+4. Refactored code to reduce duplication in the check_* functions
+5. Fixed t-testing which was inadvertently performing t-tests on reverse log2
+transformed values. 

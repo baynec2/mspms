@@ -3,7 +3,7 @@
 
 <img src="man/figures/logo.png" align="right" width="170"/>
 
-# *[mspms](https://bioconductor.org/packages/3.19/mspms)*
+# *[mspms](https://bioconductor.org/packages/3.22/mspms)*
 
 <!-- badges: start -->
 
@@ -28,7 +28,7 @@ dependencies](https://bioconductor.org/shields/dependencies/release/mspms.svg)](
 
 ## Introduction
 
-The goal of *[mspms](https://bioconductor.org/packages/3.19/mspms)* is
+The goal of *[mspms](https://bioconductor.org/packages/3.22/mspms)* is
 provide a R Package that can be used to easily and reproducibly analyze
 data resulting from the [Multiplex Substrate Profiling by Mass
 Spectrometry (MSP-MS)
@@ -63,14 +63,14 @@ In order to do so, mspms uses several excellent packages from the
 Bioconductor project to provide a framework to easily and reproducibly
 analyze MSP-MS data. These include:
 
-- *[QFeatures](https://bioconductor.org/packages/3.19/QFeatures)*:
+- *[QFeatures](https://bioconductor.org/packages/3.22/QFeatures)*:
   management and processing of peptide quantitative features and sample
   metadata.
 
-- *[limma](https://bioconductor.org/packages/3.19/limma)*: Powerful
+- *[limma](https://bioconductor.org/packages/3.22/limma)*: Powerful
   linear models and empirical Bayesian methods for omics data.
 
-- *[MsCoreUtils](https://bioconductor.org/packages/3.19/MsCoreUtils)*:
+- *[MsCoreUtils](https://bioconductor.org/packages/3.22/MsCoreUtils)*:
   log2 transformation, imputation (QRILC), and normalization
   (center.median).
 
@@ -258,7 +258,6 @@ an exported .csv file can be generated from PEAKS as follows:
     • Group samples -\> add quadruplicates of samples to new group.
 
 ``` r
-
 library(dplyr)
 #> 
 #> Attaching package: 'dplyr'
@@ -297,8 +296,6 @@ peaks_prepared_data <- mspms::prepare_peaks(lfq_filepath,
 #> 
 #> ℹ Use `spec()` to retrieve the full column specification for this data.
 #> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> 841 peptides were removed because they had a quality score < 0.3 (34%)
-#> 
 #> Rows: 12 Columns: 4
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: ","
@@ -314,10 +311,13 @@ peaks_prepared_data <- mspms::prepare_peaks(lfq_filepath,
 #> Formatting sample annotations (colData).
 #> 
 #> Formatting data as a 'QFeatures' object.
+#> 
+#> Setting assay rownames.
 
 peaks_prepared_data
-#> An instance of class QFeatures containing 1 assays:
-#>  [1] peptides: SummarizedExperiment with 2071 rows and 12 columns
+#> An instance of class QFeatures (type: bulk) with 1 set:
+#> 
+#>  [1] peptides: SummarizedExperiment with 1421 rows and 12 columns
 ```
 
 ### Fragpipe
@@ -371,9 +371,12 @@ fragpipe_prepared_data <- prepare_fragpipe(
 #> Formatting sample annotations (colData).
 #> 
 #> Formatting data as a 'QFeatures' object.
+#> 
+#> Setting assay rownames.
 
 fragpipe_prepared_data
-#> An instance of class QFeatures containing 1 assays:
+#> An instance of class QFeatures (type: bulk) with 1 set:
+#> 
 #>  [1] peptides: SummarizedExperiment with 1694 rows and 12 columns
 ```
 
@@ -426,10 +429,61 @@ prepared_pd_data <- prepare_pd(peptide_groups_filepath, colData_filepath)
 #> Formatting sample annotations (colData).
 #> 
 #> Formatting data as a 'QFeatures' object.
+#> 
+#> Setting assay rownames.
 
 prepared_pd_data
-#> An instance of class QFeatures containing 1 assays:
+#> An instance of class QFeatures (type: bulk) with 1 set:
+#> 
 #>  [1] peptides: SummarizedExperiment with 1161 rows and 12 columns
+```
+
+### Sage
+
+Analysis of a lfq.tsv file exported from
+[sage](https://github.com/lazear/sage) is supported. We found this
+software a little harder to use than other solutions (No-GUI), however
+it is completly open-source, free, and by far the fastest!
+
+``` r
+sage_lfq_filepath <- system.file(
+  "extdata/sage_lfq.tsv",
+  package = "mspms"
+)
+
+colData_filepath <- system.file("extdata/colData.csv",
+  package = "mspms"
+)
+
+prepare_sage(sage_lfq_filepath, colData_filepath)
+#> Rows: 1555 Columns: 18
+#> ── Column specification ────────────────────────────────────────────────────────
+#> Delimiter: "\t"
+#> chr  (2): peptide, proteins
+#> dbl (16): charge, q_value, score, spectral_angle, CatA_0000_1.mzML, CatA_000...
+#> 
+#> ℹ Use `spec()` to retrieve the full column specification for this data.
+#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+#> Rows: 12 Columns: 4
+#> ── Column specification ────────────────────────────────────────────────────────
+#> Delimiter: ","
+#> chr (3): quantCols, group, condition
+#> dbl (1): time
+#> 
+#> ℹ Use `spec()` to retrieve the full column specification for this data.
+#> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+#> Checking arguments.
+#> 
+#> Loading data as a 'SummarizedExperiment' object.
+#> 
+#> Formatting sample annotations (colData).
+#> 
+#> Formatting data as a 'QFeatures' object.
+#> 
+#> Setting assay rownames.
+#> An instance of class QFeatures (type: bulk) with 1 set:
+#> 
+#>  [1] peptides: SummarizedExperiment with 969 rows and 12 columns
 ```
 
 ### DIA-NN
@@ -446,16 +500,16 @@ Use caution when using this approach, we haven’t thoroughly investigated
 how well DIA data works with mspms using ground truth data yet.
 
 ``` r
-precursor_filepath = system.file(
+precursor_filepath <- system.file(
   "extdata/diann_report.pr_matrix.tsv",
   package = "mspms"
 )
-colData_filepath = system.file(
+colData_filepath <- system.file(
   "extdata/diann_colData.csv",
   package = "mspms"
 )
 
-prepared_diann_data <- prepare_diann(precursor_filepath,colData_filepath)
+prepared_diann_data <- prepare_diann(precursor_filepath, colData_filepath)
 #> Rows: 3657 Columns: 28
 #> ── Column specification ────────────────────────────────────────────────────────
 #> Delimiter: "\t"
@@ -480,9 +534,12 @@ prepared_diann_data <- prepare_diann(precursor_filepath,colData_filepath)
 #> Formatting sample annotations (colData).
 #> 
 #> Formatting data as a 'QFeatures' object.
+#> 
+#> Setting assay rownames.
 
 prepared_diann_data
-#> An instance of class QFeatures containing 1 assays:
+#> An instance of class QFeatures (type: bulk) with 1 set:
+#> 
 #>  [1] peptides: SummarizedExperiment with 2682 rows and 16 columns
 ```
 
@@ -508,13 +565,15 @@ processed_qf <- process_qf(peaks_prepared_data)
 #> Your row data contain missing values. Please read the relevant
 #> section(s) in the aggregateFeatures manual page regarding the effects
 #> of missing values on data aggregation.
+#> Aggregated: 1/1
 processed_qf
-#> An instance of class QFeatures containing 5 assays:
-#>  [1] peptides: SummarizedExperiment with 2071 rows and 12 columns 
-#>  [2] peptides_log: SummarizedExperiment with 2071 rows and 12 columns 
-#>  [3] peptides_log_norm: SummarizedExperiment with 2071 rows and 12 columns 
-#>  [4] peptides_log_impute_norm: SummarizedExperiment with 2071 rows and 12 columns 
-#>  [5] peptides_norm: SummarizedExperiment with 2071 rows and 12 columns
+#> An instance of class QFeatures (type: bulk) with 5 sets:
+#> 
+#>  [1] peptides: SummarizedExperiment with 1421 rows and 12 columns 
+#>  [2] peptides_log: SummarizedExperiment with 1421 rows and 12 columns 
+#>  [3] peptides_log_norm: SummarizedExperiment with 1421 rows and 12 columns 
+#>  [4] peptides_log_impute_norm: SummarizedExperiment with 1421 rows and 12 columns 
+#>  [5] peptides_norm: SummarizedExperiment with 1421 rows and 12 columns
 ```
 
 ## Statistics
@@ -571,7 +630,7 @@ plot_qc_check(processed_qf,
 #> Joining with `by = join_by(quantCols)`
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 We can also see in what percentage of samples each peptide in the
 peptide library were undetected in.
@@ -581,7 +640,7 @@ plot_nd_peptides(processed_qf)
 #> Joining with `by = join_by(quantCols)`
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ### Tidying our data
 
@@ -615,7 +674,7 @@ We can also inspect our data using a PCA as follows.
 plot_pca(mspms_tidy_data, value_colname = "peptides_norm")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 ### Volcano plots
 
@@ -626,7 +685,7 @@ condition as follows:
 plot_volcano(log2fc_t_test_data)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
 
 ### Cleavage Position Plots
 
@@ -645,7 +704,7 @@ p1 <- mspms::plot_cleavages_per_pos(sig_cleavage_data)
 p1
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
 
 ### iceLogo
 
@@ -687,11 +746,19 @@ possible cleavages in our peptide library like so:
 plot_icelogo(catA_sig_cleavages,
   background_universe = all_possible_8mers_from_228_library
 )
+#> Warning: `aes_string()` was deprecated in ggplot2 3.0.0.
+#> ℹ Please use tidy evaluation idioms with `aes()`.
+#> ℹ See also `vignette("ggplot2-in-packages")` for more information.
+#> ℹ The deprecated feature was likely used in the ggseqlogo package.
+#>   Please report the issue at <https://github.com/omarwagih/ggseqlogo/issues>.
+#> This warning is displayed once every 8 hours.
+#> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+#> generated.
 #> Scale for x is already present.
 #> Adding another scale for x, which will replace the existing scale.
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
 
 We also provide a function that conveniently plots all icelogos from all
 conditions from the experiment all together.
@@ -705,7 +772,7 @@ plot_all_icelogos(sig_cleavage_data)
 #> Adding another scale for x, which will replace the existing scale.
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
 
 ### Plotting a Time Course
 
@@ -733,17 +800,17 @@ p1 <- mspms_tidy_data %>%
 p1
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
 
 ``` r
 sessionInfo()
-#> R version 4.4.1 (2024-06-14)
+#> R version 4.5.2 (2025-10-31)
 #> Platform: aarch64-apple-darwin20
-#> Running under: macOS 15.3.1
+#> Running under: macOS Sequoia 15.3.1
 #> 
 #> Matrix products: default
-#> BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
-#> LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+#> BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
+#> LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 #> 
 #> locale:
 #> [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -755,59 +822,57 @@ sessionInfo()
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] mspms_0.99.8 dplyr_1.1.4 
+#> [1] mspms_1.1.1 dplyr_1.1.4
 #> 
 #> loaded via a namespace (and not attached):
 #>   [1] tidyselect_1.2.1            farver_2.1.2               
-#>   [3] fastmap_1.2.0               lazyeval_0.2.2             
-#>   [5] digest_0.6.37               lifecycle_1.0.4            
-#>   [7] cluster_2.1.8.1             ProtGenerics_1.36.0        
-#>   [9] statmod_1.5.0               magrittr_2.0.3             
-#>  [11] compiler_4.4.1              rlang_1.1.6                
-#>  [13] tools_4.4.1                 igraph_2.1.4               
-#>  [15] utf8_1.2.4                  yaml_2.3.10                
-#>  [17] ggsignif_0.6.4              knitr_1.50                 
-#>  [19] labeling_0.4.3              S4Arrays_1.4.1             
-#>  [21] bit_4.6.0                   DelayedArray_0.30.1        
-#>  [23] plyr_1.8.9                  RColorBrewer_1.1-3         
-#>  [25] abind_1.4-8                 norm_1.0-11.1              
-#>  [27] withr_3.0.2                 purrr_1.0.4                
-#>  [29] BiocGenerics_0.50.0         grid_4.4.1                 
-#>  [31] stats4_4.4.1                ggpubr_0.6.0               
-#>  [33] ggplot2_3.5.2               scales_1.4.0               
-#>  [35] MASS_7.3-65                 MultiAssayExperiment_1.30.3
-#>  [37] SummarizedExperiment_1.34.0 cli_3.6.5                  
-#>  [39] mvtnorm_1.3-3               tmvtnorm_1.6               
-#>  [41] rmarkdown_2.29              crayon_1.5.3               
-#>  [43] generics_0.1.3              rstudioapi_0.17.1          
-#>  [45] httr_1.4.7                  reshape2_1.4.4             
-#>  [47] tzdb_0.5.0                  stringr_1.5.1              
-#>  [49] ggseqlogo_0.2               zlibbioc_1.50.0            
-#>  [51] parallel_4.4.1              impute_1.78.0              
-#>  [53] AnnotationFilter_1.28.0     BiocManager_1.30.25        
-#>  [55] XVector_0.44.0              matrixStats_1.5.0          
-#>  [57] vctrs_0.6.5                 Matrix_1.7-3               
+#>   [3] S7_0.2.0                    fastmap_1.2.0              
+#>   [5] lazyeval_0.2.2              digest_0.6.37              
+#>   [7] lifecycle_1.0.4             cluster_2.1.8.1            
+#>   [9] ProtGenerics_1.42.0         statmod_1.5.1              
+#>  [11] magrittr_2.0.4              compiler_4.5.2             
+#>  [13] rlang_1.1.6                 tools_4.5.2                
+#>  [15] igraph_2.2.1                utf8_1.2.6                 
+#>  [17] yaml_2.3.10                 ggsignif_0.6.4             
+#>  [19] knitr_1.50                  labeling_0.4.3             
+#>  [21] S4Arrays_1.10.0             bit_4.6.0                  
+#>  [23] DelayedArray_0.36.0         plyr_1.8.9                 
+#>  [25] RColorBrewer_1.1-3          abind_1.4-8                
+#>  [27] norm_1.0-11.1               withr_3.0.2                
+#>  [29] purrr_1.2.0                 BiocGenerics_0.56.0        
+#>  [31] grid_4.5.2                  stats4_4.5.2               
+#>  [33] ggpubr_0.6.2                ggplot2_4.0.0              
+#>  [35] scales_1.4.0                MASS_7.3-65                
+#>  [37] MultiAssayExperiment_1.36.0 SummarizedExperiment_1.40.0
+#>  [39] cli_3.6.5                   mvtnorm_1.3-3              
+#>  [41] tmvtnorm_1.7                rmarkdown_2.30             
+#>  [43] crayon_1.5.3                generics_0.1.4             
+#>  [45] rstudioapi_0.17.1           reshape2_1.4.4             
+#>  [47] tzdb_0.5.0                  BiocBaseUtils_1.12.0       
+#>  [49] stringr_1.6.0               ggseqlogo_0.2              
+#>  [51] parallel_4.5.2              impute_1.84.0              
+#>  [53] AnnotationFilter_1.34.0     BiocManager_1.30.26        
+#>  [55] XVector_0.50.0              matrixStats_1.5.0          
+#>  [57] vctrs_0.6.5                 Matrix_1.7-4               
 #>  [59] sandwich_3.1-1              carData_3.0-5              
-#>  [61] jsonlite_2.0.0              car_3.1-3                  
-#>  [63] IRanges_2.38.1              hms_1.1.3                  
-#>  [65] S4Vectors_0.42.1            rstatix_0.7.2              
-#>  [67] bit64_4.6.0-1               imputeLCMD_2.1             
-#>  [69] Formula_1.2-5               clue_0.3-66                
-#>  [71] limma_3.60.6                tidyr_1.3.1                
-#>  [73] glue_1.8.0                  QFeatures_1.14.2           
-#>  [75] cowplot_1.1.3               stringi_1.8.7              
-#>  [77] gmm_1.8                     gtable_0.3.6               
-#>  [79] GenomeInfoDb_1.40.1         GenomicRanges_1.56.2       
-#>  [81] UCSC.utils_1.0.0            tibble_3.2.1               
-#>  [83] pillar_1.10.2               pcaMethods_1.96.0          
-#>  [85] htmltools_0.5.8.1           GenomeInfoDbData_1.2.12    
-#>  [87] R6_2.6.1                    vroom_1.6.5                
-#>  [89] evaluate_1.0.3              lattice_0.22-7             
-#>  [91] Biobase_2.64.0              readr_2.1.5                
-#>  [93] backports_1.5.0             broom_1.0.8                
-#>  [95] BiocStyle_2.32.1            Rcpp_1.0.14                
-#>  [97] gridExtra_2.3               SparseArray_1.4.8          
-#>  [99] xfun_0.52                   zoo_1.8-14                 
-#> [101] MsCoreUtils_1.16.1          MatrixGenerics_1.16.0      
-#> [103] pkgconfig_2.0.3
+#>  [61] car_3.1-3                   IRanges_2.44.0             
+#>  [63] hms_1.1.4                   S4Vectors_0.48.0           
+#>  [65] rstatix_0.7.3               bit64_4.6.0-1              
+#>  [67] imputeLCMD_2.1              Formula_1.2-5              
+#>  [69] clue_0.3-66                 limma_3.66.0               
+#>  [71] tidyr_1.3.1                 glue_1.8.0                 
+#>  [73] QFeatures_1.20.0            cowplot_1.2.0              
+#>  [75] stringi_1.8.7               gmm_1.9-1                  
+#>  [77] gtable_0.3.6                GenomicRanges_1.62.0       
+#>  [79] tibble_3.3.0                pillar_1.11.1              
+#>  [81] pcaMethods_2.2.0            htmltools_0.5.8.1          
+#>  [83] Seqinfo_1.0.0               R6_2.6.1                   
+#>  [85] vroom_1.6.6                 evaluate_1.0.5             
+#>  [87] lattice_0.22-7              Biobase_2.70.0             
+#>  [89] readr_2.1.5                 backports_1.5.0            
+#>  [91] broom_1.0.10                BiocStyle_2.38.0           
+#>  [93] Rcpp_1.1.0                  gridExtra_2.3              
+#>  [95] SparseArray_1.10.1          xfun_0.54                  
+#>  [97] MsCoreUtils_1.21.0          MatrixGenerics_1.22.0      
+#>  [99] zoo_1.8-14                  pkgconfig_2.0.3
 ```

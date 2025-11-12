@@ -1,7 +1,7 @@
 Package: mspms
 Type: Package
 Title: Tools for the analysis of MSP-MS data
-Version: 1.1.1
+Version: 1.2.1
 Authors@R: person("Charlie", "Bayne", email = "baynec2@gmail.com",
     role = c("aut", "cre"),comment=c(ORCID="0000-0003-1870-5298"))
 Description: This package provides functions for the analysis of data generated 
@@ -12,7 +12,7 @@ Description: This package provides functions for the analysis of data generated
     the data are provided. 
 License: MIT + file LICENSE
 Encoding: UTF-8
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Depends: 
     R (>= 4.4.0)
 biocViews: Proteomics, MassSpectrometry, Preprocessing
@@ -34,15 +34,15 @@ Imports:
     readr,
     rstatix,
     tibble,
-    ggpubr
+    ggpubr,
+    imputeLCMD
 Suggests: 
     knitr,
     testthat (>= 3.0.0),
     downloadthis,
     DT,
     rmarkdown,
-    BiocStyle,
-    imputeLCMD
+    BiocStyle
 Config/testthat/edition: 3
 URL: https://github.com/baynec2/mspms
 BugReports: https://github.com/baynec2/mspms/issues

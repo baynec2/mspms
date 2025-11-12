@@ -1,14 +1,11 @@
 # Testing for case where there is no cleavage site
 testthat::test_that("works with no cleavage site", {
   testthat::expect_equal(
-    mspms:::cterm_cleavage(
-      "ABCDEFGHIJKLMN", "ABCDEFGHIJKLMN",
-      "ABCDEFGHIJKLMN", 4
-    ),
+    mspms:::cterm_cleavage("ABCDEFGHIJKLMN"),
     tibble::tibble(
       peptide = "ABCDEFGHIJKLMN",
-      cterm = NA,
-      cterm_cleavage_pos = NA
+      cterm = NA_character_,
+      cterm_cleavage_pos = NA_integer_
     )
   )
 })

@@ -109,9 +109,9 @@ mspms_t_tests <- function(processed_qf,
   remaining_variables <- remaining_cd_names(processed_qf, reference_variable)
   remaining_variable_syms <- dplyr::sym(remaining_variables)
   group_by_cols <- dplyr::enquo(remaining_variable_syms)
-  mspms_data <- mspms_tidy(processed_qf)
+  mspms_data <- mspms_tidy(processed_qf, "peptides_log_impute_norm")
   # Defining formula to use in t_test
-  formula <- stats::as.formula(paste("peptides_norm ~", reference_variable))
+  formula <- stats::as.formula(paste("peptides_log_impute_norm ~", reference_variable))
   # Doing T tests
   stat <- mspms_data %>%
     dplyr::group_by(
@@ -125,9 +125,9 @@ mspms_t_tests <- function(processed_qf,
       formula = formula,
       ref.group = reference_value
     ) %>%
-    dplyr::select(-"p.adj.signif") %>% 
+    dplyr::select(-"p.adj.signif") %>%
     rstatix::adjust_pvalue(method = "fdr") %>%
-    rstatix::add_significance(p.col = "p.adj") %>% 
+    rstatix::add_significance(p.col = "p.adj") %>%
     dplyr::mutate(
       comparison = paste0(
         !!remaining_variable_syms, ".", .data$group2, "/",
@@ -140,40 +140,40 @@ mspms_t_tests <- function(processed_qf,
 
 #' add_peptide_data
 #'
-#' adds peptide information for every peptide in the data. 
+#' adds peptide information for every peptide in the data.
 #'
-#' @param tibble tibble you would like to add peptide info to. Must have column 
+#' @param tibble tibble you would like to add peptide info to. Must have column
 #' named peptide
 #' @param qf a QFeatures object with rowData for peptides. cleavage_seq,
-#' cleavage_pos, and cleavage_type. 
-#' @return a tibble with column named peptide. 
+#' cleavage_pos, and cleavage_type.
+#' @return a tibble with column named peptide.
 #' @keywords internal
 add_peptide_data <- function(tibble, qf) {
   # extract peptide data
   pd <- SummarizedExperiment::rowData(qf[["peptides_log_impute_norm"]]) %>%
     tibble::as_tibble() %>%
-    dplyr::select("peptide","library_id", "peptide_type", "cleavage_seq", "cleavage_pos")
+    dplyr::select("peptide", "library_id", "peptide_type", "cleavage_seq", "cleavage_pos")
   # innerjoin
-  out <- dplyr::inner_join(pd,tibble, by = "peptide")
+  out <- dplyr::inner_join(pd, tibble, by = "peptide")
   return(out)
 }
 
 
 #' calc_limma_design_matrix
-#' 
-#' Calculates a limma compatible design matrix for mspms data. 
+#'
+#' Calculates a limma compatible design matrix for mspms data.
 #'
 #' @param colData colData with condition and time variables as factors
 #' @param norm_data normalized data from QFeatures object to use
 #' @returns a model matrix
 #' @keywords internal
 calc_limma_design_matrix <- function(colData,
-                                     norm_data){
+                                     norm_data) {
   # Create the design matrix with a valid naming format using periods
-  if(length(unique(colData$condition))  == 1) {
-    design <- model.matrix(~ 0 + time, data = colData)
+  if (length(unique(colData$condition)) == 1) {
+    design <- stats::model.matrix(~ 0 + time, data = colData)
   } else {
-    design <- model.matrix(~ 0 + condition:time, data = colData)
+    design <- stats::model.matrix(~ 0 + condition:time, data = colData)
   }
   colnames(design) <- apply(
     expand.grid(levels(colData$condition), levels(colData$time)), 1,
@@ -184,7 +184,7 @@ calc_limma_design_matrix <- function(colData,
 }
 
 #' calc_limma_contrasts
-#' 
+#'
 #' Calculates limma contrasts given colData. The contrasts returned are pairwise
 #' relative to T0 for each timepoint assayed.
 #'
@@ -192,19 +192,19 @@ calc_limma_design_matrix <- function(colData,
 #' @param design_mat design_mat as returned by calc_limma_design_matrix
 #' @returns a contrast matrix
 #' @keywords internal
-calc_limma_contrasts <- function(colData,design_mat){
+calc_limma_contrasts <- function(colData, design_mat) {
   contrast_list <- list()
   conditions <- levels(colData$condition)
-  
+
   for (cond in conditions) {
     # Get all time points available for the condition
     valid_time_points <- unique(colData$time[colData$condition == cond])
-    
+
     for (t in valid_time_points[-1]) { # Skip time 0 for each condition
       # Construct contrast names to match the standardized format with periods
       base_name <- paste0("condition.", cond, ".time.", t)
       ref_name <- paste0("condition.", cond, ".time.0")
-      
+
       # Contrast name and formula
       contrast_name <- paste0(base_name, " - ", ref_name)
       contrast_formula <- paste0(base_name, " - ", ref_name)
@@ -218,4 +218,3 @@ calc_limma_contrasts <- function(colData,design_mat){
   )
   return(contrast_matrix)
 }
-

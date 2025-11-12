@@ -13,9 +13,9 @@ limma_stats(processed_qf)
 a tibble containing statistics
 }
 \description{
-Calculates statistics for each condition relative to time 0 using limma for 
-differential analysis. Results are then formatted to be consistent with 
-results produced by other statistic approaches used in the mspms package 
+Calculates statistics for each condition relative to time 0 using limma for
+differential analysis. Results are then formatted to be consistent with
+results produced by other statistic approaches used in the mspms package
 (log2fc_t_test).
 }
 \examples{

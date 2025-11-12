@@ -1,13 +1,13 @@
 #' limma_stats
-#' 
-#' Calculates statistics for each condition relative to time 0 using limma for 
-#' differential analysis. Results are then formatted to be consistent with 
-#' results produced by other statistic approaches used in the mspms package 
+#'
+#' Calculates statistics for each condition relative to time 0 using limma for
+#' differential analysis. Results are then formatted to be consistent with
+#' results produced by other statistic approaches used in the mspms package
 #' (log2fc_t_test).
-#' 
+#'
 #' @param processed_qf mspms data in a QFeatures object.
 #'
-#' @returns a tibble containing statistics 
+#' @returns a tibble containing statistics
 #' @export
 #'
 #' @examples
@@ -23,11 +23,11 @@ limma_stats <- function(processed_qf) {
   colData$time <- factor(colData$time, levels = unique(colData$time))
   colData$condition <- factor(colData$condition)
   # Create the design matrix with a valid naming format using periods
-  design_mat <- calc_limma_design_matrix(colData,norm_data)
+  design_mat <- calc_limma_design_matrix(colData, norm_data)
   # Fit the linear model
   fit <- limma::lmFit(norm_data, design_mat)
   # Define contrasts for each condition's time points relative to T0
-  contrast_matrix <- calc_limma_contrasts(colData,design_mat)
+  contrast_matrix <- calc_limma_contrasts(colData, design_mat)
   # Fit contrasts and apply empirical Bayes
   fit2 <- limma::contrasts.fit(fit, contrast_matrix)
   fit3 <- limma::eBayes(fit2)
@@ -76,7 +76,7 @@ limma_stats <- function(processed_qf) {
   # Convert results to a consistent format.
   results_formatted <- results_combined %>%
     dplyr::inner_join(t0, by = c("peptide", "condition")) %>%
-    dplyr::select("condition", "peptide","library_id", "peptide_type", "control_mean",
+    dplyr::select("condition", "peptide", "library_id", "peptide_type", "control_mean",
       "time",
       "sample_mean" = "AveExpr", "comparison" = "contrast",
       "log2fc" = "logFC", "cleavage_seq", "cleavage_pos", "group1",
@@ -84,4 +84,3 @@ limma_stats <- function(processed_qf) {
     )
   return(results_formatted)
 }
-

@@ -2,9 +2,7 @@
 % Please edit documentation in R/prepare_peaks.R
 \name{prepare_peaks}
 \alias{prepare_peaks}
-\title{prepare_peaks
-Prepare a label free quantification file exported from PEAKS
-for subsequent mspms analysis.}
+\title{Prepare PEAKS label-free quantification data for MSP-MS analysis}
 \usage{
 prepare_peaks(
   lfq_filepath,
@@ -15,31 +13,36 @@ prepare_peaks(
 )
 }
 \arguments{
-\item{lfq_filepath}{this is the file path to a .csv file exported from
-PEAKS}
+\item{lfq_filepath}{Path to the PEAKS `.csv` file containing peptide-level LFQ data.}
 
-\item{colData_filepath}{file path to .csv file containing colData.
-Must have columns named "quantCols","group","condition",and "time".}
+\item{colData_filepath}{Path to a `.csv` file containing sample metadata (`colData`).
+Must include the columns `"quantCols"`, `"group"`, `"condition"`, and `"time"`.}
 
-\item{quality_threshold}{only consider peptides with quality scores > than
-this threshold.}
+\item{quality_threshold}{Minimum quality score required for a peptide to be retained.
+Peptides below this threshold are filtered out (default `0.3`).}
 
-\item{peptide_library}{peptide library used in the experiment.}
+\item{peptide_library}{A peptide library used in the experiment, typically
+`mspms::peptide_library`. Must include `"library_id"`, `"library_match_sequence"`,
+and `"library_real_sequence"`.}
 
-\item{n_residues}{the number of amino acid residues before and after the
-cleavage site to generate a cleavage seq for.}
+\item{n_residues}{Number of amino acid residues to include on each side of the
+cleavage site when generating cleavage sequences (default `4`).}
 }
 \value{
-a QFeatures object containing a summarizedExperiment named "peptides"
+A `QFeatures` object containing a `SummarizedExperiment` named `"peptides"`.
 }
 \description{
-prepare_peaks
-Prepare a label free quantification file exported from PEAKS
-for subsequent mspms analysis.
+This function reads, validates, transforms, and converts a PEAKS
+LFQ file into a `QFeatures` object compatible with the `mspms` workflow.
 }
 \examples{
-lfq_filepath <- system.file("extdata/peaks_protein-peptides-lfq.csv", package = "mspms")
-colData_filepath <- system.file("extdata/colData.csv", package = "mspms")
-# Prepare the data
-peaks_prepared_data <- mspms::prepare_peaks(lfq_filepath, colData_filepath)
+lfq_filepath <- system.file(
+  "extdata/peaks_protein-peptides-lfq.csv",
+  package = "mspms"
+)
+colData_filepath <- system.file(
+  "extdata/colData.csv",
+  package = "mspms"
+)
+peaks_qf <- mspms::prepare_peaks(lfq_filepath, colData_filepath)
 }

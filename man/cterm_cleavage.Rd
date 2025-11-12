@@ -2,42 +2,18 @@
 % Please edit documentation in R/preprocessing_helper_functions.R
 \name{cterm_cleavage}
 \alias{cterm_cleavage}
-\title{cterm_cleavage}
+\title{C-terminal cleavage sequence extraction}
 \usage{
-cterm_cleavage(
-  peptide_sequence,
-  library_match_sequence,
-  library_real_sequence,
-  n_residues = 4
-)
-}
-\arguments{
-\item{peptide_sequence}{the peptide sequence represented in single letter
-code. "_" denotes cleavage site.}
-
-\item{library_match_sequence}{the sequence the peptide matches to with the
-proteomics search software used. Note, this may not be the true sequence of
-the peptide depending on how the library was constructed. For example, in
-the standard MSP-MS 228 member library, methionine has been replaced with
-norleucine (n). This was done because norleucine looks like methionine to a
-protease, but it cannot be oxidized. Norleucine's (n) mass is the same as
-leucine (L), so it is recognized by the proteomics software as L.}
-
-\item{library_real_sequence}{the sequence the peptide truly is. In the
-standard MSP_MS 228 member library, some of the amino acids recognize as
-leucine (L) are truly Norleucine (n).}
-
-\item{n_residues}{the number of residues to the left and right of
-the cleavage event to return}
+cterm_cleavage(...)
 }
 \value{
-a tibble with the peptide sequence, cleavage sequences (converted
-from the matching to real sequence), with n number
-of amino acids to the left and right of the c term cleavage, and the
-position of the c-term cleavage in the library sequence
+A tibble with columns:
+  - `peptide`: the input peptide sequence
+  - `cterm`: the C-terminal cleavage sequence (n residues on each side)
+  - `cterm_cleavage_pos`: the position of the C-terminal cleavage in the library sequence
 }
 \description{
-Finding the cleavage sequences on the C terminus of a given peptide in
-reference to the peptide library it was derived from
+Wrapper for `cleavage()` that extracts the C-terminal cleavage sequence
+and cleavage position from a peptide relative to its library sequence.
 }
 \keyword{internal}

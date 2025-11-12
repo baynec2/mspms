@@ -7,8 +7,8 @@ testthat::test_that("works with no cleavage site", {
     ),
     tibble::tibble(
       peptide = "ABCDEFGHIJKLMN",
-      nterm = NA,
-      nterm_cleavage_pos = NA
+      nterm = NA_character_,
+      nterm_cleavage_pos = NA_integer_
     )
   )
 })

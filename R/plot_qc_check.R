@@ -21,7 +21,7 @@ plot_qc_check <- function(processed_qf,
                           cleavage_product_threshold = NULL,
                           ncol = 2) {
   if (!is.character(peptide_library)) {
-    stop("peptide library musyt be a charachter vector")
+    stop("peptide library must be a character vector")
   }
   qc_check_data <- prepare_qc_check_data(
     processed_qf,
