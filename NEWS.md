@@ -61,7 +61,7 @@ to a mismatch in the order of colData compared to prepared_data. Fixed by
 changing the order of the colData to be the order of the prepared data before 
 reading as a QFeatures object
 
-## mspms 1.2.1
+## mspms 1.3.1
 
 * Improvements in response to reviewer comments after BMC Bioinformatics 
 submission. 
