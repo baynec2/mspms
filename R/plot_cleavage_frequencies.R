@@ -31,13 +31,13 @@ plot_cleavage_frequencies <- function(cleavage_seqs,
   }
 
   # Frequencies of each
-  background_counts <- mspms:::calc_AA_count_of_motif(background_universe)
-  background_proportions <- mspms:::calc_AA_prop_of_motif(background_counts)
-  experimental_counts <- mspms:::calc_AA_count_of_motif(cleavage_seqs)
-  experimental_proprotions <- mspms:::calc_AA_prop_of_motif(experimental_counts)
+  background_counts <- calc_AA_count_of_motif(background_universe)
+  background_proportions <- calc_AA_prop_of_motif(background_counts)
+  experimental_counts <- calc_AA_count_of_motif(cleavage_seqs)
+  experimental_proprotions <- calc_AA_prop_of_motif(experimental_counts)
 
   # Pvalues
-  zscores <- mspms:::calc_AA_motif_zscore(
+  zscores <- calc_AA_motif_zscore(
     background_count_matrix = background_counts,
     background_prop_matrix = background_proportions,
     experimental_count_matrix = experimental_counts,
